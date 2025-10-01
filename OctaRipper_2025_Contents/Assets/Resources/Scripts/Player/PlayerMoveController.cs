@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMoveController : MonoBehaviour
 {
     InputSystem_Actions input;
     Rigidbody rb;
