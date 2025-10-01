@@ -1,14 +1,8 @@
 using UnityEngine;
 
-public class EnemyControllerBase : MonoBehaviour
+public abstract class EnemyControllerBase : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
 
-    void Update()
-    {
-        
-    }
+
+
 }
