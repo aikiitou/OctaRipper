@@ -66,16 +66,16 @@ public class EnemyController01 : EnemyControllerBase
 
     void Update()
     {
-        CheckPattern();
-        Move();
+        ChangePattern(); // 行動の切り替え
+        Move(); // 動き
         if (canTurn)
         {
-            Turn();
+            Turn(); // 回転
         }
-        TimerCountDown();
+        TimerCountDown(); // タイマー系のカウントダウン
         if (enemyLifeController.LifePoint <= 0.0f)
         {
-            Death();
+            Death(); // 死亡
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -83,7 +83,7 @@ public class EnemyController01 : EnemyControllerBase
         }
     }
 
-    void CheckPattern()
+    void ChangePattern()
     {
         if (friezeTimer <= 0.0f)
         {
@@ -95,26 +95,28 @@ public class EnemyController01 : EnemyControllerBase
             damageTrigger.SetActive(false);
             return;
         }
+        if (attackActionTimer <= 0.0f)
+        {
+            isAttacking = false;
+            damageTrigger.SetActive(false);
+            canTurn = true;
+        }
         if (((targetObject.transform.position - gameObject.transform.position).magnitude <= attackDistance ||
             attackActionTimer > 0.0f) && canAction)
         {
-            if (attackActionTimer <= 0.0f)
+            Ray ray = new Ray(transform.position, transform.forward);
+            Physics.Raycast(ray, out RaycastHit hit, attackDistance);
+            if (hit.transform != null)
             {
-                isAttacking = false;
-                damageTrigger.SetActive(false);
-            }
-            if (attackActionTimer <= 0.0f && attackCoolDownTimer > 0.0f)
-            {
-                canTurn = true;   
-            }
-            else
-            {
-                canTurn = false;
-                isAcceleration = false;
-                Attack();
+                if (hit.transform.tag == "Player" && attackCoolDownTimer <= 0.0f)
+                {
+                    canTurn = false;
+                    isAcceleration = false;
+                    Attack();
+                }
             }
         }
-        else
+        if (!isAttacking)
         {
             canTurn = true;
             isAcceleration = true;
