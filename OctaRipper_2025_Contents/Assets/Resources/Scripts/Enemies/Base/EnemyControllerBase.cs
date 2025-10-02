@@ -28,6 +28,8 @@ public abstract class EnemyControllerBase : MonoBehaviour
 
     protected abstract void Move(); // ˆÚ“®
 
+    protected abstract void Turn(); // ‰ñ“]
+
     protected abstract void Attack(); // UŒ‚
 
     protected abstract void Damage(); // ”íƒ_ƒ[ƒW
