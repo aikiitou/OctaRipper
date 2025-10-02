@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
         Vector2 offsetZY = new Vector2(newPosOffset.z, newPosOffset.y);
        
         float angle = Vector2.Angle(Vector2.left, offsetZY);
-        Debug.Log(angle);
+
         if(angle < limitAngle)
         {
             posOffset = newPosOffset;

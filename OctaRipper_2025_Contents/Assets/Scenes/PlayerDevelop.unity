@@ -379,7 +379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 2138179927}
   speed: 60
-  limitAngle: 60
+  limitAngle: 15
   sens: 0.4
 --- !u!1 &537896342
 GameObject:
