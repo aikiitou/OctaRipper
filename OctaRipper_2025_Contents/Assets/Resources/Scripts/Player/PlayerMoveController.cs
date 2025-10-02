@@ -48,7 +48,7 @@ public class PlayerMoveController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(moveVec);
+        rb.AddRelativeForce(moveVec);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, moveRot, Time.deltaTime * angleSpeed);
     }
 
@@ -87,6 +87,8 @@ public class PlayerMoveController : MonoBehaviour
         transform.Rotate(0, input.x * sens, 0);
 
         //ŒX‚«•ûŒü‚ð•ÛŠÇ
-        moveRot = transform.rotation;
+        Vector3 newAngle = moveRot.eulerAngles;
+        newAngle.y = transform.eulerAngles.y;
+        moveRot = Quaternion.Euler(newAngle);
     }
 }

@@ -52,6 +52,6 @@ public class CameraController : MonoBehaviour
         //Vector2 input = _context.ReadValue<Vector2>();
         //float angleY = Mathf.Clamp(input.y, -limitAngle, limitAngle);
 
-        //transform.Translate(new Vector3(0, Mathf.Sin(angleY), 0));
+        //transform.RotateAround(player.position, player.right, angleY);
     }
 }
