@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TutorialSceneManager : MonoBehaviour
+public class TutorialManager : MonoBehaviour
 {
     void Update()
     {
