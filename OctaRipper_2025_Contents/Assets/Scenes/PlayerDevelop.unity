@@ -377,40 +377,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d34affc90d48334199f01a9ffe5532d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPos: {fileID: 391657742}
+  player: {fileID: 2138179927}
   speed: 60
-  limitAngle: 80
---- !u!1 &391657741
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 391657742}
-  m_Layer: 0
-  m_Name: cameraTargetPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &391657742
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391657741}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.18176672, y: -0, z: -0, w: 0.98334175}
-  m_LocalPosition: {x: 0, y: 1.9170003, z: -2.4899998}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2138179927}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  limitAngle: 60
+  sens: 0.4
 --- !u!1 &537896342
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,10 +556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 21507cce355622c4cb93a629e79cd08d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 391657742}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 21507cce355622c4cb93a629e79cd08d, type: 3}
       insertIndex: -1
