@@ -6,19 +6,22 @@ public class EnemyController01 : EnemyControllerBase
     float initLifePoint = 100.0f;
 
     [SerializeField, Header("Å‘åˆÚ“®‘¬“x")]
-    float maxSpeed = 5.0f;
+    float maxSpeed = 2.0f;
 
     [SerializeField, Header("ˆÚ“®‰Á‘¬“x")]
     float acceleration = 5.0f;
 
     [SerializeField, Header("ˆÚ“®Œ¸‘¬“x")]
-    float brake = 5.0f;
+    float brake = 10.0f;
+
+    [SerializeField, Header("UŒ‚ŽÀs‹——£")]
+    float attackDistance = 1.0f;
 
     MovePattern currentPattern;
     Vector3 moveForce;
     GameObject targetObject;
     Rigidbody rb;
-    bool isAcceleration;
+    bool isAcceleration = true;
 
 
     void Start()
@@ -34,12 +37,35 @@ public class EnemyController01 : EnemyControllerBase
 
     void Update()
     {
-        
+        Move();
     }
 
     protected override void Move()
     {
-
+        if (isAcceleration)
+        {
+            Vector3 moveAddForce = targetObject.transform.position - gameObject.transform.position; // ‘ÎÛ‚ÆŽ©•ª‚Ì‹——£ŽZo
+            moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y¬•ª‚ðœ‚­
+            moveAddForce = moveAddForce.normalized * acceleration * Time.deltaTime; // ‰Á‘¬—ÊŽZo
+            moveForce += moveAddForce;
+            if (moveForce.magnitude >= maxSpeed)
+            {
+                moveForce = moveForce.normalized * maxSpeed;
+            }
+            MyDebugLib.MessageLog(moveForce.magnitude);
+        }
+        else
+        {
+            if (moveForce.magnitude >= brake * Time.deltaTime)
+            {
+                moveForce -= moveForce.normalized * brake * Time.deltaTime;
+            }
+            else
+            {
+                moveForce = Vector3.zero;
+            }
+        }
+        rb.linearVelocity = new Vector3(moveForce.x,rb.linearVelocity.y,moveForce.z);
     }
 
     protected override void Attack()
