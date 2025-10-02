@@ -19,7 +19,10 @@ public class EnemyLifeController : MonoBehaviour
 
     public void ChangeLifePoint(float _value) // ライフポイントの変更
     {
-        lifePoint += _value;
+        if (!isInvincible)
+        {
+            lifePoint += _value;
+        }
     }
 
 }

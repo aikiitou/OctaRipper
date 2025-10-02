@@ -324,12 +324,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1aa4dbea91f8749894af080c41429f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initLifePoint: 100
+  initLifePoint: 60
   maxSpeed: 4
   acceleration: 14
   naturalBrake: 5
   brake: 10
   attackDistance: 2
+  attackActionTime: 1
+  attackCoolDownTime: 1.5
   rotationSpeed: 10
 --- !u!114 &228703993
 MonoBehaviour:

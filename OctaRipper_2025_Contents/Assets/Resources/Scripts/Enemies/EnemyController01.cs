@@ -32,9 +32,10 @@ public class EnemyController01 : EnemyControllerBase
     bool isAcceleration = true; // 現在加速しているかどうか
     bool isAttacking = false; // 攻撃しているかどうか
     bool canTurn = true; // 回転可能かどうか
+    bool canAction = true; // 行動可能かどうか
     float attackCoolDownTimer;
     float attackActionTimer;
-    MovePattern currentPattern; // 現在の状態
+    float friezeTimer; // 硬直時間
     Vector3 moveForce; // 移動量
     GameObject targetObject; // 対象のオブジェクト
     Rigidbody rb; // RigidBody
@@ -49,7 +50,6 @@ public class EnemyController01 : EnemyControllerBase
     void OnEnable()
     {
         InitializeEnemyData(initLifePoint); // 初期ライフポイントのセット
-        currentPattern = MovePattern.Move;
     }
 
     void Update()
@@ -61,14 +61,29 @@ public class EnemyController01 : EnemyControllerBase
             Turn();
         }
         TimerCountDown();
-
+        if (enemyLifeController.LifePoint <= 0.0f)
+        {
+            Death();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            MyDebugLib.MessageLog(canAction);
+            Damage(20.0f, (gameObject.transform.position - targetObject.transform.position).normalized * 5.0f, 1.0f);
+        }
     }
 
     void CheckPattern()
     {
-        MyDebugLib.MessageLog(currentPattern);
+        if (friezeTimer <= 0.0f)
+        {
+            canAction = true;
+        }
+        else
+        {
+            return;
+        }
         if (((targetObject.transform.position - gameObject.transform.position).magnitude <= attackDistance ||
-            attackActionTimer > 0.0f) && currentPattern != MovePattern.KnockBack)
+            attackActionTimer > 0.0f) && canAction)
         {
             if (attackActionTimer <= 0.0f)
             {
@@ -76,12 +91,10 @@ public class EnemyController01 : EnemyControllerBase
             }
             if (attackActionTimer <= 0.0f && attackCoolDownTimer > 0.0f)
             {
-                currentPattern = MovePattern.Idle;
                 canTurn = true;   
             }
             else
             {
-                currentPattern = MovePattern.Attack;
                 canTurn = false;
                 isAcceleration = false;
                 Attack();
@@ -91,7 +104,6 @@ public class EnemyController01 : EnemyControllerBase
         {
             canTurn = true;
             isAcceleration = true;
-            currentPattern = MovePattern.Move;
         }
     }
 
@@ -104,6 +116,10 @@ public class EnemyController01 : EnemyControllerBase
         if (attackActionTimer > 0.0f)
         {
             attackActionTimer -= Time.deltaTime;
+        }
+        if (friezeTimer > 0.0f)
+        {
+            friezeTimer -= Time.deltaTime;
         }
 
     }
@@ -156,14 +172,21 @@ public class EnemyController01 : EnemyControllerBase
         }
     }
 
-    protected override void Damage()
+    public override void Damage(float _damage, Vector3 _impact, float _friezeTime)
     {
-
+        enemyLifeController.ChangeLifePoint(_damage);
+        if (_friezeTime > 0)
+        {
+            KnockBack(_impact, _friezeTime);
+        }
     }
 
-    protected override void KnockBack()
+    protected override void KnockBack(Vector3 _force, float _friezeTime)
     {
-
+        isAcceleration = false;
+        canAction = false;
+        moveForce = _force;
+        friezeTimer = _friezeTime;
     }
 
     protected override void Death()

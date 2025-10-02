@@ -5,14 +5,6 @@ public abstract class EnemyControllerBase : MonoBehaviour
 {
     protected EnemyLifeController enemyLifeController; // ライフポイントを管理するコンポーネント
 
-    protected enum MovePattern
-    {
-        Idle,
-        Move,
-        Attack,
-        KnockBack,
-        Death,
-    }
     public void InitializeEnemyData(float _lifePoint) // エネミー情報の初期化
     {
         enemyLifeController = gameObject.GetComponent<EnemyLifeController>(); // コンポーネントの代入
@@ -32,9 +24,9 @@ public abstract class EnemyControllerBase : MonoBehaviour
 
     protected abstract void Attack(); // 攻撃
 
-    protected abstract void Damage(); // 被ダメージ
+    public abstract void Damage(float _damage, Vector3 _force, float _friezeTime); // 被ダメージ
     
-    protected abstract void KnockBack(); // ノックバック
+    protected abstract void KnockBack(Vector3 _force, float _friezeTime); // ノックバック
     
     protected abstract void Death(); // 死亡
 
