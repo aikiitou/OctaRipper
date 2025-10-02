@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyLifeController : MonoBehaviour
 {
-    float lifePoint = 100.0f; // ライフポイント
+    float lifePoint; // ライフポイント
     bool isInvincible = true; // 無敵(ダメージを受けない)
 
     public float LifePoint => lifePoint; // ライフポイントのゲッター

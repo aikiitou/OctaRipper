@@ -3,28 +3,39 @@ using UnityEngine.Pool;
 
 public abstract class EnemyControllerBase : MonoBehaviour
 {
-    EnemyLifeController enemyLifeController;
-    public EnemyControllerBase()
+    protected EnemyLifeController enemyLifeController; // ライフポイントを管理するコンポーネント
+
+    protected enum MovePattern
     {
-        enemyLifeController = gameObject.AddComponent<EnemyLifeController>();
+        Idle,
+        Move,
+        Attack,
+        KnockBack,
+        Death,
+    }
+    public void InitializeEnemyData(float _lifePoint) // エネミー情報の初期化
+    {
+        enemyLifeController = gameObject.GetComponent<EnemyLifeController>(); // コンポーネントの代入
+        enemyLifeController.SetLifePoint(_lifePoint); // ライフポイントのセット
+        enemyLifeController.SetInvincible(false); // 無敵の解除
     }
 
-    public void InitializeEnemyData(float _lifePoint)
+    public void ReleaseObject(GameObject _obj)
     {
-        enemyLifeController.SetLifePoint(_lifePoint);
-        enemyLifeController.SetInvincible(false);
+        enemyLifeController.SetInvincible(true); // 無敵の有効
+        //transform.parent.GetComponent<>().
     }
 
-    public abstract void Move();
+    protected abstract void Move(); // 移動
+
+    protected abstract void Attack(); // 攻撃
+
+    protected abstract void Damage(); // 被ダメージ
     
-    public abstract void Attack();
+    protected abstract void KnockBack(); // ノックバック
     
-    public abstract void KnockBack();
-    
-    public abstract void Spawn();
-    
-    public abstract void Death();
-    
+    protected abstract void Death(); // 死亡
+
 
 
 }
