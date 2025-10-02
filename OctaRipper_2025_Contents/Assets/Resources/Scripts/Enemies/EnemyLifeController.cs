@@ -11,4 +11,15 @@ public class EnemyLifeController : MonoBehaviour
     {
         lifePoint = _value;
     }
+
+    public void SetInvincible(bool _isInvincible) // 無敵判定のセッター
+    {
+        isInvincible = _isInvincible;
+    }
+
+    public void ChangeLifePoint(float _value) // ライフポイントの変更
+    {
+        lifePoint += _value;
+    }
+
 }
