@@ -23,11 +23,20 @@ public class EnemyController01 : EnemyControllerBase
     [SerializeField, Header("攻撃必要時間")]
     float attackActionTime = 1.0f;
 
+    [SerializeField, Header("突進スピード")]
+    float attackSpeed = 10.0f;
+
+    [SerializeField, Header("与ダメージ")]
+    float attackDamage = 10.0f;
+
     [SerializeField, Header("攻撃クールダウン")]
     float attackCoolDownTime = 1.5f;
 
     [SerializeField, Header("見た目回転スピード")]
-    float rotationSpeed = 360.0f;
+    float rotationSpeed = 10.0f;
+
+    [SerializeField, Header("攻撃の当たり判定")]
+    GameObject damageTrigger; // 攻撃の当たり判定オブジェクト
 
     bool isAcceleration = true; // 現在加速しているかどうか
     bool isAttacking = false; // 攻撃しているかどうか
@@ -39,10 +48,13 @@ public class EnemyController01 : EnemyControllerBase
     Vector3 moveForce; // 移動量
     GameObject targetObject; // 対象のオブジェクト
     Rigidbody rb; // RigidBody
+    Animator animator; // Animator
 
 
     void Start()
     {
+        damageTrigger.SetActive(false);
+        animator = GetComponent<Animator>();
         targetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
         rb = GetComponent<Rigidbody>();
     }
@@ -67,7 +79,6 @@ public class EnemyController01 : EnemyControllerBase
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            MyDebugLib.MessageLog(canAction);
             Damage(20.0f, (gameObject.transform.position - targetObject.transform.position).normalized * 5.0f, 1.0f);
         }
     }
@@ -80,6 +91,8 @@ public class EnemyController01 : EnemyControllerBase
         }
         else
         {
+            isAttacking = false;
+            damageTrigger.SetActive(false);
             return;
         }
         if (((targetObject.transform.position - gameObject.transform.position).magnitude <= attackDistance ||
@@ -88,6 +101,7 @@ public class EnemyController01 : EnemyControllerBase
             if (attackActionTimer <= 0.0f)
             {
                 isAttacking = false;
+                damageTrigger.SetActive(false);
             }
             if (attackActionTimer <= 0.0f && attackCoolDownTimer > 0.0f)
             {
@@ -166,6 +180,11 @@ public class EnemyController01 : EnemyControllerBase
     {
         if (!isAttacking)
         {
+            damageTrigger.SetActive(true);
+            Vector3 horizonDistance = targetObject.transform.position - gameObject.transform.position;
+            horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            animator.SetTrigger("IsAttacking");
+            moveForce = horizonDistance.normalized * attackSpeed;
             attackActionTimer = attackActionTime;
             attackCoolDownTimer = attackCoolDownTime;
             isAttacking = true;
@@ -183,6 +202,7 @@ public class EnemyController01 : EnemyControllerBase
 
     protected override void KnockBack(Vector3 _force, float _friezeTime)
     {
+        animator.SetTrigger("Damaged");
         isAcceleration = false;
         canAction = false;
         moveForce = _force;
