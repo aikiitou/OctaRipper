@@ -25,6 +25,7 @@ public class PlayerMoveController : MonoBehaviour
         //インプットシステムに関数の追加
         input.Player.Move.performed += Move;
         input.Player.Move.canceled += Move;
+        input.Player.Dodge.started += Dodge;
     }
     private void OnDisable()
     {
@@ -32,6 +33,7 @@ public class PlayerMoveController : MonoBehaviour
         //インプットシステムに関数の解除
         input.Player.Move.performed -= Move;
         input.Player.Move.canceled -= Move;
+        input.Player.Dodge.started += Dodge;
     }
     void Start()
     {
@@ -57,5 +59,9 @@ public class PlayerMoveController : MonoBehaviour
         //傾きの生成
         Vector3 moveAngle = new Vector3(moveDir.z, 0, -moveDir.x) * angle;
         moveRot = Quaternion.Euler(moveAngle);
+    }
+    private void Dodge(InputAction.CallbackContext _context)
+    {
+        transform.localPosition += (moveVec / speed);
     }
 }
