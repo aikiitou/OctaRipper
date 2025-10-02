@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &231634395 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
+  m_PrefabInstance: {fileID: 1026752369}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &530795139
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &567889308
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -376,6 +381,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!1 &654364143 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
+  m_PrefabInstance: {fileID: 1058397942}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &667304371
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -600,13 +610,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
+--- !u!1 &1110162486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
+  m_PrefabInstance: {fileID: 1957775416}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1143002931
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1157193057
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -891,7 +906,7 @@ GameObject:
   - component: {fileID: 1610370594}
   - component: {fileID: 1610370595}
   m_Layer: 0
-  m_Name: TutorialManager
+  m_Name: TutorialScenenManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,15 +934,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1610370592}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61cb5f8155dc25d44b516f0215ed39e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   boards:
-  - {fileID: 1157193056}
-  - {fileID: 1960760986}
-  - {fileID: 567889307}
+  - {fileID: 654364143}
+  - {fileID: 231634395}
+  - {fileID: 1110162486}
   boardDuration: 2
   boardRotation: 500
 --- !u!1001 &1957775416
@@ -984,7 +999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2d5723d349ec7bc478ddad590d1dc3f6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1010,7 +1025,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1960760987
 Rigidbody:
   m_ObjectHideFlags: 0
