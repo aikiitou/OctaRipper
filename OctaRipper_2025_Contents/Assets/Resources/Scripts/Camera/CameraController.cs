@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    InputSystem_Actions input;
+    InputSystem_Actions isInput;
 
     [Header("プレイヤー")]
     [SerializeField]
@@ -34,18 +34,18 @@ public class CameraController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
 
-        input = new InputSystem_Actions();
-        input.Enable();
+        isInput = new InputSystem_Actions();
+        isInput.Enable();
 
         //インプットシステムに関数登録
-        input.Player.Look.performed += ViewPointMovement;
+        isInput.Player.Look.performed += ViewPointMovement;
     }
     private void OnDisable()
     {
-        input.Disable();
+        isInput.Disable();
 
         //インプットシステムの解除
-        input.Player.Look.performed -= ViewPointMovement; 
+        isInput.Player.Look.performed -= ViewPointMovement; 
     }
     private void Start()
     {
