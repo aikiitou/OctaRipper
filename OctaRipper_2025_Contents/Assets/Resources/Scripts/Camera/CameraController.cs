@@ -10,13 +10,16 @@ public class CameraController : MonoBehaviour
     [Header("プレイヤー")]
     [SerializeField]
     Transform player;
+    [Header("見るところ")]
+    [SerializeField]
+    Transform lookTarget;
     [Header("カメラの移動スピード")]
     [SerializeField]
     float speed;
-    [Header("y方向の視点移動の最小")]
+    [Header("視野の最大最小")]
     [SerializeField]
     float limitAngle;
-    
+    [Header("マウスの感度")]
     [SerializeField]
     float sens;
 
@@ -54,8 +57,9 @@ public class CameraController : MonoBehaviour
         Vector3 rotationOffset = offsetRot * posOffset;
 
         transform.position = Vector3.MoveTowards(transform.position, (player.position + lookOffset) + rotationOffset, Time.deltaTime * speed);
+        lookTarget.position = Vector3.MoveTowards(lookTarget.position, (player.position + lookOffset), Time.deltaTime * speed);
 
-        transform.LookAt(player.position + lookOffset);
+        transform.LookAt(lookTarget);
     }
 
     private void ViewPointMovement(InputAction.CallbackContext _context)

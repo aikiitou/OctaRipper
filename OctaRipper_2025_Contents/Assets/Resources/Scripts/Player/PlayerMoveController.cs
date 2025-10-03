@@ -13,13 +13,17 @@ public class PlayerMoveController : MonoBehaviour
     [Header("プレイヤーの移動時の傾くスピード")]
     [SerializeField]
     private float angleSpeed;
-    //[Header("プレイヤーの移動時の傾き")]
-    //[SerializeField]
-    //private float angle;
+    [Header("プレイヤーの回避時の移動距離")]
+    [SerializeField]
+    private float dodgeDistance;
+    [Header("回避のクールタイム時間")]
+    [SerializeField]
+    private float dodgeCoolTimeValue;
 
-    Vector3 moveVec = Vector3.zero;   //入力からの移動方向を入れる変数
-    Vector3 inputDir = Vector3.zero;  //入力を記憶
-    Quaternion moveRot; //入力からプレイヤーの傾きを入れる変数
+    private Vector3 moveVec = Vector3.zero;   //入力からの移動方向を入れる変数
+    private Vector3 inputDir = Vector3.zero;  //入力を記憶
+    private Quaternion moveRot; //入力からプレイヤーの傾きを入れる変数
+    private float dodgeCoolTime = 0f;
     private bool isMove = false;
 
     private void OnEnable()
@@ -49,6 +53,15 @@ public class PlayerMoveController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(dodgeCoolTime > 0f)
+        {
+            dodgeCoolTime -= Time.deltaTime;
+            if(dodgeCoolTime <= 0f)
+            {
+                dodgeCoolTime = 0f;
+            }
+        }
+
         rb.linearVelocity = moveVec;
 
         rb.linearVelocity = moveVec * speed + new Vector3(0, rb.linearVelocity.y, 0);
@@ -92,7 +105,12 @@ public class PlayerMoveController : MonoBehaviour
     //回避用の関数
     private void Dodge(InputAction.CallbackContext _context)
     {
-        transform.localPosition += (moveVec / speed);
+        if (dodgeCoolTime <= 0f)
+        {
+            transform.localPosition += (moveVec * dodgeDistance);
+
+            dodgeCoolTime = dodgeCoolTimeValue;
+        }
     }
     private void Look(InputAction.CallbackContext _context)
     {
