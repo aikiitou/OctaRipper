@@ -33,6 +33,7 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         isInput = new InputSystem_Actions();
         isInput.Enable();
