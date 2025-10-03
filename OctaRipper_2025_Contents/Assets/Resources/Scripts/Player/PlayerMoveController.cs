@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMoveController : MonoBehaviour
 {
-    InputSystem_Actions input;
+    InputSystem_Actions isInput;
     Rigidbody rb;
 
     [Header("プレイヤーの移動のスピード")]
@@ -28,22 +28,22 @@ public class PlayerMoveController : MonoBehaviour
 
     private void OnEnable()
     {
-        input = new InputSystem_Actions();
-        input.Enable();
+        isInput = new InputSystem_Actions();
+        isInput.Enable();
         //インプットシステムに関数の追加
-        input.Player.Move.performed += Move;
-        input.Player.Move.canceled += Stop;
-        input.Player.Dodge.started += Dodge;
-        input.Player.Look.performed += Look;
+        isInput.Player.Move.performed += Move;
+        isInput.Player.Move.canceled += Stop;
+        isInput.Player.Dodge.started += Dodge;
+        isInput.Player.Look.performed += Look;
     }
     private void OnDisable()
     {
-        input.Disable();
+        isInput.Disable();
         //インプットシステムに関数の解除
-        input.Player.Move.performed -= Move;
-        input.Player.Move.canceled -= Stop;
-        input.Player.Dodge.started -= Dodge;
-        input.Player.Look.performed -= Look;
+        isInput.Player.Move.performed -= Move;
+        isInput.Player.Move.canceled -= Stop;
+        isInput.Player.Dodge.started -= Dodge;
+        isInput.Player.Look.performed -= Look;
     }
     void Start()
     {
