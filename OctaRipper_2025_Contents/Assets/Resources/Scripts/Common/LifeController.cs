@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyLifeController : MonoBehaviour
+public class LifeController : MonoBehaviour
 {
     float fLifePoint; // ライフポイント
     bool bIsInvincible = true; // 無敵(ダメージを受けない)

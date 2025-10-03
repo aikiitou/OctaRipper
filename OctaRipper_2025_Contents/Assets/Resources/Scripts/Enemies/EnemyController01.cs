@@ -73,7 +73,7 @@ public class EnemyController01 : EnemyControllerBase
             Turn(); // 回転
         }
         TimerCountDown(); // タイマー系のカウントダウン
-        if (cEnemyLifeController.GetLifePoint <= 0.0f)
+        if (cLifeController.GetLifePoint <= 0.0f)
         {
             Death(); // 死亡
         }
@@ -194,7 +194,7 @@ public class EnemyController01 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
-        cEnemyLifeController.ChangeLifePoint(_damage); // ダメージを与える
+        cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {
             KnockBack(_impact, _friezeTime);
