@@ -593,11 +593,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d34affc90d48334199f01a9ffe5532d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 791034053}
-  lookTarget: {fileID: 1206297217}
-  speed: 30
-  limitAngle: 20
-  sens: 0.4
+  tPlayer: {fileID: 791034053}
+  tLookTarget: {fileID: 1206297217}
+  fSpeed: 30
+  fLimitAngle: 20
+  fSens: 0.4
 --- !u!1 &537896342
 GameObject:
   m_ObjectHideFlags: 0
