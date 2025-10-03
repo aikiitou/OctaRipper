@@ -809,6 +809,7 @@ MonoBehaviour:
   fAngleSpeed: 10
   fDodgeDistance: 3
   fDodgeCoolTimeValue: 3
+  fAnimSpeed: 3
 --- !u!4 &791034053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c1c9d8d8d67181341a046ed97cb7e833, type: 3}
