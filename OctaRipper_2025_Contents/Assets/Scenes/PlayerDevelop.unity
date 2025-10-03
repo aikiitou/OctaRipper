@@ -805,10 +805,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5847f7f44346a0d44bb13cca964dca59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 15
-  angleSpeed: 10
-  dodgeDistance: 3
-  dodgeCoolTimeValue: 3
+  fSpeed: 15
+  fAngleSpeed: 10
+  fDodgeDistance: 3
+  fDodgeCoolTimeValue: 3
 --- !u!4 &791034053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c1c9d8d8d67181341a046ed97cb7e833, type: 3}
@@ -839,7 +839,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &791034055
 CapsuleCollider:

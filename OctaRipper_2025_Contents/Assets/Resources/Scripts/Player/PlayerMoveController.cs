@@ -9,22 +9,22 @@ public class PlayerMoveController : MonoBehaviour
 
     [Header("プレイヤーの移動のスピード")]
     [SerializeField]
-    private float speed;
+    private float fSpeed;
     [Header("プレイヤーの移動時の傾くスピード")]
     [SerializeField]
-    private float angleSpeed;
+    private float fAngleSpeed;
     [Header("プレイヤーの回避時の移動距離")]
     [SerializeField]
-    private float dodgeDistance;
+    private float fDodgeDistance;
     [Header("回避のクールタイム時間")]
     [SerializeField]
-    private float dodgeCoolTimeValue;
+    private float fDodgeCoolTimeValue;
 
-    private Vector3 moveVec = Vector3.zero;   //入力からの移動方向を入れる変数
-    private Vector3 inputDir = Vector3.zero;  //入力を記憶
-    private Quaternion moveRot; //入力からプレイヤーの傾きを入れる変数
-    private float dodgeCoolTime = 0f;
-    private bool isMove = false;
+    private Vector3 vMoveVec = Vector3.zero;   //入力からの移動方向を入れる変数
+    private Vector3 vInputDir = Vector3.zero;  //入力を記憶
+    private Quaternion qMoveRot; //入力からプレイヤーの傾きを入れる変数
+    private float fDodgeCoolTime = 0f;
+    private bool bIsMove = false;
 
     private void OnEnable()
     {
@@ -53,33 +53,33 @@ public class PlayerMoveController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(dodgeCoolTime > 0f)
+        if(fDodgeCoolTime > 0f)
         {
-            dodgeCoolTime -= Time.deltaTime;
-            if(dodgeCoolTime <= 0f)
+            fDodgeCoolTime -= Time.deltaTime;
+            if(fDodgeCoolTime <= 0f)
             {
-                dodgeCoolTime = 0f;
+                fDodgeCoolTime = 0f;
             }
         }
 
-        rb.linearVelocity = moveVec;
+        rb.linearVelocity = vMoveVec;
 
-        rb.linearVelocity = moveVec * speed + new Vector3(0, rb.linearVelocity.y, 0);
+        rb.linearVelocity = vMoveVec * fSpeed + new Vector3(0, rb.linearVelocity.y, 0);
 
-        Vector3 lookDir = new Vector3(moveVec.x, 0, moveVec.z);
+        Vector3 lookDir = new Vector3(vMoveVec.x, 0, vMoveVec.z);
         if (lookDir.sqrMagnitude > 0.001f)
         {
             Quaternion rot = Quaternion.LookRotation(lookDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * angleSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * fAngleSpeed);
         }
     }
 
     //移動用の関数
     private void Move(InputAction.CallbackContext _context)
     {
-        isMove = true;
+        bIsMove = true;
 
-        inputDir = _context.ReadValue<Vector2>();
+        vInputDir = _context.ReadValue<Vector2>();
 
         //カメラの前
         Vector3 cameraForward = Camera.main.transform.forward;
@@ -90,31 +90,31 @@ public class PlayerMoveController : MonoBehaviour
         cameraRight.y = 0;
         cameraRight.Normalize();
 
-        moveVec = cameraForward * inputDir.y + cameraRight * inputDir.x;
+        vMoveVec = cameraForward * vInputDir.y + cameraRight * vInputDir.x;
     }
     //移動を止める
     private void Stop(InputAction.CallbackContext _context)
     {
         //移動用の情報のリセット
-        moveVec = Vector3.zero;
-        inputDir = Vector3.zero;
+        vMoveVec = Vector3.zero;
+        vInputDir = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
-        moveRot = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-        isMove = false;
+        qMoveRot = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        bIsMove = false;
     }
     //回避用の関数
     private void Dodge(InputAction.CallbackContext _context)
     {
-        if (dodgeCoolTime <= 0f)
+        if (fDodgeCoolTime <= 0f)
         {
-            transform.localPosition += (moveVec * dodgeDistance);
+            transform.localPosition += (vMoveVec * fDodgeDistance);
 
-            dodgeCoolTime = dodgeCoolTimeValue;
+            fDodgeCoolTime = fDodgeCoolTimeValue;
         }
     }
     private void Look(InputAction.CallbackContext _context)
     {
-       if(isMove == true)
+       if(bIsMove == true)
         {
             //カメラの前
             Vector3 cameraForward = Camera.main.transform.forward;
@@ -125,7 +125,7 @@ public class PlayerMoveController : MonoBehaviour
             cameraRight.y = 0;
             cameraRight.Normalize();
 
-            moveVec = cameraForward * inputDir.y + cameraRight * inputDir.x;
+            vMoveVec = cameraForward * vInputDir.y + cameraRight * vInputDir.x;
         }
     }
 }

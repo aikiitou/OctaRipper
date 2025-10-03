@@ -9,26 +9,26 @@ public class CameraController : MonoBehaviour
 
     [Header("プレイヤー")]
     [SerializeField]
-    Transform player;
+    Transform tPlayer;
     [Header("見るところ")]
     [SerializeField]
-    Transform lookTarget;
+    Transform tLookTarget;
     [Header("カメラの移動スピード")]
     [SerializeField]
-    float speed;
+    float fSpeed;
     [Header("視野の最大最小")]
     [SerializeField]
-    float limitAngle;
+    float fLimitAngle;
     [Header("マウスの感度")]
     [SerializeField]
-    float sens;
+    float fSens;
 
-    private Vector3 lookOffset = new Vector3(0, 1f, 0);
-    private Vector3 posOffset = new Vector3(0, 1, -3);
-    private Quaternion offsetRot;
-    private float maxDistance;
-    private float angleX = 0;
-    private float angleY = 0;
+    private Vector3 vLookOffset = new Vector3(0, 1f, 0);
+    private Vector3 vPosOffset = new Vector3(0, 1, -3);
+    private Quaternion qOffsetRot;
+    private float fMaxDistance;
+    private float fAngleX = 0;
+    private float fAngleY = 0;
     
     private void OnEnable()
     {
@@ -49,50 +49,50 @@ public class CameraController : MonoBehaviour
     }
     private void Start()
     {
-        maxDistance = posOffset.magnitude;
+        fMaxDistance = vPosOffset.magnitude;
     }
 
     void FixedUpdate()
     {
-        Vector3 rotationOffset = offsetRot * posOffset;
+        Vector3 rotationOffset = qOffsetRot * vPosOffset;
 
-        transform.position = Vector3.MoveTowards(transform.position, (player.position + lookOffset) + rotationOffset, Time.deltaTime * speed);
-        lookTarget.position = Vector3.MoveTowards(lookTarget.position, (player.position + lookOffset), Time.deltaTime * speed);
+        transform.position = Vector3.MoveTowards(transform.position, (tPlayer.position + vLookOffset) + rotationOffset, Time.deltaTime * fSpeed);
+        tLookTarget.position = Vector3.MoveTowards(tLookTarget.position, (tPlayer.position + vLookOffset), Time.deltaTime * fSpeed);
 
-        transform.LookAt(lookTarget);
+        transform.LookAt(tLookTarget);
     }
 
     private void ViewPointMovement(InputAction.CallbackContext _context)
     {
         Vector2 input = _context.ReadValue<Vector2>();
-        input *= sens;
+        input *= fSens;
 
-        angleX += input.x;
-        angleY -= input.y;
+        fAngleX += input.x;
+        fAngleY -= input.y;
 
         //角度の制限
-        angleY = Mathf.Clamp(angleY, -limitAngle, limitAngle);
+        fAngleY = Mathf.Clamp(fAngleY, -fLimitAngle, fLimitAngle);
 
-        offsetRot = Quaternion.Euler(new Vector3(angleY, angleX, 0));
+        qOffsetRot = Quaternion.Euler(new Vector3(fAngleY, fAngleX, 0));
 
         //距離の制限
-        Vector3 rayDir = (transform.position - (player.position + lookOffset)).normalized;
-        if (Physics.Raycast((player.position + lookOffset), rayDir, out RaycastHit hitInfo))
+        Vector3 rayDir = (transform.position - (tPlayer.position + vLookOffset)).normalized;
+        if (Physics.Raycast((tPlayer.position + vLookOffset), rayDir, out RaycastHit hitInfo))
         {
-            if (hitInfo.transform != transform && hitInfo.transform != player)
+            if (hitInfo.transform != transform && hitInfo.transform != tPlayer)
             {
-                posOffset = Vector3.ClampMagnitude(posOffset, hitInfo.distance);
+                vPosOffset = Vector3.ClampMagnitude(vPosOffset, hitInfo.distance);
             }
             else
             {
-                posOffset *= maxDistance;
-                posOffset = Vector3.ClampMagnitude(posOffset, maxDistance);
+                vPosOffset *= fMaxDistance;
+                vPosOffset = Vector3.ClampMagnitude(vPosOffset, fMaxDistance);
             }
         }
         else
         {
-            posOffset *= maxDistance;
-            posOffset = Vector3.ClampMagnitude(posOffset, maxDistance);
+            vPosOffset *= fMaxDistance;
+            vPosOffset = Vector3.ClampMagnitude(vPosOffset, fMaxDistance);
         }
     }
 }
