@@ -6,6 +6,6 @@ public class Charge1 : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = new Vector3(4f, 0f, 0f);
+        //rb.linearVelocity = new Vector3(transform.forward * 4f, 0f, 0f);
     }
 }
