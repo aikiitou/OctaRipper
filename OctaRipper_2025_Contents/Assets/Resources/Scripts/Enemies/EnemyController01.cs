@@ -85,30 +85,30 @@ public class EnemyController01 : EnemyControllerBase
 
     void ChangePattern()
     {
-        if (fFriezeTimer <= 0.0f)
+        if (fFriezeTimer <= 0.0f) // 硬直状態のタイマーが終わっていたら
         {
-            bCanAction = true;
+            bCanAction = true; // 行動を許可する
         }
         else
         {
-            bIsAttacking = false;
+            bIsAttacking = false; 
             gDamageTrigger.SetActive(false);
-            return;
+            return; // でなければ攻撃を停止させ、returnする。
         }
-        if (fAttackActionTimer <= 0.0f)
+        if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
             bIsAttacking = false;
             gDamageTrigger.SetActive(false);
             bCanTurn = true;
         }
         if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance ||
-            fAttackActionTimer > 0.0f) && bCanAction)
+            fAttackActionTimer > 0.0f) && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
             Ray ray = new Ray(transform.position, transform.forward);
             Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
             if (hit.transform != null)
             {
-                if (hit.transform.tag == "Player" && fAttackCoolDownTimer <= 0.0f)
+                if (hit.transform.tag == "Player" && fAttackCoolDownTimer <= 0.0f) // 正面にプレイヤーがいる際に攻撃実行。
                 {
                     bCanTurn = false;
                     bIsAcceleration = false;
@@ -116,14 +116,14 @@ public class EnemyController01 : EnemyControllerBase
                 }
             }
         }
-        if (!bIsAttacking)
+        if (!bIsAttacking) // 攻撃中でなければ
         {
             bCanTurn = true;
             bIsAcceleration = true;
         }
     }
 
-    void TimerCountDown()
+    void TimerCountDown() // 各タイマーのカウントダウン
     {
         if (fAttackCoolDownTimer > 0.0f)
         {
@@ -137,9 +137,8 @@ public class EnemyController01 : EnemyControllerBase
         {
             fFriezeTimer -= Time.deltaTime;
         }
-
     }
-    protected override void Move()
+    protected override void Move() // 移動
     {
         if (bIsAcceleration) // 加速中
         {
@@ -164,10 +163,10 @@ public class EnemyController01 : EnemyControllerBase
                 vMoveForce = Vector3.zero;
             }
         }
-        rRigidbody.linearVelocity = new Vector3(vMoveForce.x,rRigidbody.linearVelocity.y,vMoveForce.z);
+        rRigidbody.linearVelocity = new Vector3(vMoveForce.x,rRigidbody.linearVelocity.y,vMoveForce.z); // 反映
     }
 
-    protected override void Turn()
+    protected override void Turn() // 回転
     {
         Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
         horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
@@ -178,9 +177,9 @@ public class EnemyController01 : EnemyControllerBase
             ); // 方向転換
     }
 
-    protected override void Attack()
+    protected override void Attack() // 攻撃
     {
-        if (!bIsAttacking)
+        if (!bIsAttacking) // 初動処理
         {
             gDamageTrigger.SetActive(true);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
@@ -193,27 +192,28 @@ public class EnemyController01 : EnemyControllerBase
         }
     }
 
-    public override void Damage(float _damage, Vector3 _impact, float _friezeTime)
+    public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
-        cEnemyLifeController.ChangeLifePoint(_damage);
-        if (_friezeTime > 0)
+        cEnemyLifeController.ChangeLifePoint(_damage); // ダメージを与える
+        if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {
             KnockBack(_impact, _friezeTime);
         }
     }
 
-    protected override void KnockBack(Vector3 _force, float _friezeTime)
+    protected override void KnockBack(Vector3 _force, float _friezeTime) // ノックバック・硬直
     {
-        aAnimator.SetTrigger("Damaged");
-        bIsAcceleration = false;
-        bCanAction = false;
-        vMoveForce = _force;
-        fFriezeTimer = _friezeTime;
+        aAnimator.SetTrigger("Damaged"); // 硬直モーション起動
+        bIsAcceleration = false; // 加速停止
+        bCanAction = false; // 行動停止
+        vMoveForce = _force; // 移動力を吹っ飛ばされる力に上書き
+        fFriezeTimer = _friezeTime; // 硬直時間の設定
     }
 
-    protected override void Death()
+    protected override void Death() // 死亡(現在は仮ログ)
     {
-
+        MyDebugLib.MessageLog("Dead");
+        gameObject.SetActive(false);
     }
 
 
