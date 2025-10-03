@@ -79,7 +79,7 @@ public class EnemyController01 : EnemyControllerBase
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Damage(-20.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
+            Damage(-10.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
         }
     }
 
@@ -207,6 +207,7 @@ public class EnemyController01 : EnemyControllerBase
         bIsAcceleration = false; // ‰Á‘¬’â~
         bCanAction = false; // s“®’â~
         vMoveForce = _force; // ˆÚ“®—Í‚ğ‚Á”ò‚Î‚³‚ê‚é—Í‚Éã‘‚«
+        rRigidbody.linearVelocity = vMoveForce; // ”½‰f
         fFriezeTimer = _friezeTime; // d’¼ŠÔ‚Ìİ’è
     }
 

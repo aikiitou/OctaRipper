@@ -3,40 +3,37 @@ using UnityEngine;
 public class EnemyController02 : EnemyControllerBase
 {
     [SerializeField, Header("初期ライフポイント")]
-    float fInitLifePoint = 100.0f;
+    float fInitLifePoint = 30.0f;
 
     [SerializeField, Header("最大移動速度")]
     float fMaxSpeed = 2.0f;
 
     [SerializeField, Header("移動加速度")]
-    float fAcceleration = 5.0f;
-
-    [SerializeField, Header("移動自然減速度")]
-    float fNaturalBrake = 2.0f;
+    float fAcceleration = 20.0f;
 
     [SerializeField, Header("移動減速度")]
     float fBrake = 20.0f;
 
     [SerializeField, Header("攻撃実行距離")]
-    float fAttackDistance = 2.0f;
+    float fAttackDistance = 100.0f;
 
     [SerializeField, Header("攻撃必要時間")]
     float fAttackActionTime = 1.0f;
 
-    [SerializeField, Header("突進スピード")]
-    float fAttackSpeed = 10.0f;
+    [SerializeField, Header("弾速")]
+    float fBulletSpeed = 20.0f;
 
     [SerializeField, Header("与ダメージ")]
     float fAttackDamage = 10.0f;
 
     [SerializeField, Header("攻撃クールダウン")]
-    float fAttackCoolDownTime = 1.5f;
+    float fAttackCoolDownTime = 2.0f;
 
     [SerializeField, Header("見た目回転スピード")]
     float fRotationSpeed = 10.0f;
 
-    [SerializeField, Header("攻撃の当たり判定")]
-    GameObject gDamageTrigger; // 攻撃の当たり判定オブジェクト
+    [SerializeField, Header("弾")]
+    GameObject gBulletObject; // 弾丸
 
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
@@ -53,7 +50,7 @@ public class EnemyController02 : EnemyControllerBase
 
     void Start()
     {
-        gDamageTrigger.SetActive(false);
+        gBulletObject.SetActive(false);
         aAnimator = GetComponent<Animator>();
         gTargetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
         rRigidbody = GetComponent<Rigidbody>();
@@ -79,7 +76,7 @@ public class EnemyController02 : EnemyControllerBase
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Damage(-20.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
+            Damage(-10.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
         }
     }
 
@@ -92,13 +89,13 @@ public class EnemyController02 : EnemyControllerBase
         else
         {
             bIsAttacking = false;
-            gDamageTrigger.SetActive(false);
+            gBulletObject.SetActive(false);
             return; // でなければ攻撃を停止させ、returnする。
         }
         if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
             bIsAttacking = false;
-            gDamageTrigger.SetActive(false);
+            gBulletObject.SetActive(false);
             bCanTurn = true;
         }
         if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance ||
@@ -145,7 +142,7 @@ public class EnemyController02 : EnemyControllerBase
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
             moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
-            vMoveForce -= vMoveForce.normalized * fNaturalBrake * Time.deltaTime; // 摩擦
+            vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime; // 摩擦
             vMoveForce += moveAddForce; // 加速度を移動量に加える
             if (vMoveForce.magnitude >= fMaxSpeed) // 上限値矯正
             {
@@ -181,11 +178,11 @@ public class EnemyController02 : EnemyControllerBase
     {
         if (!bIsAttacking) // 初動処理
         {
-            gDamageTrigger.SetActive(true);
+            gBulletObject.SetActive(true);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
-            vMoveForce = horizonDistance.normalized * fAttackSpeed;
+            vMoveForce = horizonDistance.normalized * fBulletSpeed;
             fAttackActionTimer = fAttackActionTime;
             fAttackCoolDownTimer = fAttackCoolDownTime;
             bIsAttacking = true;
@@ -207,6 +204,7 @@ public class EnemyController02 : EnemyControllerBase
         bIsAcceleration = false; // 加速停止
         bCanAction = false; // 行動停止
         vMoveForce = _force; // 移動力を吹っ飛ばされる力に上書き
+        rRigidbody.linearVelocity = vMoveForce; // 反映
         fFriezeTimer = _friezeTime; // 硬直時間の設定
     }
 
