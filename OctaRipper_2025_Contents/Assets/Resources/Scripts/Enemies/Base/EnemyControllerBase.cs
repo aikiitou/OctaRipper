@@ -3,18 +3,18 @@ using UnityEngine.Pool;
 
 public abstract class EnemyControllerBase : MonoBehaviour
 {
-    protected EnemyLifeController cEnemyLifeController; // ライフポイントを管理するコンポーネント
+    protected LifeController cLifeController; // ライフポイントを管理するコンポーネント
 
     public void InitializeEnemyData(float _lifePoint) // エネミー情報の初期化
     {
-        cEnemyLifeController = gameObject.GetComponent<EnemyLifeController>(); // コンポーネントの代入
-        cEnemyLifeController.SetLifePoint(_lifePoint); // ライフポイントのセット
-        cEnemyLifeController.SetInvincible(false); // 無敵の解除
+        cLifeController = gameObject.GetComponent<LifeController>(); // コンポーネントの代入
+        cLifeController.SetLifePoint(_lifePoint); // ライフポイントのセット
+        cLifeController.SetInvincible(false); // 無敵の解除
     }
 
     public void ReleaseObject(GameObject _obj)
     {
-        cEnemyLifeController.SetInvincible(true); // 無敵の有効
+        cLifeController.SetInvincible(true); // 無敵の有効
         //transform.parent.GetComponent<>().
     }
 
