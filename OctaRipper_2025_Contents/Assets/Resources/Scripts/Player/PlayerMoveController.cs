@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMoveController : MonoBehaviour
 {
-    InputSystem_Actions input;
+    Animator aAnimator;
+    InputSystem_Actions isInput;
     Rigidbody rb;
 
     [Header("プレイヤーの移動のスピード")]
@@ -19,41 +20,57 @@ public class PlayerMoveController : MonoBehaviour
     [Header("回避のクールタイム時間")]
     [SerializeField]
     private float fDodgeCoolTimeValue;
+    [Header("アニメーションの速度")]
+    [SerializeField]
+    private float fAnimSpeed;
 
     private Vector3 vMoveVec = Vector3.zero;   //入力からの移動方向を入れる変数
     private Vector3 vInputDir = Vector3.zero;  //入力を記憶
+    private Vector3 vCameraForward = Vector3.zero; //カメラからの正面
     private Quaternion qMoveRot; //入力からプレイヤーの傾きを入れる変数
     private float fDodgeCoolTime = 0f;
+    private float fAnimBlendX = 0;
+    private float fAnimBlendY = 0;
     private bool bIsMove = false;
 
     private void OnEnable()
     {
-        input = new InputSystem_Actions();
-        input.Enable();
+        isInput = new InputSystem_Actions();
+        isInput.Enable();
         //インプットシステムに関数の追加
-        input.Player.Move.performed += Move;
-        input.Player.Move.canceled += Stop;
-        input.Player.Dodge.started += Dodge;
-        input.Player.Look.performed += Look;
+        isInput.Player.Move.performed += Move;
+        isInput.Player.Move.canceled += Stop;
+        isInput.Player.Dodge.started += Dodge;
+        isInput.Player.Look.performed += Look;
     }
     private void OnDisable()
     {
-        input.Disable();
+        isInput.Disable();
         //インプットシステムに関数の解除
-        input.Player.Move.performed -= Move;
-        input.Player.Move.canceled -= Stop;
-        input.Player.Dodge.started -= Dodge;
-        input.Player.Look.performed -= Look;
+        isInput.Player.Move.performed -= Move;
+        isInput.Player.Move.canceled -= Stop;
+        isInput.Player.Dodge.started -= Dodge;
+        isInput.Player.Look.performed -= Look;
     }
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        aAnimator = GetComponent<Animator>();
     }
 
 
     void FixedUpdate()
     {
-        if(fDodgeCoolTime > 0f)
+        if(bIsMove == true)
+        {
+            fAnimBlendX = Mathf.MoveTowards(fAnimBlendX, vInputDir.x, Time.deltaTime * fAnimSpeed);
+            fAnimBlendY = Mathf.MoveTowards(fAnimBlendY, vInputDir.y, Time.deltaTime * fAnimSpeed);
+
+            aAnimator.SetFloat("fMoveDirX", fAnimBlendX);
+            aAnimator.SetFloat("fMoveDirY", fAnimBlendY);
+        }
+
+        if (fDodgeCoolTime > 0f)
         {
             fDodgeCoolTime -= Time.deltaTime;
             if(fDodgeCoolTime <= 0f)
@@ -66,7 +83,7 @@ public class PlayerMoveController : MonoBehaviour
 
         rb.linearVelocity = vMoveVec * fSpeed + new Vector3(0, rb.linearVelocity.y, 0);
 
-        Vector3 lookDir = new Vector3(vMoveVec.x, 0, vMoveVec.z);
+        Vector3 lookDir = vCameraForward;
         if (lookDir.sqrMagnitude > 0.001f)
         {
             Quaternion rot = Quaternion.LookRotation(lookDir);
@@ -78,19 +95,20 @@ public class PlayerMoveController : MonoBehaviour
     private void Move(InputAction.CallbackContext _context)
     {
         bIsMove = true;
+        aAnimator.SetBool("bIsMove", bIsMove);
 
         vInputDir = _context.ReadValue<Vector2>();
 
         //カメラの前
-        Vector3 cameraForward = Camera.main.transform.forward;
-        cameraForward.y = 0;
-        cameraForward.Normalize();
+        vCameraForward = Camera.main.transform.forward;
+        vCameraForward.y = 0;
+        vCameraForward.Normalize();
         //カメラの右
         Vector3 cameraRight = Camera.main.transform.right;
         cameraRight.y = 0;
         cameraRight.Normalize();
 
-        vMoveVec = cameraForward * vInputDir.y + cameraRight * vInputDir.x;
+        vMoveVec = vCameraForward * vInputDir.y + cameraRight * vInputDir.x;
     }
     //移動を止める
     private void Stop(InputAction.CallbackContext _context)
@@ -100,7 +118,10 @@ public class PlayerMoveController : MonoBehaviour
         vInputDir = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
         qMoveRot = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        fAnimBlendX = 0;
+        fAnimBlendY = 0;
         bIsMove = false;
+        aAnimator.SetBool("bIsMove", bIsMove);
     }
     //回避用の関数
     private void Dodge(InputAction.CallbackContext _context)
@@ -117,15 +138,15 @@ public class PlayerMoveController : MonoBehaviour
        if(bIsMove == true)
         {
             //カメラの前
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0;
-            cameraForward.Normalize();
+            vCameraForward = Camera.main.transform.forward;
+            vCameraForward.y = 0;
+            vCameraForward.Normalize();
             //カメラの右
             Vector3 cameraRight = Camera.main.transform.right;
             cameraRight.y = 0;
             cameraRight.Normalize();
 
-            vMoveVec = cameraForward * vInputDir.y + cameraRight * vInputDir.x;
+            vMoveVec = vCameraForward * vInputDir.y + cameraRight * vInputDir.x;
         }
     }
 }
