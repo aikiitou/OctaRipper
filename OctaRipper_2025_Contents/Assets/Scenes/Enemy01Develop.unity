@@ -326,18 +326,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1aa4dbea91f8749894af080c41429f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initLifePoint: 60
-  maxSpeed: 4
-  acceleration: 14
-  naturalBrake: 5
-  brake: 10
-  attackDistance: 4
-  attackActionTime: 1
-  attackSpeed: 10
-  attackDamage: 10
-  attackCoolDownTime: 1.5
-  rotationSpeed: 10
-  damageTrigger: {fileID: 2137286705}
+  fInitLifePoint: 60
+  fMaxSpeed: 4
+  fAcceleration: 14
+  fNaturalBrake: 7
+  fBrake: 10
+  fAttackDistance: 4
+  fAttackActionTime: 1
+  fAttackSpeed: 10
+  fAttackDamage: 10
+  fAttackCoolDownTime: 1.5
+  fRotationSpeed: 10
+  gDamageTrigger: {fileID: 2137286705}
 --- !u!114 &228703993
 MonoBehaviour:
   m_ObjectHideFlags: 0

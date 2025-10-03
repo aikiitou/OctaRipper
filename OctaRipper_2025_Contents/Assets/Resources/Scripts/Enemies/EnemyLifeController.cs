@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class EnemyLifeController : MonoBehaviour
 {
-    float lifePoint; // ライフポイント
-    bool isInvincible = true; // 無敵(ダメージを受けない)
+    float fLifePoint; // ライフポイント
+    bool bIsInvincible = true; // 無敵(ダメージを受けない)
 
-    public float LifePoint => lifePoint; // ライフポイントのゲッター
+    public float GetLifePoint => fLifePoint; // ライフポイントのゲッター
 
     public void SetLifePoint(float _value) // ライフポイントのセッター
     {
-        lifePoint = _value;
+        fLifePoint = _value;
     }
 
     public void SetInvincible(bool _isInvincible) // 無敵判定のセッター
     {
-        isInvincible = _isInvincible;
+        bIsInvincible = _isInvincible;
     }
 
     public void ChangeLifePoint(float _value) // ライフポイントの変更
     {
-        if (!isInvincible)
+        if (!bIsInvincible)
         {
-            lifePoint += _value;
+            fLifePoint += _value;
         }
     }
 

@@ -3,199 +3,199 @@ using UnityEngine;
 public class EnemyController01 : EnemyControllerBase
 {
     [SerializeField,Header("初期ライフポイント")]
-    float initLifePoint = 100.0f;
+    float fInitLifePoint = 100.0f;
 
     [SerializeField, Header("最大移動速度")]
-    float maxSpeed = 2.0f;
+    float fMaxSpeed = 2.0f;
 
     [SerializeField, Header("移動加速度")]
-    float acceleration = 5.0f;
+    float fAcceleration = 5.0f;
 
     [SerializeField, Header("移動自然減速度")]
-    float naturalBrake = 2.0f;
+    float fNaturalBrake = 2.0f;
 
     [SerializeField, Header("移動減速度")]
-    float brake = 20.0f;
+    float fBrake = 20.0f;
 
     [SerializeField, Header("攻撃実行距離")]
-    float attackDistance = 2.0f;
+    float fAttackDistance = 2.0f;
 
     [SerializeField, Header("攻撃必要時間")]
-    float attackActionTime = 1.0f;
+    float fAttackActionTime = 1.0f;
 
     [SerializeField, Header("突進スピード")]
-    float attackSpeed = 10.0f;
+    float fAttackSpeed = 10.0f;
 
     [SerializeField, Header("与ダメージ")]
-    float attackDamage = 10.0f;
+    float fAttackDamage = 10.0f;
 
     [SerializeField, Header("攻撃クールダウン")]
-    float attackCoolDownTime = 1.5f;
+    float fAttackCoolDownTime = 1.5f;
 
     [SerializeField, Header("見た目回転スピード")]
-    float rotationSpeed = 10.0f;
+    float fRotationSpeed = 10.0f;
 
     [SerializeField, Header("攻撃の当たり判定")]
-    GameObject damageTrigger; // 攻撃の当たり判定オブジェクト
+    GameObject gDamageTrigger; // 攻撃の当たり判定オブジェクト
 
-    bool isAcceleration = true; // 現在加速しているかどうか
-    bool isAttacking = false; // 攻撃しているかどうか
-    bool canTurn = true; // 回転可能かどうか
-    bool canAction = true; // 行動可能かどうか
-    float attackCoolDownTimer;
-    float attackActionTimer;
-    float friezeTimer; // 硬直時間
-    Vector3 moveForce; // 移動量
-    GameObject targetObject; // 対象のオブジェクト
-    Rigidbody rb; // RigidBody
-    Animator animator; // Animator
+    bool bIsAcceleration = true; // 現在加速しているかどうか
+    bool bIsAttacking = false; // 攻撃しているかどうか
+    bool bCanTurn = true; // 回転可能かどうか
+    bool bCanAction = true; // 行動可能かどうか
+    float fAttackCoolDownTimer;
+    float fAttackActionTimer;
+    float fFriezeTimer; // 硬直時間
+    Vector3 vMoveForce; // 移動量
+    GameObject gTargetObject; // 対象のオブジェクト
+    Rigidbody rRigidbody; // Rigidbody
+    Animator aAnimator; // Animator
 
 
     void Start()
     {
-        damageTrigger.SetActive(false);
-        animator = GetComponent<Animator>();
-        targetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
-        rb = GetComponent<Rigidbody>();
+        gDamageTrigger.SetActive(false);
+        aAnimator = GetComponent<Animator>();
+        gTargetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
+        rRigidbody = GetComponent<Rigidbody>();
     }
 
     void OnEnable()
     {
-        InitializeEnemyData(initLifePoint); // 初期ライフポイントのセット
+        InitializeEnemyData(fInitLifePoint); // 初期ライフポイントのセット
     }
 
     void Update()
     {
         ChangePattern(); // 行動の切り替え
         Move(); // 動き
-        if (canTurn)
+        if (bCanTurn)
         {
             Turn(); // 回転
         }
         TimerCountDown(); // タイマー系のカウントダウン
-        if (enemyLifeController.LifePoint <= 0.0f)
+        if (cEnemyLifeController.GetLifePoint <= 0.0f)
         {
             Death(); // 死亡
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Damage(20.0f, (gameObject.transform.position - targetObject.transform.position).normalized * 5.0f, 1.0f);
+            Damage(-20.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
         }
     }
 
     void ChangePattern()
     {
-        if (friezeTimer <= 0.0f)
+        if (fFriezeTimer <= 0.0f)
         {
-            canAction = true;
+            bCanAction = true;
         }
         else
         {
-            isAttacking = false;
-            damageTrigger.SetActive(false);
+            bIsAttacking = false;
+            gDamageTrigger.SetActive(false);
             return;
         }
-        if (attackActionTimer <= 0.0f)
+        if (fAttackActionTimer <= 0.0f)
         {
-            isAttacking = false;
-            damageTrigger.SetActive(false);
-            canTurn = true;
+            bIsAttacking = false;
+            gDamageTrigger.SetActive(false);
+            bCanTurn = true;
         }
-        if (((targetObject.transform.position - gameObject.transform.position).magnitude <= attackDistance ||
-            attackActionTimer > 0.0f) && canAction)
+        if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance ||
+            fAttackActionTimer > 0.0f) && bCanAction)
         {
             Ray ray = new Ray(transform.position, transform.forward);
-            Physics.Raycast(ray, out RaycastHit hit, attackDistance);
+            Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
             if (hit.transform != null)
             {
-                if (hit.transform.tag == "Player" && attackCoolDownTimer <= 0.0f)
+                if (hit.transform.tag == "Player" && fAttackCoolDownTimer <= 0.0f)
                 {
-                    canTurn = false;
-                    isAcceleration = false;
+                    bCanTurn = false;
+                    bIsAcceleration = false;
                     Attack();
                 }
             }
         }
-        if (!isAttacking)
+        if (!bIsAttacking)
         {
-            canTurn = true;
-            isAcceleration = true;
+            bCanTurn = true;
+            bIsAcceleration = true;
         }
     }
 
     void TimerCountDown()
     {
-        if (attackCoolDownTimer > 0.0f)
+        if (fAttackCoolDownTimer > 0.0f)
         {
-            attackCoolDownTimer -= Time.deltaTime;
+            fAttackCoolDownTimer -= Time.deltaTime;
         }
-        if (attackActionTimer > 0.0f)
+        if (fAttackActionTimer > 0.0f)
         {
-            attackActionTimer -= Time.deltaTime;
+            fAttackActionTimer -= Time.deltaTime;
         }
-        if (friezeTimer > 0.0f)
+        if (fFriezeTimer > 0.0f)
         {
-            friezeTimer -= Time.deltaTime;
+            fFriezeTimer -= Time.deltaTime;
         }
 
     }
     protected override void Move()
     {
-        if (isAcceleration) // 加速中
+        if (bIsAcceleration) // 加速中
         {
-            Vector3 moveAddForce = targetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
+            Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
-            moveAddForce = moveAddForce.normalized * acceleration * Time.deltaTime; // 加速量算出
-            moveForce -= moveForce.normalized * naturalBrake * Time.deltaTime; // 摩擦
-            moveForce += moveAddForce; // 加速度を移動量に加える
-            if (moveForce.magnitude >= maxSpeed) // 上限値矯正
+            moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
+            vMoveForce -= vMoveForce.normalized * fNaturalBrake * Time.deltaTime; // 摩擦
+            vMoveForce += moveAddForce; // 加速度を移動量に加える
+            if (vMoveForce.magnitude >= fMaxSpeed) // 上限値矯正
             {
-                moveForce = moveForce.normalized * maxSpeed;
+                vMoveForce = vMoveForce.normalized * fMaxSpeed;
             }
         }
         else // ブレーキ
         {
-            if (moveForce.magnitude >= brake * Time.deltaTime)
+            if (vMoveForce.magnitude >= fBrake * Time.deltaTime)
             {
-                moveForce -= moveForce.normalized * brake * Time.deltaTime;
+                vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime;
             }
             else
             {
-                moveForce = Vector3.zero;
+                vMoveForce = Vector3.zero;
             }
         }
-        rb.linearVelocity = new Vector3(moveForce.x,rb.linearVelocity.y,moveForce.z);
+        rRigidbody.linearVelocity = new Vector3(vMoveForce.x,rRigidbody.linearVelocity.y,vMoveForce.z);
     }
 
     protected override void Turn()
     {
-        Vector3 horizonDistance = targetObject.transform.position - gameObject.transform.position;
+        Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
         horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
-            rotationSpeed * Time.deltaTime
+            fRotationSpeed * Time.deltaTime
             ); // 方向転換
     }
 
     protected override void Attack()
     {
-        if (!isAttacking)
+        if (!bIsAttacking)
         {
-            damageTrigger.SetActive(true);
-            Vector3 horizonDistance = targetObject.transform.position - gameObject.transform.position;
+            gDamageTrigger.SetActive(true);
+            Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
-            animator.SetTrigger("IsAttacking");
-            moveForce = horizonDistance.normalized * attackSpeed;
-            attackActionTimer = attackActionTime;
-            attackCoolDownTimer = attackCoolDownTime;
-            isAttacking = true;
+            aAnimator.SetTrigger("IsAttacking");
+            vMoveForce = horizonDistance.normalized * fAttackSpeed;
+            fAttackActionTimer = fAttackActionTime;
+            fAttackCoolDownTimer = fAttackCoolDownTime;
+            bIsAttacking = true;
         }
     }
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime)
     {
-        enemyLifeController.ChangeLifePoint(_damage);
+        cEnemyLifeController.ChangeLifePoint(_damage);
         if (_friezeTime > 0)
         {
             KnockBack(_impact, _friezeTime);
@@ -204,11 +204,11 @@ public class EnemyController01 : EnemyControllerBase
 
     protected override void KnockBack(Vector3 _force, float _friezeTime)
     {
-        animator.SetTrigger("Damaged");
-        isAcceleration = false;
-        canAction = false;
-        moveForce = _force;
-        friezeTimer = _friezeTime;
+        aAnimator.SetTrigger("Damaged");
+        bIsAcceleration = false;
+        bCanAction = false;
+        vMoveForce = _force;
+        fFriezeTimer = _friezeTime;
     }
 
     protected override void Death()
