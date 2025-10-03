@@ -58,7 +58,6 @@ public class PlayerMoveController : MonoBehaviour
         aAnimator = GetComponent<Animator>();
     }
 
-
     void FixedUpdate()
     {
         if(bIsMove == true)
@@ -110,6 +109,7 @@ public class PlayerMoveController : MonoBehaviour
 
         vMoveVec = vCameraForward * vInputDir.y + cameraRight * vInputDir.x;
     }
+
     //ˆÚ“®‚ğ~‚ß‚é
     private void Stop(InputAction.CallbackContext _context)
     {
@@ -123,6 +123,7 @@ public class PlayerMoveController : MonoBehaviour
         bIsMove = false;
         aAnimator.SetBool("bIsMove", bIsMove);
     }
+
     //‰ñ”ğ—p‚ÌŠÖ”
     private void Dodge(InputAction.CallbackContext _context)
     {
@@ -133,6 +134,8 @@ public class PlayerMoveController : MonoBehaviour
             fDodgeCoolTime = fDodgeCoolTimeValue;
         }
     }
+
+    //ƒJƒƒ‰‚Ì•ûŒü‚ª•Ï‚í‚Á‚½‚Æ‚«AˆÚ“®‚µ‚Ä‚¢‚½‚çŒü‚«‚ğ•Ï‚¦‚é‚æ‚¤
     private void Look(InputAction.CallbackContext _context)
     {
        if(bIsMove == true)
