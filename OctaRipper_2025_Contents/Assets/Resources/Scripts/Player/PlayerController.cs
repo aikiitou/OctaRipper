@@ -81,6 +81,10 @@ public class PlayerController : MonoBehaviour
             gDodgeEffectInstance.transform.position = transform.position;
             gDodgeEffectInstance.transform.rotation = transform.rotation;
         }
+        else
+        {
+            gDodgeEffectInstance.transform.position = Vector3.MoveTowards(gDodgeEffectInstance.transform.position, transform.position, Time.deltaTime * fSpeed);
+        }
 
         if (fDodgeCoolTime > 0f)
         {
