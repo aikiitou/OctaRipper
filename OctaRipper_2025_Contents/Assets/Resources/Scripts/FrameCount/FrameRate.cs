@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class FrameRate : MonoBehaviour
 {
-    private int nFrameRate;
+    private int nFrameRate;     //現在のフレーム
+    private int nFrame = 59;    //フレームをリセットする数
 
     void Awake()
     {
@@ -15,7 +16,7 @@ public class FrameRate : MonoBehaviour
     void Update()
     {
         nFrameRate++;
-        if (nFrameRate > 60)
+        if (nFrameRate > nFrame)
         {
             nFrameRate = 0;
         }
