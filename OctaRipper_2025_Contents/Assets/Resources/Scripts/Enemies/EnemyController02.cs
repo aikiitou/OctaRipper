@@ -17,8 +17,8 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("攻撃実行距離")]
     float fAttackDistance = 100.0f;
 
-    [SerializeField, Header("攻撃必要時間")]
-    float fAttackActionTime = 1.0f;
+    [SerializeField, Header("移動クールダウン")]
+    float fMoveCoolDownTime = 3.0f;
 
     [SerializeField, Header("弾速")]
     float fBulletSpeed = 20.0f;
@@ -40,7 +40,7 @@ public class EnemyController02 : EnemyControllerBase
     bool bCanTurn = true; // 回転可能かどうか
     bool bCanAction = true; // 行動可能かどうか
     float fAttackCoolDownTimer;
-    float fAttackActionTimer;
+    float fMoveCoolDownTimer;
     float fFriezeTimer; // 硬直時間
     Vector3 vMoveForce; // 移動量
     GameObject gTargetObject; // 対象のオブジェクト
@@ -88,27 +88,24 @@ public class EnemyController02 : EnemyControllerBase
         }
         else
         {
-            bIsAttacking = false;
-            gBulletObject.SetActive(false);
             return; // でなければ攻撃を停止させ、returnする。
         }
-        if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
+        if (fMoveCoolDownTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
             bIsAttacking = false;
             gBulletObject.SetActive(false);
             bCanTurn = true;
+            bIsAcceleration = true;
         }
-        if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance ||
-            fAttackActionTimer > 0.0f) && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
+        if (fAttackCoolDownTimer <= 0.0f && rRigidbody.linearVelocity.magnitude <= 0.0f && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
             Ray ray = new Ray(transform.position, transform.forward);
             Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
             if (hit.transform != null)
             {
-                if (hit.transform.tag == "Player" && fAttackCoolDownTimer <= 0.0f) // 正面にプレイヤーがいる際に攻撃実行。
+                if (hit.transform.tag == "Player") // 正面にプレイヤーがいる際に攻撃実行。
                 {
                     bCanTurn = false;
-                    bIsAcceleration = false;
                     Attack();
                 }
             }
@@ -116,19 +113,18 @@ public class EnemyController02 : EnemyControllerBase
         if (!bIsAttacking) // 攻撃中でなければ
         {
             bCanTurn = true;
-            bIsAcceleration = true;
         }
     }
 
     void TimerCountDown() // 各タイマーのカウントダウン
     {
-        if (fAttackCoolDownTimer > 0.0f)
+        if (fAttackCoolDownTimer > 0.0f && !bIsAttacking)
         {
             fAttackCoolDownTimer -= Time.deltaTime;
         }
-        if (fAttackActionTimer > 0.0f)
+        if (fMoveCoolDownTimer > 0.0f && bIsAttacking)
         {
-            fAttackActionTimer -= Time.deltaTime;
+            fMoveCoolDownTimer -= Time.deltaTime;
         }
         if (fFriezeTimer > 0.0f)
         {
@@ -137,28 +133,23 @@ public class EnemyController02 : EnemyControllerBase
     }
     protected override void Move() // 移動
     {
-        if (bIsAcceleration) // 加速中
+        if(bIsAcceleration)
         {
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
-            moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
-            vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime; // 摩擦
-            vMoveForce += moveAddForce; // 加速度を移動量に加える
-            if (vMoveForce.magnitude >= fMaxSpeed) // 上限値矯正
-            {
-                vMoveForce = vMoveForce.normalized * fMaxSpeed;
-            }
+            moveAddForce = moveAddForce.normalized * fAcceleration; // 加速量算出
+            vMoveForce -= moveAddForce; // 加速度を移動量に加える
+            fMoveCoolDownTimer = fMoveCoolDownTime;
+            bIsAcceleration = false;
         }
-        else // ブレーキ
+        vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime; // 摩擦
+        if (vMoveForce.magnitude >= fBrake * Time.deltaTime)
         {
-            if (vMoveForce.magnitude >= fBrake * Time.deltaTime)
-            {
-                vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime;
-            }
-            else
-            {
-                vMoveForce = Vector3.zero;
-            }
+            vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime;
+        }
+        else
+        {
+            vMoveForce = Vector3.zero;
         }
         rRigidbody.linearVelocity = new Vector3(vMoveForce.x, rRigidbody.linearVelocity.y, vMoveForce.z); // 反映
     }
@@ -183,7 +174,6 @@ public class EnemyController02 : EnemyControllerBase
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
             vMoveForce = horizonDistance.normalized * fBulletSpeed;
-            fAttackActionTimer = fAttackActionTime;
             fAttackCoolDownTimer = fAttackCoolDownTime;
             bIsAttacking = true;
         }

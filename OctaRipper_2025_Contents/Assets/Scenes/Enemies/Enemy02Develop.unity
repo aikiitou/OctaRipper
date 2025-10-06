@@ -831,10 +831,10 @@ MonoBehaviour:
   fAcceleration: 20
   fBrake: 20
   fAttackDistance: 100
-  fAttackActionTime: 1
+  fMoveCoolDownTime: 1
   fBulletSpeed: 20
   fAttackDamage: 10
-  fAttackCoolDownTime: 2
+  fAttackCoolDownTime: 1
   fRotationSpeed: 10
   gBulletObject: {fileID: 713678295899088615}
 --- !u!4 &8876160808198324983
