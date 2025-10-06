@@ -11,8 +11,7 @@ public class CameraController : MonoBehaviour
     [Header("プレイヤー")]
     [SerializeField]
     Transform tPlayer;
-    [Header("見るところ")]
-    [SerializeField]
+    //視点制御用
     Transform tLookTarget;
     [Header("カメラの移動スピード")]
     [SerializeField]

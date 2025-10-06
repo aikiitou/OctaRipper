@@ -1,8 +1,11 @@
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    const int _FPS = 60;
+
     InputSystem_Actions isInput;
     Animator aAnimator;
     Rigidbody rb;
@@ -17,19 +20,21 @@ public class PlayerController : MonoBehaviour
     [Header("プレイヤーの回避時の移動距離")]
     [SerializeField]
     private float fDodgeDistance;
-    [Header("回避のクールタイム時間")]
+    [Header("回避のクールタイムフレーム")]
     [SerializeField]
-    private float fDodgeCoolTimeValue;
+    private int nDodgeCoolTimeFrame;
     [Header("アニメーションの速度")]
     [SerializeField]
     private float fAnimSpeed;
-
     [Header("最大体力")]
     [SerializeField]
     private float fMaxLif;
     [Header("回避エフェクト")]
     [SerializeField]
     private GameObject gDodgeEffectPrefab;
+    [Header("フレームカウンター")]
+    [SerializeField]
+    private FrameRate cFps;
 
     private GameObject gDodgeEffectInstance;
 
@@ -37,7 +42,9 @@ public class PlayerController : MonoBehaviour
     PlayerDodgeEffectController cDodgeEffectController;
     LifeController cLifeController;
 
-    private float fDodgeCoolTime = 0f;
+    private int nDodgeCoolTime = 0;
+
+    private int nPastFps;
     private void OnEnable()
     {
         aAnimator = GetComponent<Animator>();
@@ -72,6 +79,29 @@ public class PlayerController : MonoBehaviour
         cDodgeEffectController = gDodgeEffectInstance.GetComponent<PlayerDodgeEffectController>();
     }
 
+    private void Update()
+    {
+        if (nDodgeCoolTime > 0)
+        {
+            int currentFps = cFps.GetFPS();
+            if(currentFps < nPastFps)
+            {
+                nDodgeCoolTime--;
+            }
+            else
+            {
+                int fpsDiff = currentFps - nPastFps;
+                nDodgeCoolTime -= fpsDiff;
+            }
+
+            nPastFps = currentFps;
+
+            if (nDodgeCoolTime <= 0)
+            {
+                nDodgeCoolTime = 0;
+            }
+        }
+    }
     private void FixedUpdate()
     {
         cMoveController.FixedUpdateMove(transform);
@@ -84,15 +114,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             gDodgeEffectInstance.transform.position = Vector3.MoveTowards(gDodgeEffectInstance.transform.position, transform.position, Time.deltaTime * fSpeed);
-        }
-
-        if (fDodgeCoolTime > 0f)
-        {
-            fDodgeCoolTime -= Time.deltaTime;
-            if (fDodgeCoolTime <= 0f)
-            {
-                fDodgeCoolTime = 0f;
-            }
         }
     }
 
@@ -107,9 +128,11 @@ public class PlayerController : MonoBehaviour
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        if(fDodgeCoolTime <= 0)
+        if(nDodgeCoolTime <= 0)
         {
-            fDodgeCoolTime = fDodgeCoolTimeValue;
+            nPastFps = cFps.GetFPS();
+            cLifeController.SetInvincible(true);
+            nDodgeCoolTime = nDodgeCoolTimeFrame;
 
             cMoveController.Dodge(transform);
             StartCoroutine(cDodgeEffectController.DodgeEffect());
