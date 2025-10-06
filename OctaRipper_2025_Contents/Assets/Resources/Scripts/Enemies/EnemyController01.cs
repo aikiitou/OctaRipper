@@ -91,19 +91,18 @@ public class EnemyController01 : EnemyControllerBase
         }
         else
         {
-            bIsAttacking = false; 
             gDamageTrigger.SetActive(false);
             return; // でなければ攻撃を停止させ、returnする。
         }
         if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
-            bIsAttacking = false;
+            bIsAcceleration = true;
             gDamageTrigger.SetActive(false);
             bCanTurn = true;
         }
-        if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance ||
-            fAttackActionTimer > 0.0f) && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
+        if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance) && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
+            bIsAttacking = false;
             Ray ray = new Ray(transform.position, transform.forward);
             Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
             if (hit.transform != null)
@@ -115,11 +114,6 @@ public class EnemyController01 : EnemyControllerBase
                     Attack();
                 }
             }
-        }
-        if (!bIsAttacking) // 攻撃中でなければ
-        {
-            bCanTurn = true;
-            bIsAcceleration = true;
         }
     }
 
@@ -182,6 +176,7 @@ public class EnemyController01 : EnemyControllerBase
         if (!bIsAttacking) // 初動処理
         {
             gDamageTrigger.SetActive(true);
+            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
