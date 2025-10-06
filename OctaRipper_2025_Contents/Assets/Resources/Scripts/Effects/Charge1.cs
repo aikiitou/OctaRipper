@@ -3,9 +3,10 @@ using UnityEngine;
 public class Charge1 : MonoBehaviour
 {
     Rigidbody rb;
+    [SerializeField] float fSpeed;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = new Vector3(4f, 0f, 0f);
+        rb.AddForce(transform.forward * fSpeed, ForceMode.VelocityChange);
     }
 }
