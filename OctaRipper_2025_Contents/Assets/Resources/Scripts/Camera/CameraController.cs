@@ -1,4 +1,5 @@
 using Mono.Cecil.Cil;
+using System.Collections;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -29,6 +30,7 @@ public class CameraController : MonoBehaviour
     private float fMaxDistance;
     private float fAngleX = 0;
     private float fAngleY = 0;
+    private bool bIsFreeze = false;
     
     private void OnEnable()
     {
@@ -46,21 +48,25 @@ public class CameraController : MonoBehaviour
         isInput.Disable();
 
         //インプットシステムの解除
-        isInput.Player.Look.performed -= ViewPointMovement; 
+        isInput.Player.Look.performed -= ViewPointMovement;
     }
     private void Start()
     {
         fMaxDistance = vPosOffset.magnitude;
+        tLookTarget = new GameObject().transform;
     }
 
     void FixedUpdate()
     {
         Vector3 rotationOffset = qOffsetRot * vPosOffset;
 
-        transform.position = Vector3.MoveTowards(transform.position, (tPlayer.position + vLookOffset) + rotationOffset, Time.deltaTime * fSpeed);
-        tLookTarget.position = Vector3.MoveTowards(tLookTarget.position, (tPlayer.position + vLookOffset), Time.deltaTime * fSpeed);
+        if (bIsFreeze == false)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, (tPlayer.position + vLookOffset) + rotationOffset, Time.deltaTime * fSpeed);
+            tLookTarget.position = Vector3.MoveTowards(tLookTarget.position, (tPlayer.position + vLookOffset), Time.deltaTime * fSpeed);
 
-        transform.LookAt(tLookTarget);
+            transform.LookAt(tLookTarget);
+        }
     }
 
     private void ViewPointMovement(InputAction.CallbackContext _context)
