@@ -1,3 +1,4 @@
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,9 @@ public class PlayerController : MonoBehaviour
     [Header("回避エフェクト")]
     [SerializeField]
     private GameObject gDodgeEffectPrefab;
+    [Header("フレームカウンター")]
+    [SerializeField]
+    private FrameRate fps;
 
     private GameObject gDodgeEffectInstance;
 
@@ -74,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Debug.Log(fps.GetFPS());
         cMoveController.FixedUpdateMove(transform);
 
         if(gDodgeEffectInstance.activeInHierarchy == false)
@@ -109,6 +114,7 @@ public class PlayerController : MonoBehaviour
     {
         if(fDodgeCoolTime <= 0)
         {
+            cLifeController.SetInvincible(true);
             fDodgeCoolTime = fDodgeCoolTimeValue;
 
             cMoveController.Dodge(transform);
