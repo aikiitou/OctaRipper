@@ -53,6 +53,7 @@ public class EnemyController02 : EnemyControllerBase
 
     void Start()
     {
+        fAttackCoolDownTimer = fAttackCoolDownTime;
         gBulletObject.SetActive(false);
         aAnimator = GetComponent<Animator>();
         gTargetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
@@ -95,7 +96,6 @@ public class EnemyController02 : EnemyControllerBase
         }
         if (fMoveCoolDownTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
-            gBulletObject.SetActive(false);
             bCanTurn = true;
             bIsAcceleration = true;
         }
@@ -174,11 +174,16 @@ public class EnemyController02 : EnemyControllerBase
     {
         if (!bIsAttacking) // 初動処理
         {
-            gBulletObject.SetActive(true);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
-            vMoveForce = horizonDistance.normalized * fBulletSpeed;
+            gBulletObject.GetComponent<Enemy02BulletController>().SetUp(
+                gameObject,
+                gBulletShotPosition.transform.position,
+                horizonDistance.normalized,
+                fBulletSpeed,
+                fAttackDamage
+                );
             fAttackCoolDownTimer = fAttackCoolDownTime;
             bIsAttacking = true;
         }
