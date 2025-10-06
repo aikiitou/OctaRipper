@@ -14,8 +14,8 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("移動減速度")]
     float fBrake = 20.0f;
 
-    [SerializeField, Header("攻撃実行距離")]
-    float fAttackDistance = 100.0f;
+    [SerializeField, Header("攻撃に必要な距離")]
+    float fAttackDistance = 20.0f;
 
     [SerializeField, Header("移動クールダウン")]
     float fMoveCoolDownTime = 3.0f;
@@ -34,6 +34,9 @@ public class EnemyController02 : EnemyControllerBase
 
     [SerializeField, Header("弾")]
     GameObject gBulletObject; // 弾丸
+
+    [SerializeField, Header("射撃位置")]
+    GameObject gBulletShotPosition; // 射撃位置の空オブジェクト
 
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
@@ -92,15 +95,15 @@ public class EnemyController02 : EnemyControllerBase
         }
         if (fMoveCoolDownTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
-            bIsAttacking = false;
             gBulletObject.SetActive(false);
             bCanTurn = true;
             bIsAcceleration = true;
         }
         if (fAttackCoolDownTimer <= 0.0f && rRigidbody.linearVelocity.magnitude <= 0.0f && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
+            bIsAttacking = false;
             Ray ray = new Ray(transform.position, transform.forward);
-            Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
+            Physics.Raycast(ray, out RaycastHit hit);
             if (hit.transform != null)
             {
                 if (hit.transform.tag == "Player") // 正面にプレイヤーがいる際に攻撃実行。
@@ -118,11 +121,13 @@ public class EnemyController02 : EnemyControllerBase
 
     void TimerCountDown() // 各タイマーのカウントダウン
     {
-        if (fAttackCoolDownTimer > 0.0f && !bIsAttacking)
+        if (fAttackCoolDownTimer > 0.0f &&
+            Vector3.Distance(gTargetObject.transform.position, transform.position) > fAttackDistance)
         {
             fAttackCoolDownTimer -= Time.deltaTime;
         }
-        if (fMoveCoolDownTimer > 0.0f && bIsAttacking)
+        if (fMoveCoolDownTimer > 0.0f &&
+            Vector3.Distance(gTargetObject.transform.position, transform.position) <= fAttackDistance)
         {
             fMoveCoolDownTimer -= Time.deltaTime;
         }
