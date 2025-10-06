@@ -2,10 +2,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMoveController : MonoBehaviour
+public class PlayerMoveController
 {
     Animator aAnimator;
-    InputSystem_Actions isInput;
     Rigidbody rb;
 
     [Header("プレイヤーの移動のスピード")]
@@ -33,32 +32,18 @@ public class PlayerMoveController : MonoBehaviour
     private float fAnimBlendY = 0;
     private bool bIsMove = false;
 
-    private void OnEnable()
+    public PlayerMoveController(Rigidbody _rb,Animator _animator,float _speed,float _angleSpeed, float _dodgeDistance ,float _dodgeCoolTimeValue,float _animSpeed)
     {
-        isInput = new InputSystem_Actions();
-        isInput.Enable();
-        //インプットシステムに関数の追加
-        isInput.Player.Move.performed += Move;
-        isInput.Player.Move.canceled += Stop;
-        isInput.Player.Dodge.started += Dodge;
-        isInput.Player.Look.performed += Look;
+        this.rb = _rb;
+        this.aAnimator = _animator;
+        this.fSpeed = _speed;
+        this.fAngleSpeed = _angleSpeed;
+        this.fDodgeDistance = _dodgeDistance;
+        this.fDodgeCoolTimeValue = _dodgeCoolTimeValue;
+        this.fAnimSpeed = _animSpeed;
     }
-    private void OnDisable()
-    {
-        isInput.Disable();
-        //インプットシステムに関数の解除
-        isInput.Player.Move.performed -= Move;
-        isInput.Player.Move.canceled -= Stop;
-        isInput.Player.Dodge.started -= Dodge;
-        isInput.Player.Look.performed -= Look;
-    }
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        aAnimator = GetComponent<Animator>();
-    }
-
-    void FixedUpdate()
+    
+    public void FixedUpdateMove(Transform _transform)
     {
         if(bIsMove == true)
         {
@@ -86,17 +71,17 @@ public class PlayerMoveController : MonoBehaviour
         if (lookDir.sqrMagnitude > 0.001f)
         {
             Quaternion rot = Quaternion.LookRotation(lookDir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * fAngleSpeed);
+            _transform.rotation = Quaternion.Slerp(_transform.rotation, rot, Time.fixedDeltaTime * fAngleSpeed);
         }
     }
 
     //移動用の関数
-    private void Move(InputAction.CallbackContext _context)
+    public void Move(Vector2 inputDir)
     {
         bIsMove = true;
         aAnimator.SetBool("bIsMove", bIsMove);
 
-        vInputDir = _context.ReadValue<Vector2>();
+        vInputDir = inputDir;
 
         //カメラの前
         vCameraForward = Camera.main.transform.forward;
@@ -111,13 +96,13 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     //移動を止める
-    private void Stop(InputAction.CallbackContext _context)
+    public void Stop(Transform _transform)
     {
         //移動用の情報のリセット
         vMoveVec = Vector3.zero;
         vInputDir = Vector3.zero;
         rb.linearVelocity = Vector3.zero;
-        qMoveRot = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        qMoveRot = Quaternion.Euler(0, _transform.eulerAngles.y, 0);
         fAnimBlendX = 0;
         fAnimBlendY = 0;
         bIsMove = false;
@@ -125,18 +110,18 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     //回避用の関数
-    private void Dodge(InputAction.CallbackContext _context)
+    public void Dodge(Transform _transform)
     {
         if (fDodgeCoolTime <= 0f)
         {
-            transform.localPosition += (vMoveVec * fDodgeDistance);
+            _transform.localPosition += (vMoveVec * fDodgeDistance);
 
             fDodgeCoolTime = fDodgeCoolTimeValue;
         }
     }
 
     //カメラの方向が変わったとき、移動していたら向きを変えるよう
-    private void Look(InputAction.CallbackContext _context)
+    public void Look()
     {
        if(bIsMove == true)
         {
