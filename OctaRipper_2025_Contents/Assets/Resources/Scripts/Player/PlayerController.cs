@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
     PlayerMoveController moveController;
     LifeController cLifeController;
 
+    List<Material> materials = new List<Material>();
     private void OnEnable()
     {
         aAnimator = GetComponent<Animator>();
@@ -61,6 +64,21 @@ public class PlayerController : MonoBehaviour
 
         cLifeController.SetLifePoint(fMaxLif);
         cLifeController.SetInvincible(false);
+
+        Renderer[] renderers = transform.GetComponentsInChildren<MeshRenderer>();
+        foreach (Renderer ren in renderers)
+        {
+            foreach (Material mat in ren.materials)
+            {
+                materials.Add(mat);
+            }
+        }
+
+        foreach (Material mat in materials)
+        {
+            mat.SetFloat("_Rate", 1);
+        }
+
     }
 
     private void FixedUpdate()
@@ -79,7 +97,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        moveController.Dodge(transform);
+        StartCoroutine(moveController.Dodge(transform, materials.ToArray()));
     }
     private void Look(InputAction.CallbackContext _context)
     {

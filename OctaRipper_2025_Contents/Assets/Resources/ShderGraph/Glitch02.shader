@@ -72,7 +72,7 @@ Shader "Unlit/Glitch02"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 if(abs(sin(floor(_Time.y))) >= _Rate)
                 {
-                    float4 offset = float4(0, -_GlitchValue,0,0);
+                    float4 offset = float4( -_GlitchValue,0,0,0);
                     o.vertex += offset;
                 }
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);

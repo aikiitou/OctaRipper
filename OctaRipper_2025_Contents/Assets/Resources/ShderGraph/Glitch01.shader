@@ -70,11 +70,6 @@ Shader "Unlit/Glitch01"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                if(abs(sin(floor(_Time.y))) >= _Rate)
-                {
-                    float4 offset = float4(0,0,0,0);
-                    o.vertex += offset;
-                }
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
@@ -89,7 +84,7 @@ Shader "Unlit/Glitch01"
                     float t = _Time.y * _GlitchSpeed;
                     float n = blockNoise(i.uv,t * _BlockNum);
 
-                    if(n >= 0.3) discard;
+                    if(n >= 0.6) discard;
 
                     col.r = 0;
                     col.g = col.g;

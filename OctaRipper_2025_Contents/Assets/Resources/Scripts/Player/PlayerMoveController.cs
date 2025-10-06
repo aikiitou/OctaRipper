@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -110,10 +111,22 @@ public class PlayerMoveController
     }
 
     //‰ñ”ğ—p‚ÌŠÖ”
-    public void Dodge(Transform _transform)
+    public IEnumerator Dodge(Transform _transform , Material[] materials)
     {
         if (fDodgeCoolTime <= 0f)
         {
+            foreach (Material mat in materials)
+            {
+                mat.SetFloat("_Rate", 0);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+
+            foreach (Material mat in materials)
+            {
+                mat.SetFloat("_Rate", 1);
+            }
+
             _transform.localPosition += (vMoveVec * fDodgeDistance);
 
             fDodgeCoolTime = fDodgeCoolTimeValue;
