@@ -8,18 +8,11 @@ public class PlayerMoveController
     Animator aAnimator;
     Rigidbody rb;
 
-    [Header("プレイヤーの移動のスピード")]
-    [SerializeField]
     private float fSpeed;
-    [Header("プレイヤーの移動時の傾くスピード")]
-    [SerializeField]
     private float fAngleSpeed;
-    [Header("プレイヤーの回避時の移動距離")]
-    [SerializeField]
     private float fDodgeDistance;
-    [Header("アニメーションの速度")]
-    [SerializeField]
     private float fAnimSpeed;
+    private float fColliderRadius;
 
     private Vector3 vMoveVec = Vector3.zero;   //入力からの移動方向を入れる変数
     private Vector3 vInputDir = Vector3.zero;  //入力を記憶
@@ -29,7 +22,7 @@ public class PlayerMoveController
     private float fAnimBlendY = 0;
     private bool bIsMove = false;
 
-    public PlayerMoveController(Rigidbody _rb,Animator _animator,float _speed,float _angleSpeed, float _dodgeDistance ,float _animSpeed)
+    public PlayerMoveController(Rigidbody _rb,Animator _animator,float _speed,float _angleSpeed, float _dodgeDistance ,float _animSpeed,float _colliderRadius)
     {
         this.rb = _rb;
         this.aAnimator = _animator;
@@ -37,6 +30,7 @@ public class PlayerMoveController
         this.fAngleSpeed = _angleSpeed;
         this.fDodgeDistance = _dodgeDistance;
         this.fAnimSpeed = _animSpeed;
+        this.fColliderRadius = _colliderRadius;
     }
     
     public void FixedUpdateMove(Transform _transform)
@@ -80,6 +74,7 @@ public class PlayerMoveController
         cameraRight.Normalize();
 
         vMoveVec = vCameraForward * vInputDir.y + cameraRight * vInputDir.x;
+        vMoveVec.Normalize();
     }
 
     //移動を止める
@@ -99,7 +94,28 @@ public class PlayerMoveController
     //回避用の関数
     public void Dodge(Transform _transform)
     {
-        _transform.localPosition += (vMoveVec * fDodgeDistance);
+        Vector3 dodgeDir = -_transform.forward;
+        if (vMoveVec.sqrMagnitude >= 0.0001)
+        {
+            dodgeDir = vMoveVec;
+        }
+        Ray ray = new Ray(_transform.position, dodgeDir);
+        if(Physics.SphereCast(ray,fColliderRadius,out RaycastHit hitInfo,fDodgeDistance))
+        {
+            if(hitInfo.collider.CompareTag("Player") == false)
+            {
+                float dodgeDistance = hitInfo.distance - fColliderRadius;
+                if (hitInfo.distance - fColliderRadius >= 0)
+                {
+                    _transform.position = (dodgeDir * (hitInfo.distance - fColliderRadius));
+                }
+                else
+                {
+                    return;
+                }
+            } 
+        }
+        _transform.position += (dodgeDir * fDodgeDistance);
     }
 
     //カメラの方向が変わったとき、移動していたら向きを変えるよう

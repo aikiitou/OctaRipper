@@ -42,7 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         aAnimator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed);
+        float fColliderRadius = gameObject.GetComponent<CapsuleCollider>().radius;
+        cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed, fColliderRadius);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
