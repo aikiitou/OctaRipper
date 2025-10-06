@@ -101,7 +101,7 @@ Material:
     - _EnvironmentReflections: 1
     - _GlitchAlpha: 0.34
     - _GlitchSpeed: 10
-    - _GlitchValue: 0.006
+    - _GlitchValue: 0.1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
