@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
@@ -31,16 +27,22 @@ public class PlayerController : MonoBehaviour
     [Header("最大体力")]
     [SerializeField]
     private float fMaxLif;
+    [Header("回避エフェクト")]
+    [SerializeField]
+    private GameObject gDodgeEffectPrefab;
 
-    PlayerMoveController moveController;
+    private GameObject gDodgeEffectInstance;
+
+    PlayerMoveController cMoveController;
+    PlayerDodgeEffectController cDodgeEffectController;
     LifeController cLifeController;
 
-    List<Material> materials = new List<Material>();
+    private float fDodgeCoolTime = 0f;
     private void OnEnable()
     {
         aAnimator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        moveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fDodgeCoolTimeValue, fAnimSpeed);
+        cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
@@ -65,43 +67,52 @@ public class PlayerController : MonoBehaviour
         cLifeController.SetLifePoint(fMaxLif);
         cLifeController.SetInvincible(false);
 
-        Renderer[] renderers = transform.GetComponentsInChildren<MeshRenderer>();
-        foreach (Renderer ren in renderers)
-        {
-            foreach (Material mat in ren.materials)
-            {
-                materials.Add(mat);
-            }
-        }
-
-        foreach (Material mat in materials)
-        {
-            mat.SetFloat("_Rate", 1);
-        }
-
+        gDodgeEffectInstance = Instantiate(gDodgeEffectPrefab, transform.parent);
+        cDodgeEffectController = gDodgeEffectInstance.GetComponent<PlayerDodgeEffectController>();
     }
 
     private void FixedUpdate()
     {
-        moveController.FixedUpdateMove(transform);
+        cMoveController.FixedUpdateMove(transform);
+
+        if(gDodgeEffectInstance.activeInHierarchy == false)
+        {
+            gDodgeEffectInstance.transform.position = transform.position;
+            gDodgeEffectInstance.transform.rotation = transform.rotation;
+        }
+
+        if (fDodgeCoolTime > 0f)
+        {
+            fDodgeCoolTime -= Time.deltaTime;
+            if (fDodgeCoolTime <= 0f)
+            {
+                fDodgeCoolTime = 0f;
+            }
+        }
     }
 
     private void Move(InputAction.CallbackContext _context)
     {
         Vector2 input = _context.ReadValue<Vector2>();
-        moveController.Move(input);   
+        cMoveController.Move(input);   
     }
     private void Stop(InputAction.CallbackContext _context)
     {
-        moveController.Stop(transform);
+        cMoveController.Stop(transform);
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        StartCoroutine(moveController.Dodge(transform, materials.ToArray()));
+        if(fDodgeCoolTime <= 0)
+        {
+            fDodgeCoolTime = fDodgeCoolTimeValue;
+
+            cMoveController.Dodge(transform);
+            StartCoroutine(cDodgeEffectController.DodgeEffect());
+        }
     }
     private void Look(InputAction.CallbackContext _context)
     {
-        moveController.Look();
+        cMoveController.Look();
     }
 
     public void Damage(float _damageValue, Vector3 _knockback)

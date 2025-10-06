@@ -3,11 +3,14 @@ Shader "Unlit/Glitch01"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        [Normal]_NormalTex ("Normal Map",2D) = "bump"{}
         _GlitchSpeed ("GlitchSpeed" , Float) = 10
         _Rate ("NoiseRate" , Float) = 0.98
         _GlitchValue ("GlitchValue" ,Float) = 1
         _GlitchAlpha ("GlitchAlpha" , Float) = 0.3
         _BlockNum ("BlockNum" , Float) = 10
+        _GreenThreshold("GreenThreshold",Float) = 0.5
+        _RedThreshold("RedThreshold",Float) = 0.5
     }
     SubShader
     {
@@ -19,6 +22,7 @@ Shader "Unlit/Glitch01"
         CGINCLUDE
 
             sampler2D _MainTex;
+            sampler2D _NormalTex;
             float4 _MainTex_ST;
             float _GlitchSpeed;
             float _Rate;
@@ -53,6 +57,8 @@ Shader "Unlit/Glitch01"
 
             #include "UnityCG.cginc"
 
+            float _GreenThreshold;
+
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -84,7 +90,7 @@ Shader "Unlit/Glitch01"
                     float t = _Time.y * _GlitchSpeed;
                     float n = blockNoise(i.uv,t * _BlockNum);
 
-                    if(n >= 0.6) discard;
+                    if(n >= _GreenThreshold) discard;
 
                     col.r = 0;
                     col.g = col.g;
@@ -108,6 +114,8 @@ Shader "Unlit/Glitch01"
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+
+            float _RedThreshold;
 
             struct appdata
             {
@@ -145,7 +153,7 @@ Shader "Unlit/Glitch01"
                     float t = _Time.y * _GlitchSpeed;
                     float n = blockNoise(i.uv,t * _BlockNum);
 
-                    if(n >= 0.6) discard;
+                    if(n >= _RedThreshold) discard;
 
                     col.r = col.r;
                     col.g = 0;

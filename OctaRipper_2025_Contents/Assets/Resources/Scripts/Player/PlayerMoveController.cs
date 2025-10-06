@@ -17,9 +17,6 @@ public class PlayerMoveController
     [Header("プレイヤーの回避時の移動距離")]
     [SerializeField]
     private float fDodgeDistance;
-    [Header("回避のクールタイム時間")]
-    [SerializeField]
-    private float fDodgeCoolTimeValue;
     [Header("アニメーションの速度")]
     [SerializeField]
     private float fAnimSpeed;
@@ -28,19 +25,17 @@ public class PlayerMoveController
     private Vector3 vInputDir = Vector3.zero;  //入力を記憶
     private Vector3 vCameraForward = Vector3.zero; //カメラからの正面
     private Quaternion qMoveRot; //入力からプレイヤーの傾きを入れる変数
-    private float fDodgeCoolTime = 0f;
     private float fAnimBlendX = 0;
     private float fAnimBlendY = 0;
     private bool bIsMove = false;
 
-    public PlayerMoveController(Rigidbody _rb,Animator _animator,float _speed,float _angleSpeed, float _dodgeDistance ,float _dodgeCoolTimeValue,float _animSpeed)
+    public PlayerMoveController(Rigidbody _rb,Animator _animator,float _speed,float _angleSpeed, float _dodgeDistance ,float _animSpeed)
     {
         this.rb = _rb;
         this.aAnimator = _animator;
         this.fSpeed = _speed;
         this.fAngleSpeed = _angleSpeed;
         this.fDodgeDistance = _dodgeDistance;
-        this.fDodgeCoolTimeValue = _dodgeCoolTimeValue;
         this.fAnimSpeed = _animSpeed;
     }
     
@@ -53,15 +48,6 @@ public class PlayerMoveController
 
             aAnimator.SetFloat("fMoveDirX", fAnimBlendX);
             aAnimator.SetFloat("fMoveDirY", fAnimBlendY);
-        }
-
-        if (fDodgeCoolTime > 0f)
-        {
-            fDodgeCoolTime -= Time.deltaTime;
-            if(fDodgeCoolTime <= 0f)
-            {
-                fDodgeCoolTime = 0f;
-            }
         }
 
         rb.linearVelocity = vMoveVec;
@@ -111,26 +97,9 @@ public class PlayerMoveController
     }
 
     //回避用の関数
-    public IEnumerator Dodge(Transform _transform , Material[] materials)
+    public void Dodge(Transform _transform)
     {
-        if (fDodgeCoolTime <= 0f)
-        {
-            foreach (Material mat in materials)
-            {
-                mat.SetFloat("_Rate", 0);
-            }
-
-            yield return new WaitForSeconds(0.1f);
-
-            foreach (Material mat in materials)
-            {
-                mat.SetFloat("_Rate", 1);
-            }
-
-            _transform.localPosition += (vMoveVec * fDodgeDistance);
-
-            fDodgeCoolTime = fDodgeCoolTimeValue;
-        }
+        _transform.localPosition += (vMoveVec * fDodgeDistance);
     }
 
     //カメラの方向が変わったとき、移動していたら向きを変えるよう

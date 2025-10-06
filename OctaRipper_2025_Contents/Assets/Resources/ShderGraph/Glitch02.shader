@@ -8,6 +8,7 @@ Shader "Unlit/Glitch02"
         _GlitchValue ("GlitchValue" ,Float) = 1
         _GlitchAlpha ("GlitchAlpha" , Float) = 0.3
         _BlockNum ("BlockNum" , Float) = 10
+        _BlueThreshold("BlueThreshold",Float) = 0.5
     }
     SubShader
     {
@@ -53,6 +54,8 @@ Shader "Unlit/Glitch02"
 
             #include "UnityCG.cginc"
 
+            float _BlueThreshold;
+
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -89,7 +92,7 @@ Shader "Unlit/Glitch02"
                     float t = _Time.y * _GlitchSpeed;
                     float n = blockNoise(i.uv,t * _BlockNum);
 
-                    if(n >= 0.7) discard;
+                    if(n >= _BlueThreshold) discard;
 
                     col.r = 0;
                     col.g = 0;
