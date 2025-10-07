@@ -225,6 +225,7 @@ public class EnemyController01 : EnemyControllerBase
         gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
         gameObject.SetActive(false);
+        //transform.parent.GetComponent<FireWallController>().DeadChild(gameObject);
     }
 
 
