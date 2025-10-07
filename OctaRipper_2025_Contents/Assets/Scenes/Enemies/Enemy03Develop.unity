@@ -246,7 +246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e0b012e076dae7408662ecb2cd1953a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000000065804393
+      value: 0.000000006580439
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e0b012e076dae7408662ecb2cd1953a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -889,7 +889,7 @@ Animator:
   m_GameObject: {fileID: 7514622482583597745}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b69822540a6b8284684fc9e7acd15698, type: 2}
+  m_Controller: {fileID: 9100000, guid: c5c19235ffc35064c8f48f70e08e17ef, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -913,12 +913,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3c4cfe67491bba4f95fb55fe2ce910b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fInitLifePoint: 100
-  fMaxSpeed: 2
-  fAcceleration: 5
-  fNaturalBrake: 2
+  fInitLifePoint: 120
+  fMaxSpeed: 5
+  fAcceleration: 20
+  fNaturalBrake: 15
   fBrake: 20
-  fAttackDistance: 2
+  fAttackDistance: 6
   fAttackActionTime: 1
   fAttackSpeed: 10
   fAttackDamage: 10
