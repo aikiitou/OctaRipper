@@ -215,10 +215,11 @@ public class EnemyController03 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
+        bIsShielding = false;
         if (bIsShielded && ShieldJudge(_impact.normalized))
         {
             _damage *= fShieldMagnification;
-            shielded = true;
+            bIsShielding = true;
         }
         cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
@@ -235,6 +236,7 @@ public class EnemyController03 : EnemyControllerBase
         vMoveForce = _force; // 移動力を吹っ飛ばされる力に上書き
         rRigidbody.linearVelocity = vMoveForce; // 反映
         fFriezeTimer = _friezeTime; // 硬直時間の設定
+        bIsShielding = false;
     }
 
     protected override void Death() // 死亡(現在は仮ログ)
