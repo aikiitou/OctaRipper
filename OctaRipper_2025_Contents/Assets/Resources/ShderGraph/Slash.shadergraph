@@ -280,7 +280,7 @@
                 "m_Node": {
                     "m_Id": "6105960f02ac46f4987fccce3898e483"
                 },
-                "m_SlotId": 1
+                "m_SlotId": 2
             }
         },
         {
@@ -302,7 +302,7 @@
                 "m_Node": {
                     "m_Id": "a66db50dd5b04cc7894ed787b3094d6b"
                 },
-                "m_SlotId": 1
+                "m_SlotId": 2
             },
             "m_InputSlot": {
                 "m_Node": {
@@ -484,7 +484,7 @@
     "m_Title": "Mask",
     "m_Position": {
         "x": 1185.5999755859375,
-        "y": -550.3999633789063
+        "y": -550.4000244140625
     }
 }
 
@@ -1041,7 +1041,7 @@
     "m_ShaderOutputName": "Edge2",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.949999988079071,
+        "x": 1.100000023841858,
         "y": 1.0,
         "z": 1.0,
         "w": 1.0
@@ -1440,7 +1440,7 @@
     "m_Title": "distosion",
     "m_Position": {
         "x": -394.3999938964844,
-        "y": -104.00003051757813
+        "y": -104.00006103515625
     }
 }
 
@@ -1578,9 +1578,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 1.0,
+        "r": 0.0,
         "g": 0.0,
-        "b": 0.0057582855224609379,
+        "b": 1.0,
         "a": 1.0
     },
     "isMainColor": false,
@@ -1831,7 +1831,7 @@
     "m_ShaderOutputName": "Edge1",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.7099999785423279,
+        "x": 0.800000011920929,
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
@@ -2783,7 +2783,7 @@
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
-        "y": 2.0
+        "y": 3.0
     }
 }
 

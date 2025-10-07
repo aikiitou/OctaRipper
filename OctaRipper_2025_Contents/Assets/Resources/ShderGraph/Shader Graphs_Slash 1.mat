@@ -41,9 +41,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _distosion: 1
-    - _scrollSpeed: 4
+    - _scrollSpeed: 3
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0.005758286, a: 1}
+    - _Color: {r: 0, g: 0.15243578, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2257800590177583496
