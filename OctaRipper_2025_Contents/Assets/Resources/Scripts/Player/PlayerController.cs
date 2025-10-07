@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        if(nDodgeRestCoolTimeFrame <= 0)
+        if(nDodgeRestCoolTimeFrame <= 0 && bIsFreeze == false)
         {
             cLifeController.SetInvincible(true);
 

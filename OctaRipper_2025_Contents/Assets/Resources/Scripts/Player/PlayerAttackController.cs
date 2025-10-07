@@ -37,17 +37,17 @@ public class PlayerAttackController
             aAnimator.SetBool("bIsButton", true);
             aAnimator.SetTrigger("weakAttackTrigger");
 
+            nButtonOnFrame = 0;
             aAnimator.SetInteger("nButtonOnFrame", 0);
         }
         else if(isAnimataion == true)
         {
-            aAnimator.SetTrigger("comboTrigger");
+            aAnimator.SetTrigger("weakComboTrigger");
         }
     }
     public void ReleaseWeakAttackButton()
     {
         isWeakButton = false;
-        nButtonOnFrame = 0;
 
         aAnimator.SetBool("bIsButton", false);
     }
@@ -59,17 +59,17 @@ public class PlayerAttackController
             aAnimator.SetBool("bIsButton", true);
             aAnimator.SetTrigger("strongAttackTrigger");
 
+            nButtonOnFrame = 0;
             aAnimator.SetInteger("nButtonOnFrame", 0);
         }
         else if (isAnimataion == true)
         {
-            aAnimator.SetTrigger("comboTrigger");
+            aAnimator.SetTrigger("strongComboTrigger");
         }
     }
     public void ReleaseStrongAttackButton()
     {
         isStrongButton = false;
-        nButtonOnFrame = 0;
 
         aAnimator.SetBool("bIsButton", false);
     }
