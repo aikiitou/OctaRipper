@@ -66,6 +66,8 @@ public class EnemyController03 : EnemyControllerBase
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
     bool bCanAction = true; // 行動可能かどうか
+    bool bIsShielded = false;
+    bool bIsShielding = false;
     float fAttackCoolDownTimer;
     float fAttackActionTimer;
     float fFriezeTimer; // 硬直時間
@@ -213,6 +215,11 @@ public class EnemyController03 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
+        if (bIsShielded && ShieldJudge(_impact.normalized))
+        {
+            _damage *= fShieldMagnification;
+            shielded = true;
+        }
         cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {
