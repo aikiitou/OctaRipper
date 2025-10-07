@@ -1051,6 +1051,7 @@ MonoBehaviour:
   fAnimSpeed: 3
   fMaxLif: 100
   gDodgeEffectPrefab: {fileID: 5422706499837455800, guid: 208e1c7debdfb4d42a499d7c8fda6762, type: 3}
+  nEffectArrivalFrame: 12
   cFps: {fileID: 2072809597}
 --- !u!1001 &866277449
 PrefabInstance:
