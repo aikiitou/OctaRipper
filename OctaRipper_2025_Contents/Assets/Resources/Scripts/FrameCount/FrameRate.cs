@@ -20,7 +20,6 @@ public class FrameRate : MonoBehaviour
         {
             nFrameRate = 0;
         }
-        MyDebugLib.MessageLog(nFrameRate);
     }
     public int GetFPS()
     {
