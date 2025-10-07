@@ -153,9 +153,15 @@ MonoBehaviour:
   fAttackActionTime: 1
   fAttackSpeed: 10
   fAttackDamage: 10
+  fAttackForce: 1
+  fAttackFriezeTime: 0.2
   fAttackCoolDownTime: 1.5
   fRotationSpeed: 10
   gDamageTrigger: {fileID: 3661821628362695233}
+  fExplosionDamage: 30
+  fExplosionFriezeTime: 2
+  fExplosionForce: 3
+  gExplosion: {fileID: 4178853841737588827}
 --- !u!114 &3577171381013002911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,6 +271,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyExplosion
       objectReference: {fileID: 0}
+    - target: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -273,6 +283,11 @@ PrefabInstance:
 --- !u!4 &1985298894180217500 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+  m_PrefabInstance: {fileID: 678309990968690682}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4178853841737588827 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
   m_PrefabInstance: {fileID: 678309990968690682}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6069246089126040753

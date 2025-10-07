@@ -53,6 +53,9 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("死亡時爆発吹っ飛ばし")]
     float fExplosionForce = 10.0f;
 
+    [SerializeField, Header("爆発オブジェクト")]
+    GameObject gExplosion; // 攻撃の当たり判定オブジェクト
+
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
@@ -227,6 +230,7 @@ public class EnemyController02 : EnemyControllerBase
 
     protected override void Death() // 死亡(現在は仮ログ)
     {
+        gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
         gameObject.SetActive(false);
     }
