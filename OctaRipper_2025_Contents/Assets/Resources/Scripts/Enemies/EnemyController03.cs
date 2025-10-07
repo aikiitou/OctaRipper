@@ -38,6 +38,12 @@ public class EnemyController03 : EnemyControllerBase
     [SerializeField, Header("攻撃クールダウン")]
     float fAttackCoolDownTime = 1.5f;
 
+    [SerializeField, Header("防御被ダメ倍率")]
+    float fShieldMagnification = 0.5f;
+
+    [SerializeField, Header("防御角度(左右対称)")]
+    float fShieldRadius = 45f;
+
     [SerializeField, Header("見た目回転スピード")]
     float fRotationSpeed = 10.0f;
 
@@ -229,6 +235,16 @@ public class EnemyController03 : EnemyControllerBase
         gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
         gameObject.SetActive(false);
+    }
+
+    bool ShieldJudge(Vector3 _direction)
+    {
+        Vector3 addVector = _direction + transform.forward;
+        if (Mathf.Asin(addVector.magnitude / 2.0f) * 2.0f < fShieldRadius * Mathf.Deg2Rad)
+        {
+            return true;
+        }
+        return false;
     }
 
 

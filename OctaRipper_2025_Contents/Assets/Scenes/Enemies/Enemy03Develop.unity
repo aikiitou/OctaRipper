@@ -853,7 +853,7 @@ GameObject:
   - component: {fileID: 8431475332669733707}
   m_Layer: 11
   m_Name: Enemy_03
-  m_TagString: Untagged
+  m_TagString: Enemy03
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -925,6 +925,8 @@ MonoBehaviour:
   fAttackForce: 1
   fAttackFriezeTime: 0.1
   fAttackCoolDownTime: 1.5
+  fShieldMagnification: 0.5
+  fShieldRadius: 45
   fRotationSpeed: 10
   gDamageTrigger: {fileID: 713678295899088615}
   fExplosionDamage: 10
