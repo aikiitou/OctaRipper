@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 68593960ab7052e46b5bafacc78e8d32
+guid: 1df1483983a6bb140aaf2cec5f1c8754
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -34,8 +34,8 @@ ModelImporter:
       name: Take 001
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 15
-      lastFrame: 32
+      firstFrame: 0
+      lastFrame: 45
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -55,8 +55,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: AnimationStr
+      - time: 0.3126815
+        functionName: GoFront
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 600
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: DisFreeze
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -67,13 +74,6 @@ ModelImporter:
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.06098743
-        functionName: GoFront
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 200
         intParameter: 0
         messageOptions: 0
       transformMask: []

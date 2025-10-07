@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Look.performed += Look;
         isInput.Player.OnWeakAttack.performed += OnWeakAttackButton;
         isInput.Player.ReleaseWeakAttack.performed += ReleaseWeakAttackButton;
+        isInput.Player.
     }
     private void OnDisable()
     {
@@ -192,6 +193,14 @@ public class PlayerController : MonoBehaviour
     {
         cAttackController.ReleaseWeakAttackButton();
     }
+    private void OnStrongAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.OnStrongAttackButton();
+    }
+    private void ReleaseStrongAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.ReleaseStrongAttackButton();
+    }
     private void AnimationStr()
     {
         cAttackController.AnimationStr();
@@ -207,11 +216,12 @@ public class PlayerController : MonoBehaviour
     }
     private void DisFreeze()
     {
+        rb.linearVelocity = Vector3.zero;
         bIsFreeze = false;
     }
     private void GoFront(float distance)
     {
-        transform.Translate(transform.forward * distance);
+        rb.AddForce(transform.forward * distance);
     }
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
