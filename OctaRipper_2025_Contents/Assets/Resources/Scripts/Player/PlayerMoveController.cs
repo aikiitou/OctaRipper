@@ -43,8 +43,6 @@ public class PlayerMoveController
             aAnimator.SetFloat("fMoveDirX", fAnimBlendX);
             aAnimator.SetFloat("fMoveDirY", fAnimBlendY);
 
-            rb.linearVelocity = vMoveVec;
-
             rb.linearVelocity = vMoveVec * fSpeed + new Vector3(0, rb.linearVelocity.y, 0);
 
             Vector3 lookDir = vCameraForward;
