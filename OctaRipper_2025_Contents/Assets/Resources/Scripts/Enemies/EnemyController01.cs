@@ -95,10 +95,6 @@ public class EnemyController01 : EnemyControllerBase
         {
             Death(); // Ž€–S
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-10.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
-        }
     }
 
     void ChangePattern()

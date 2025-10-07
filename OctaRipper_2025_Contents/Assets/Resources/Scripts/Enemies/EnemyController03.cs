@@ -66,8 +66,8 @@ public class EnemyController03 : EnemyControllerBase
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
     bool bCanAction = true; // 行動可能かどうか
-    bool bIsShielded = false;
-    bool bIsShielding = false;
+    bool bIsShielding = false; // シールド構え
+    bool bIsShielded = false; // シールドしたかどうか
     float fAttackCoolDownTimer;
     float fAttackActionTimer;
     float fFriezeTimer; // 硬直時間
@@ -102,10 +102,6 @@ public class EnemyController03 : EnemyControllerBase
         if (cLifeController.GetLifePoint <= 0.0f)
         {
             Death(); // 死亡
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-10.0f, (gameObject.transform.position - gTargetObject.transform.position).normalized * 5.0f, 1.0f);
         }
     }
 
@@ -215,11 +211,11 @@ public class EnemyController03 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
-        bIsShielding = false;
-        if (bIsShielded && ShieldJudge(_impact.normalized))
+        bIsShielded = false;
+        if (bIsShielding && ShieldJudge(_impact.normalized))
         {
             _damage *= fShieldMagnification;
-            bIsShielding = true;
+            bIsShielded = true;
         }
         cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
@@ -230,13 +226,16 @@ public class EnemyController03 : EnemyControllerBase
 
     protected override void KnockBack(Vector3 _force, float _friezeTime) // ノックバック・硬直
     {
-        aAnimator.SetTrigger("Damaged"); // 硬直モーション起動
-        bIsAcceleration = false; // 加速停止
-        bCanAction = false; // 行動停止
+        if (bIsShielded)
+        {
+            aAnimator.SetTrigger("Damaged"); // 硬直モーション起動
+            bIsAcceleration = false; // 加速停止
+            bCanAction = false; // 行動停止
+            fFriezeTimer = _friezeTime; // 硬直時間の設定
+            bIsShielded = false;
+        }
         vMoveForce = _force; // 移動力を吹っ飛ばされる力に上書き
         rRigidbody.linearVelocity = vMoveForce; // 反映
-        fFriezeTimer = _friezeTime; // 硬直時間の設定
-        bIsShielding = false;
     }
 
     protected override void Death() // 死亡(現在は仮ログ)
@@ -249,7 +248,7 @@ public class EnemyController03 : EnemyControllerBase
     bool ShieldJudge(Vector3 _direction)
     {
         Vector3 addVector = _direction + transform.forward;
-        if (Mathf.Asin(addVector.magnitude / 2.0f) * 2.0f < fShieldRadius * Mathf.Deg2Rad)
+        if (Mathf.Asin(addVector.magnitude / 2.0f) * 2.0f < fShieldRadius * Mathf.Deg2Rad) // 角度算出
         {
             return true;
         }
