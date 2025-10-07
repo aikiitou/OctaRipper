@@ -26,6 +26,12 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("与ダメージ")]
     float fAttackDamage = 10.0f;
 
+    [SerializeField, Header("吹っ飛ばし")]
+    float fAttackForce = 1.0f;
+
+    [SerializeField, Header("与硬直時間")]
+    float fAttackFriezeTime = 0.1f;
+
     [SerializeField, Header("攻撃クールダウン")]
     float fAttackCoolDownTime = 2.0f;
 
@@ -37,6 +43,15 @@ public class EnemyController02 : EnemyControllerBase
 
     [SerializeField, Header("射撃位置")]
     GameObject gBulletShotPosition; // 射撃位置の空オブジェクト
+
+    [SerializeField, Header("死亡時爆発与ダメージ")]
+    float fExplosionDamage = 10.0f;
+
+    [SerializeField, Header("死亡時爆発与硬直時間")]
+    float fExplosionFriezeTime = 10.0f;
+
+    [SerializeField, Header("死亡時爆発吹っ飛ばし")]
+    float fExplosionForce = 10.0f;
 
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
@@ -182,7 +197,9 @@ public class EnemyController02 : EnemyControllerBase
                 gBulletShotPosition.transform.position,
                 horizonDistance.normalized,
                 fBulletSpeed,
-                fAttackDamage
+                fAttackDamage,
+                fAttackForce,
+                fFriezeTimer
                 );
             fAttackCoolDownTimer = fAttackCoolDownTime;
             bIsAttacking = true;

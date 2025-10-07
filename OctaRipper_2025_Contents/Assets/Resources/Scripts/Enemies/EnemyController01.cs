@@ -29,6 +29,12 @@ public class EnemyController01 : EnemyControllerBase
     [SerializeField, Header("—^ƒ_ƒ[ƒW")]
     float fAttackDamage = 10.0f;
 
+    [SerializeField, Header("‚Á”ò‚Î‚µ")]
+    float fAttackForce = 1.0f;
+
+    [SerializeField, Header("—^d’¼ŠÔ")]
+    float fAttackFriezeTime = 0.1f;
+
     [SerializeField, Header("UŒ‚ƒN[ƒ‹ƒ_ƒEƒ“")]
     float fAttackCoolDownTime = 1.5f;
 
@@ -37,6 +43,15 @@ public class EnemyController01 : EnemyControllerBase
 
     [SerializeField, Header("UŒ‚‚Ì“–‚½‚è”»’è")]
     GameObject gDamageTrigger; // UŒ‚‚Ì“–‚½‚è”»’èƒIƒuƒWƒFƒNƒg
+
+    [SerializeField, Header("€–S”š”­—^ƒ_ƒ[ƒW")]
+    float fExplosionDamage = 10.0f;
+
+    [SerializeField, Header("€–S”š”­—^d’¼ŠÔ")]
+    float fExplosionFriezeTime = 10.0f;
+
+    [SerializeField, Header("€–S”š”­‚Á”ò‚Î‚µ")]
+    float fExplosionForce = 10.0f;
 
     bool bIsAcceleration = true; // Œ»İ‰Á‘¬‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
     bool bIsAttacking = false; // UŒ‚‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
@@ -176,7 +191,7 @@ public class EnemyController01 : EnemyControllerBase
         if (!bIsAttacking) // ‰“®ˆ—
         {
             gDamageTrigger.SetActive(true);
-            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage);
+            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fFriezeTimer);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
