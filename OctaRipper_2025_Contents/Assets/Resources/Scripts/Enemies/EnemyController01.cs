@@ -191,7 +191,7 @@ public class EnemyController01 : EnemyControllerBase
         if (!bIsAttacking) // èâìÆèàóù
         {
             gDamageTrigger.SetActive(true);
-            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage);
+            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fFriezeTimer);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
