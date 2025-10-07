@@ -42,11 +42,12 @@ public class PlayerController : MonoBehaviour
 
     private GameObject gDodgeEffectInstance;
 
-    PlayerMoveController cMoveController;
-    LifeController cLifeController;
+    private PlayerMoveController cMoveController;
+    private LifeController cLifeController;
 
     private int nDodgeRestCoolTimeFrame = 0;
     private int nEffectActiveFrame = 0;
+    private int nFreezeFrame = 0;
     private int nPastFps;
     private int nFpsDiff;
     private void OnEnable()
@@ -112,9 +113,21 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        cMoveController.FixedUpdateMove(transform);
+        if(nFreezeFrame <= 0)
+        {
+            cMoveController.FixedUpdateMove(transform);
+        }
+        else
+        {
+            nFreezeFrame -= nFpsDiff;
+            if(nFreezeFrame <= 0)
+            {
+                nFreezeFrame = 0;
+                cLifeController.SetInvincible(false);
+            }
+        }
 
-        if(gDodgeEffectInstance.activeInHierarchy == false)
+        if (gDodgeEffectInstance.activeInHierarchy == false)
         {
             gDodgeEffectInstance.transform.position = transform.position;
             gDodgeEffectInstance.transform.rotation = transform.rotation;
@@ -131,8 +144,6 @@ public class PlayerController : MonoBehaviour
                 gDodgeEffectInstance.SetActive(false);
             }
         }
-
-        Damage(1, -transform.forward);
     }
 
     private void Move(InputAction.CallbackContext _context)
@@ -163,12 +174,18 @@ public class PlayerController : MonoBehaviour
         cMoveController.Look();
     }
 
-    public void Damage(float _damageValue, Vector3 _knockback)
+    public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
-            rb.AddForce(_knockback, ForceMode.Impulse);
-            cLifeController.ChangeLifePoint(_damageValue);
+            //硬直・無敵の設定
+            nFreezeFrame = _freezeFrame;
+            cLifeController.SetInvincible(true);
+            //ノックバックベクトルの補正
+            _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
+            //ノックバック
+            rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
+            transform.rotation = Quaternion.LookRotation(-_knockBackVec);
         }        
     }
 }
