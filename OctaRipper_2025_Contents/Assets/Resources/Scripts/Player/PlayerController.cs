@@ -68,7 +68,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Look.performed += Look;
         isInput.Player.OnWeakAttack.performed += OnWeakAttackButton;
         isInput.Player.ReleaseWeakAttack.performed += ReleaseWeakAttackButton;
-        isInput.Player.
+        isInput.Player.OnStrengthAttack.performed += OnStrongAttackButton;
+        isInput.Player.ReleaseStrengthAttack.performed += ReleaseStrongAttackButton;
     }
     private void OnDisable()
     {
@@ -80,6 +81,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Look.performed -= Look;
         isInput.Player.OnWeakAttack.performed -= OnWeakAttackButton;
         isInput.Player.ReleaseWeakAttack.performed -= ReleaseWeakAttackButton;
+        isInput.Player.OnStrengthAttack.performed -= OnStrongAttackButton;
+        isInput.Player.ReleaseStrengthAttack.performed -= ReleaseStrongAttackButton;
     }
     private void Start()
     {
@@ -219,9 +222,13 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         bIsFreeze = false;
     }
-    private void GoFront(float distance)
+    private void GoFront(float _distance)
     {
-        rb.AddForce(transform.forward * distance);
+        rb.AddForce(transform.forward * _distance);
+    }
+    private void VecLost(float _magnification)
+    {
+        rb.linearVelocity *= _magnification;
     }
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {

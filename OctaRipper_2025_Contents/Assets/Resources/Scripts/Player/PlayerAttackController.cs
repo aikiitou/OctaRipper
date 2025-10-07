@@ -23,6 +23,11 @@ public class PlayerAttackController
             nButtonOnFrame += _fpsDiff;
             aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
         }
+        if (isStrongButton == true)
+        {
+            nButtonOnFrame += _fpsDiff;
+            aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
+        }
     }
     public void OnWeakAttackButton()
     {
@@ -76,5 +81,6 @@ public class PlayerAttackController
     {
         isAnimataion = false;
         aAnimator.ResetTrigger("weakAttackTrigger");
+        aAnimator.ResetTrigger("strongAttackTrigger");
     }
 }

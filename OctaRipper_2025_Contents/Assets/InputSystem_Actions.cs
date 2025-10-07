@@ -129,12 +129,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""StrengthAttack"",
+                    ""name"": ""OnStrengthAttack"",
                     ""type"": ""Button"",
                     ""id"": ""04c3bb63-ae87-46bd-bab0-d29574af8857"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReleaseStrengthAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""0305af18-b880-4956-ba78-340f35eddcca"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -331,7 +340,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""StrengthAttack"",
+                    ""action"": ""OnStrengthAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -342,7 +351,29 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""StrengthAttack"",
+                    ""action"": ""OnStrengthAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cc982f9-7365-4b2b-b5c6-c5ade7cae40a"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReleaseStrengthAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f809dbf8-4aa0-4a97-9c7c-1562b9c49e27"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReleaseStrengthAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -978,7 +1009,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_OnWeakAttack = m_Player.FindAction("OnWeakAttack", throwIfNotFound: true);
         m_Player_ReleaseWeakAttack = m_Player.FindAction("ReleaseWeakAttack", throwIfNotFound: true);
-        m_Player_StrengthAttack = m_Player.FindAction("StrengthAttack", throwIfNotFound: true);
+        m_Player_OnStrengthAttack = m_Player.FindAction("OnStrengthAttack", throwIfNotFound: true);
+        m_Player_ReleaseStrengthAttack = m_Player.FindAction("ReleaseStrengthAttack", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -1077,7 +1109,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_OnWeakAttack;
     private readonly InputAction m_Player_ReleaseWeakAttack;
-    private readonly InputAction m_Player_StrengthAttack;
+    private readonly InputAction m_Player_OnStrengthAttack;
+    private readonly InputAction m_Player_ReleaseStrengthAttack;
     private readonly InputAction m_Player_Dodge;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
@@ -1107,9 +1140,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @ReleaseWeakAttack => m_Wrapper.m_Player_ReleaseWeakAttack;
         /// <summary>
-        /// Provides access to the underlying input action "Player/StrengthAttack".
+        /// Provides access to the underlying input action "Player/OnStrengthAttack".
         /// </summary>
-        public InputAction @StrengthAttack => m_Wrapper.m_Player_StrengthAttack;
+        public InputAction @OnStrengthAttack => m_Wrapper.m_Player_OnStrengthAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ReleaseStrengthAttack".
+        /// </summary>
+        public InputAction @ReleaseStrengthAttack => m_Wrapper.m_Player_ReleaseStrengthAttack;
         /// <summary>
         /// Provides access to the underlying input action "Player/Dodge".
         /// </summary>
@@ -1152,9 +1189,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ReleaseWeakAttack.started += instance.OnReleaseWeakAttack;
             @ReleaseWeakAttack.performed += instance.OnReleaseWeakAttack;
             @ReleaseWeakAttack.canceled += instance.OnReleaseWeakAttack;
-            @StrengthAttack.started += instance.OnStrengthAttack;
-            @StrengthAttack.performed += instance.OnStrengthAttack;
-            @StrengthAttack.canceled += instance.OnStrengthAttack;
+            @OnStrengthAttack.started += instance.OnOnStrengthAttack;
+            @OnStrengthAttack.performed += instance.OnOnStrengthAttack;
+            @OnStrengthAttack.canceled += instance.OnOnStrengthAttack;
+            @ReleaseStrengthAttack.started += instance.OnReleaseStrengthAttack;
+            @ReleaseStrengthAttack.performed += instance.OnReleaseStrengthAttack;
+            @ReleaseStrengthAttack.canceled += instance.OnReleaseStrengthAttack;
             @Dodge.started += instance.OnDodge;
             @Dodge.performed += instance.OnDodge;
             @Dodge.canceled += instance.OnDodge;
@@ -1181,9 +1221,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ReleaseWeakAttack.started -= instance.OnReleaseWeakAttack;
             @ReleaseWeakAttack.performed -= instance.OnReleaseWeakAttack;
             @ReleaseWeakAttack.canceled -= instance.OnReleaseWeakAttack;
-            @StrengthAttack.started -= instance.OnStrengthAttack;
-            @StrengthAttack.performed -= instance.OnStrengthAttack;
-            @StrengthAttack.canceled -= instance.OnStrengthAttack;
+            @OnStrengthAttack.started -= instance.OnOnStrengthAttack;
+            @OnStrengthAttack.performed -= instance.OnOnStrengthAttack;
+            @OnStrengthAttack.canceled -= instance.OnOnStrengthAttack;
+            @ReleaseStrengthAttack.started -= instance.OnReleaseStrengthAttack;
+            @ReleaseStrengthAttack.performed -= instance.OnReleaseStrengthAttack;
+            @ReleaseStrengthAttack.canceled -= instance.OnReleaseStrengthAttack;
             @Dodge.started -= instance.OnDodge;
             @Dodge.performed -= instance.OnDodge;
             @Dodge.canceled -= instance.OnDodge;
@@ -1516,12 +1559,19 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnReleaseWeakAttack(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "StrengthAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "OnStrengthAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnStrengthAttack(InputAction.CallbackContext context);
+        void OnOnStrengthAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ReleaseStrengthAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnReleaseStrengthAttack(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Dodge" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

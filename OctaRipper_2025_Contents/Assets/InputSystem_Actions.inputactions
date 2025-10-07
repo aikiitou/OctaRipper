@@ -43,12 +43,21 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "StrengthAttack",
+                    "name": "OnStrengthAttack",
                     "type": "Button",
                     "id": "04c3bb63-ae87-46bd-bab0-d29574af8857",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ReleaseStrengthAttack",
+                    "type": "Button",
+                    "id": "0305af18-b880-4956-ba78-340f35eddcca",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press(behavior=1)",
                     "initialStateCheck": false
                 },
                 {
@@ -245,7 +254,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StrengthAttack",
+                    "action": "OnStrengthAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -256,7 +265,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "StrengthAttack",
+                    "action": "OnStrengthAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9cc982f9-7365-4b2b-b5c6-c5ade7cae40a",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReleaseStrengthAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f809dbf8-4aa0-4a97-9c7c-1562b9c49e27",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReleaseStrengthAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
