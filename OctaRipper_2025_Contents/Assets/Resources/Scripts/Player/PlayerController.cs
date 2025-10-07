@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -32,19 +33,23 @@ public class PlayerController : MonoBehaviour
     [Header("回避エフェクト")]
     [SerializeField]
     private GameObject gDodgeEffectPrefab;
+    [Header("エフェクトの到着フレーム")]
+    [SerializeField]
+    private int nEffectArrivalFrame;
     [Header("フレームカウンター")]
     [SerializeField]
     private FrameRate cFps;
 
     private GameObject gDodgeEffectInstance;
 
-    PlayerMoveController cMoveController;
-    PlayerDodgeEffectController cDodgeEffectController;
-    LifeController cLifeController;
+    private PlayerMoveController cMoveController;
+    private LifeController cLifeController;
 
-    private int nDodgeCoolTime = 0;
-
+    private int nDodgeRestCoolTimeFrame = 0;
+    private int nEffectActiveFrame = 0;
+    private int nFreezeFrame = 0;
     private int nPastFps;
+    private int nFpsDiff;
     private void OnEnable()
     {
         aAnimator = GetComponent<Animator>();
@@ -76,44 +81,68 @@ public class PlayerController : MonoBehaviour
         cLifeController.SetInvincible(false);
 
         gDodgeEffectInstance = Instantiate(gDodgeEffectPrefab, transform.parent);
-        cDodgeEffectController = gDodgeEffectInstance.GetComponent<PlayerDodgeEffectController>();
     }
 
     private void Update()
     {
-        if (nDodgeCoolTime > 0)
+        int currentFps = cFps.GetFPS();
+        if (currentFps < nPastFps)
         {
-            int currentFps = cFps.GetFPS();
-            if(currentFps < nPastFps)
-            {
-                nDodgeCoolTime--;
-            }
-            else
-            {
-                int fpsDiff = currentFps - nPastFps;
-                nDodgeCoolTime -= fpsDiff;
-            }
+            nFpsDiff = _FPS - nPastFps;
+            nFpsDiff += currentFps;
+            nDodgeRestCoolTimeFrame -= nFpsDiff;
+        }
+        else
+        {
+            nFpsDiff = currentFps - nPastFps;
+            nDodgeRestCoolTimeFrame -= nFpsDiff;
+        }
 
-            nPastFps = currentFps;
+        nPastFps = currentFps;
 
-            if (nDodgeCoolTime <= 0)
+        
+        //クールタイム計算
+        if (nDodgeRestCoolTimeFrame > 0)
+        {
+            nDodgeRestCoolTimeFrame -= nFpsDiff;
+            if (nDodgeRestCoolTimeFrame <= 0)
             {
-                nDodgeCoolTime = 0;
+                nDodgeRestCoolTimeFrame = 0;
             }
         }
     }
     private void FixedUpdate()
     {
-        cMoveController.FixedUpdateMove(transform);
+        if(nFreezeFrame <= 0)
+        {
+            cMoveController.FixedUpdateMove(transform);
+        }
+        else
+        {
+            nFreezeFrame -= nFpsDiff;
+            if(nFreezeFrame <= 0)
+            {
+                nFreezeFrame = 0;
+                cLifeController.SetInvincible(false);
+            }
+        }
 
-        if(gDodgeEffectInstance.activeInHierarchy == false)
+        if (gDodgeEffectInstance.activeInHierarchy == false)
         {
             gDodgeEffectInstance.transform.position = transform.position;
             gDodgeEffectInstance.transform.rotation = transform.rotation;
         }
         else
         {
-            gDodgeEffectInstance.transform.position = Vector3.MoveTowards(gDodgeEffectInstance.transform.position, transform.position, Time.deltaTime * fSpeed);
+            nEffectActiveFrame += nFpsDiff;
+            float Ratio = (float)nEffectActiveFrame / (float)nEffectArrivalFrame;
+            gDodgeEffectInstance.transform.position =
+                Vector3.Lerp(gDodgeEffectInstance.transform.position, transform.position, Ratio);
+            if (Ratio >= 1.0f)
+            {
+                cLifeController.SetInvincible(false);
+                gDodgeEffectInstance.SetActive(false);
+            }
         }
     }
 
@@ -128,14 +157,16 @@ public class PlayerController : MonoBehaviour
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        if(nDodgeCoolTime <= 0)
+        if(nDodgeRestCoolTimeFrame <= 0)
         {
-            nPastFps = cFps.GetFPS();
             cLifeController.SetInvincible(true);
-            nDodgeCoolTime = nDodgeCoolTimeFrame;
+
+            nDodgeRestCoolTimeFrame = nDodgeCoolTimeFrame;
+            nEffectActiveFrame = nFpsDiff;
 
             cMoveController.Dodge(transform);
-            StartCoroutine(cDodgeEffectController.DodgeEffect());
+
+            gDodgeEffectInstance.SetActive(true);
         }
     }
     private void Look(InputAction.CallbackContext _context)
@@ -143,8 +174,18 @@ public class PlayerController : MonoBehaviour
         cMoveController.Look();
     }
 
-    public void Damage(float _damageValue, Vector3 _knockback)
+    public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
-        cLifeController.ChangeLifePoint(_damageValue);
+        if(cLifeController.ChangeLifePoint(_damageValue) == true)
+        {
+            //硬直・無敵の設定
+            nFreezeFrame = _freezeFrame;
+            cLifeController.SetInvincible(true);
+            //ノックバックベクトルの補正
+            _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
+            //ノックバック
+            rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
+            transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+        }        
     }
 }

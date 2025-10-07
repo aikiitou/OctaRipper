@@ -42,17 +42,17 @@ public class PlayerMoveController
 
             aAnimator.SetFloat("fMoveDirX", fAnimBlendX);
             aAnimator.SetFloat("fMoveDirY", fAnimBlendY);
-        }
 
-        rb.linearVelocity = vMoveVec;
+            rb.linearVelocity = vMoveVec;
 
-        rb.linearVelocity = vMoveVec * fSpeed + new Vector3(0, rb.linearVelocity.y, 0);
+            rb.linearVelocity = vMoveVec * fSpeed + new Vector3(0, rb.linearVelocity.y, 0);
 
-        Vector3 lookDir = vCameraForward;
-        if (lookDir.sqrMagnitude > 0.001f)
-        {
-            Quaternion rot = Quaternion.LookRotation(lookDir);
-            _transform.rotation = Quaternion.Slerp(_transform.rotation, rot, Time.fixedDeltaTime * fAngleSpeed);
+            Vector3 lookDir = vCameraForward;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                Quaternion rot = Quaternion.LookRotation(lookDir);
+                _transform.rotation = Quaternion.Slerp(_transform.rotation, rot, Time.fixedDeltaTime * fAngleSpeed);
+            }
         }
     }
 
