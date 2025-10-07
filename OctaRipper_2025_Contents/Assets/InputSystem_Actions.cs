@@ -111,9 +111,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""WeakAttack"",
+                    ""name"": ""OnWeakAttack"",
                     ""type"": ""Button"",
                     ""id"": ""57593807-f530-4da1-a45f-05272af3b8ee"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ReleaseWeakAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""f545c030-1a01-4119-812d-3cfcdd256ecd"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -297,10 +306,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""4daf6996-0346-47de-847b-f38915a41c27"",
                     ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""WeakAttack"",
+                    ""action"": ""OnWeakAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -308,10 +317,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""37f32f9b-bddf-459a-96ff-2d85ee30edad"",
                     ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""WeakAttack"",
+                    ""action"": ""OnWeakAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -356,6 +365,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4246508-1ea7-455a-a86e-7dc641e04a3d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReleaseWeakAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de12ae82-8d5e-4e8b-b3d8-9997a13f84cb"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": ""Press(behavior=1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReleaseWeakAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -945,7 +976,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
-        m_Player_WeakAttack = m_Player.FindAction("WeakAttack", throwIfNotFound: true);
+        m_Player_OnWeakAttack = m_Player.FindAction("OnWeakAttack", throwIfNotFound: true);
+        m_Player_ReleaseWeakAttack = m_Player.FindAction("ReleaseWeakAttack", throwIfNotFound: true);
         m_Player_StrengthAttack = m_Player.FindAction("StrengthAttack", throwIfNotFound: true);
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         // UI
@@ -1043,7 +1075,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Look;
-    private readonly InputAction m_Player_WeakAttack;
+    private readonly InputAction m_Player_OnWeakAttack;
+    private readonly InputAction m_Player_ReleaseWeakAttack;
     private readonly InputAction m_Player_StrengthAttack;
     private readonly InputAction m_Player_Dodge;
     /// <summary>
@@ -1066,9 +1099,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Player_Look;
         /// <summary>
-        /// Provides access to the underlying input action "Player/WeakAttack".
+        /// Provides access to the underlying input action "Player/OnWeakAttack".
         /// </summary>
-        public InputAction @WeakAttack => m_Wrapper.m_Player_WeakAttack;
+        public InputAction @OnWeakAttack => m_Wrapper.m_Player_OnWeakAttack;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/ReleaseWeakAttack".
+        /// </summary>
+        public InputAction @ReleaseWeakAttack => m_Wrapper.m_Player_ReleaseWeakAttack;
         /// <summary>
         /// Provides access to the underlying input action "Player/StrengthAttack".
         /// </summary>
@@ -1109,9 +1146,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @WeakAttack.started += instance.OnWeakAttack;
-            @WeakAttack.performed += instance.OnWeakAttack;
-            @WeakAttack.canceled += instance.OnWeakAttack;
+            @OnWeakAttack.started += instance.OnOnWeakAttack;
+            @OnWeakAttack.performed += instance.OnOnWeakAttack;
+            @OnWeakAttack.canceled += instance.OnOnWeakAttack;
+            @ReleaseWeakAttack.started += instance.OnReleaseWeakAttack;
+            @ReleaseWeakAttack.performed += instance.OnReleaseWeakAttack;
+            @ReleaseWeakAttack.canceled += instance.OnReleaseWeakAttack;
             @StrengthAttack.started += instance.OnStrengthAttack;
             @StrengthAttack.performed += instance.OnStrengthAttack;
             @StrengthAttack.canceled += instance.OnStrengthAttack;
@@ -1135,9 +1175,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @WeakAttack.started -= instance.OnWeakAttack;
-            @WeakAttack.performed -= instance.OnWeakAttack;
-            @WeakAttack.canceled -= instance.OnWeakAttack;
+            @OnWeakAttack.started -= instance.OnOnWeakAttack;
+            @OnWeakAttack.performed -= instance.OnOnWeakAttack;
+            @OnWeakAttack.canceled -= instance.OnOnWeakAttack;
+            @ReleaseWeakAttack.started -= instance.OnReleaseWeakAttack;
+            @ReleaseWeakAttack.performed -= instance.OnReleaseWeakAttack;
+            @ReleaseWeakAttack.canceled -= instance.OnReleaseWeakAttack;
             @StrengthAttack.started -= instance.OnStrengthAttack;
             @StrengthAttack.performed -= instance.OnStrengthAttack;
             @StrengthAttack.canceled -= instance.OnStrengthAttack;
@@ -1459,12 +1502,19 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "WeakAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "OnWeakAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnWeakAttack(InputAction.CallbackContext context);
+        void OnOnWeakAttack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ReleaseWeakAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnReleaseWeakAttack(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "StrengthAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

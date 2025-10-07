@@ -7,14 +7,34 @@ public class PlayerAttackController
     Animator aAnimator;
     Rigidbody rb;
 
-    public PlayerAttackController(Animator _animator,Rigidbody _rb)
+    private bool isWeakButton = false;
+    private int nButtonOnFrame = 0;
+    public PlayerAttackController(Rigidbody _rb , Animator _animator)
     {
         this.aAnimator = _animator;
         this.rb = _rb;
     }
-    
-    public void WeakAttack()
+    public void UpdataAttack(int _fpsDiff)
     {
-        aAnimator.SetBool("bIsAttack", true);
+        if (isWeakButton == true)
+        {
+            nButtonOnFrame += _fpsDiff;
+            aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
+        }
+    }
+    public void OnWeakAttackButton()
+    {
+        isWeakButton = true;
+        aAnimator.SetBool("bIsButton", true);
+        aAnimator.SetTrigger("WeakAttackTrigger");
+    }
+    public void ReleaseWeakAttackButton()
+    {
+        isWeakButton = false;
+
+        nButtonOnFrame = 0;
+
+        aAnimator.SetBool("bIsButton", false);
+        aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
     }
 }

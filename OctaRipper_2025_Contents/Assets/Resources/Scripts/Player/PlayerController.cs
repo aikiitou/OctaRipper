@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         float fColliderRadius = gameObject.GetComponent<CapsuleCollider>().radius;
         cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed, fColliderRadius);
+        cAttackController = new PlayerAttackController(rb, aAnimator);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
@@ -64,7 +65,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled += Stop;
         isInput.Player.Dodge.started += Dodge;
         isInput.Player.Look.performed += Look;
-        isInput.Player.WeakAttack.started += WeakAttack;
+        isInput.Player.OnWeakAttack.started += OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.started += ReleaseWeakAttackButton;
     }
     private void OnDisable()
     {
@@ -74,7 +76,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled -= Stop;
         isInput.Player.Dodge.started -= Dodge;
         isInput.Player.Look.performed -= Look;
-        isInput.Player.WeakAttack.started -= WeakAttack;
+        isInput.Player.OnWeakAttack.started -= OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.started -= ReleaseWeakAttackButton;
     }
     private void Start()
     {
@@ -88,6 +91,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        cAttackController.UpdataAttack(nFpsDiff);
         int currentFps = cFps.GetFPS();
         if (currentFps < nPastFps)
         {
@@ -102,7 +106,6 @@ public class PlayerController : MonoBehaviour
         }
 
         nPastFps = currentFps;
-
         
         //クールタイム計算
         if (nDodgeRestCoolTimeFrame > 0)
@@ -176,11 +179,14 @@ public class PlayerController : MonoBehaviour
     {
         cMoveController.Look();
     }
-    private void WeakAttack(InputAction.CallbackContext _context)
+    private void OnWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.WeakAttack();
+        cAttackController.OnWeakAttackButton();
     }
-
+    private void ReleaseWeakAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.ReleaseWeakAttackButton();
+    }
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)

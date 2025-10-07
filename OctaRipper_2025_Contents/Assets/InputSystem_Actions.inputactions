@@ -25,9 +25,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "WeakAttack",
+                    "name": "OnWeakAttack",
                     "type": "Button",
                     "id": "57593807-f530-4da1-a45f-05272af3b8ee",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ReleaseWeakAttack",
+                    "type": "Button",
+                    "id": "f545c030-1a01-4119-812d-3cfcdd256ecd",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -211,10 +220,10 @@
                     "name": "",
                     "id": "4daf6996-0346-47de-847b-f38915a41c27",
                     "path": "<Gamepad>/buttonWest",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "WeakAttack",
+                    "action": "OnWeakAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -222,10 +231,10 @@
                     "name": "",
                     "id": "37f32f9b-bddf-459a-96ff-2d85ee30edad",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "WeakAttack",
+                    "action": "OnWeakAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -270,6 +279,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c4246508-1ea7-455a-a86e-7dc641e04a3d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReleaseWeakAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de12ae82-8d5e-4e8b-b3d8-9997a13f84cb",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ReleaseWeakAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
