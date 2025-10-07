@@ -17,12 +17,14 @@ public class LifeController : MonoBehaviour
         bIsInvincible = _isInvincible;
     }
 
-    public void ChangeLifePoint(float _value) // ライフポイントの変更
+    public bool ChangeLifePoint(float _value) // ライフポイントの変更
     {
         if (!bIsInvincible)
         {
             fLifePoint += _value;
+            return true;
         }
+        return false;
     }
 
 }
