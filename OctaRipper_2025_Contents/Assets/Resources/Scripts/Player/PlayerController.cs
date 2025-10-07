@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private PlayerAttackController cAttackController;
     private LifeController cLifeController;
 
+    private bool bIsFreeze = false;
     private int nDodgeRestCoolTimeFrame = 0;
     private int nEffectActiveFrame = 0;
     private int nFreezeFrame = 0;
@@ -65,8 +66,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled += Stop;
         isInput.Player.Dodge.started += Dodge;
         isInput.Player.Look.performed += Look;
-        isInput.Player.OnWeakAttack.started += OnWeakAttackButton;
-        isInput.Player.ReleaseWeakAttack.started += ReleaseWeakAttackButton;
+        isInput.Player.OnWeakAttack.performed += OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.performed += ReleaseWeakAttackButton;
     }
     private void OnDisable()
     {
@@ -76,8 +77,8 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled -= Stop;
         isInput.Player.Dodge.started -= Dodge;
         isInput.Player.Look.performed -= Look;
-        isInput.Player.OnWeakAttack.started -= OnWeakAttackButton;
-        isInput.Player.ReleaseWeakAttack.started -= ReleaseWeakAttackButton;
+        isInput.Player.OnWeakAttack.performed -= OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.performed -= ReleaseWeakAttackButton;
     }
     private void Start()
     {
@@ -91,7 +92,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        cAttackController.UpdataAttack(nFpsDiff);
         int currentFps = cFps.GetFPS();
         if (currentFps < nPastFps)
         {
@@ -116,20 +116,25 @@ public class PlayerController : MonoBehaviour
                 nDodgeRestCoolTimeFrame = 0;
             }
         }
+
+        cAttackController.UpdataAttack(nFpsDiff);
     }
     private void FixedUpdate()
     {
-        if(nFreezeFrame <= 0)
+        if(nFreezeFrame <= 0 && bIsFreeze == false)
         {
             cMoveController.FixedUpdateMove(transform);
         }
         else
         {
-            nFreezeFrame -= nFpsDiff;
-            if(nFreezeFrame <= 0)
+            if(nFreezeFrame > 0)
             {
-                nFreezeFrame = 0;
-                cLifeController.SetInvincible(false);
+                nFreezeFrame -= nFpsDiff;
+                if (nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+                    cLifeController.SetInvincible(false);
+                }
             }
         }
 
@@ -187,18 +192,42 @@ public class PlayerController : MonoBehaviour
     {
         cAttackController.ReleaseWeakAttackButton();
     }
+    private void AnimationStr()
+    {
+        cAttackController.AnimationStr();
+    }
+    private void AnimationEnd()
+    {
+        cAttackController.AnimationEnd();
+    }
+    private void OnFreeze()
+    {
+        rb.linearVelocity = Vector3.zero;
+        bIsFreeze = true;
+    }
+    private void DisFreeze()
+    {
+        bIsFreeze = false;
+    }
+    private void GoFront(float distance)
+    {
+        transform.Translate(transform.forward * distance);
+    }
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
-            //硬直・無敵の設定
-            nFreezeFrame = _freezeFrame;
-            cLifeController.SetInvincible(true);
-            //ノックバックベクトルの補正
-            _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
-            //ノックバック
-            rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
-            transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+            if (bIsFreeze == true)
+            {
+                //硬直・無敵の設定
+                nFreezeFrame = _freezeFrame;
+                cLifeController.SetInvincible(true);
+                //ノックバックベクトルの補正
+                _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
+                //ノックバック
+                rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
+                transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+            }
         }        
     }
 }

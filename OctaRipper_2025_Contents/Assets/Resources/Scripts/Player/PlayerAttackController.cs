@@ -8,6 +8,7 @@ public class PlayerAttackController
     Rigidbody rb;
 
     private bool isWeakButton = false;
+    private bool isAnimataion = false;
     private int nButtonOnFrame = 0;
     public PlayerAttackController(Rigidbody _rb , Animator _animator)
     {
@@ -24,17 +25,33 @@ public class PlayerAttackController
     }
     public void OnWeakAttackButton()
     {
-        isWeakButton = true;
-        aAnimator.SetBool("bIsButton", true);
-        aAnimator.SetTrigger("WeakAttackTrigger");
+        if(isAnimataion == false)
+        {
+            isWeakButton = true;
+            aAnimator.SetBool("bIsButton", true);
+            aAnimator.SetTrigger("weakAttackTrigger");
+
+            aAnimator.SetInteger("nButtonOnFrame", 0);
+        }
+        else
+        {
+            aAnimator.SetTrigger("comboTrigger");
+        }
     }
     public void ReleaseWeakAttackButton()
     {
         isWeakButton = false;
-
         nButtonOnFrame = 0;
 
         aAnimator.SetBool("bIsButton", false);
-        aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
+    }
+    public void AnimationStr()
+    {
+        isAnimataion = true;
+    }
+    public void AnimationEnd()
+    {
+        isAnimataion = false;
+        aAnimator.ResetTrigger("weakAttackTrigger");
     }
 }
