@@ -131,6 +131,8 @@ public class PlayerController : MonoBehaviour
                 gDodgeEffectInstance.SetActive(false);
             }
         }
+
+        Damage(1, -transform.forward);
     }
 
     private void Move(InputAction.CallbackContext _context)
@@ -163,6 +165,10 @@ public class PlayerController : MonoBehaviour
 
     public void Damage(float _damageValue, Vector3 _knockback)
     {
-        cLifeController.ChangeLifePoint(_damageValue);
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(_knockback, ForceMode.Impulse);
+            cLifeController.ChangeLifePoint(_damageValue);
+        }        
     }
 }
