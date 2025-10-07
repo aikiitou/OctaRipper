@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private GameObject gDodgeEffectInstance;
 
     private PlayerMoveController cMoveController;
+    private PlayerAttackController cAttackController;
     private LifeController cLifeController;
 
     private int nDodgeRestCoolTimeFrame = 0;
@@ -63,6 +64,7 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled += Stop;
         isInput.Player.Dodge.started += Dodge;
         isInput.Player.Look.performed += Look;
+        isInput.Player.WeakAttack.started += WeakAttack;
     }
     private void OnDisable()
     {
@@ -72,6 +74,7 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled -= Stop;
         isInput.Player.Dodge.started -= Dodge;
         isInput.Player.Look.performed -= Look;
+        isInput.Player.WeakAttack.started -= WeakAttack;
     }
     private void Start()
     {
@@ -172,6 +175,10 @@ public class PlayerController : MonoBehaviour
     private void Look(InputAction.CallbackContext _context)
     {
         cMoveController.Look();
+    }
+    private void WeakAttack(InputAction.CallbackContext _context)
+    {
+        cAttackController.WeakAttack();
     }
 
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
