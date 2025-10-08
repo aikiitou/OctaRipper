@@ -63,6 +63,9 @@ public class EnemyController01 : EnemyControllerBase
     [SerializeField, Header("爆発オブジェクト")]
     GameObject gExplosion; // 攻撃の当たり判定オブジェクト
 
+    [SerializeField, Header("ヒットエフェクトオブジェクト")]
+    GameObject gHitEffect; // 攻撃の当たり判定オブジェクト
+
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
@@ -102,6 +105,10 @@ public class EnemyController01 : EnemyControllerBase
         if (cLifeController.GetLifePoint <= 0.0f)
         {
             StartCoroutine(DeadDelay()); // 死亡
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Damage(-10.0f, -transform.forward * 5.0f, 0.5f);
         }
     }
 
@@ -254,6 +261,7 @@ public class EnemyController01 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
+        gHitEffect.GetComponent<HitEffect>().HitParticle();
         cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {
