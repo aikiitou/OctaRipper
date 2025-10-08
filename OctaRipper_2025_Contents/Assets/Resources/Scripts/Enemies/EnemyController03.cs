@@ -20,11 +20,23 @@ public class EnemyController03 : EnemyControllerBase
     [SerializeField, Header("攻撃実行距離")]
     float fAttackDistance = 2.0f;
 
+    [SerializeField, Header("接近可能距離")]
+    float fDistance = 1.0f;
+
     [SerializeField, Header("攻撃必要時間")]
     float fAttackActionTime = 1.0f;
 
+    [SerializeField, Header("薙ぎ払い攻撃必要時間")]
+    float fSweepAttackActionTime = 1.0f;
+
     [SerializeField, Header("突進スピード")]
     float fAttackSpeed = 10.0f;
+
+    [SerializeField, Header("突進無敵時間")]
+    float fAttackInvincibleTime = 10.0f;
+
+    [SerializeField, Header("薙ぎ払い踏み込みスピード")]
+    float fSweepAttackSpeed = 10.0f;
 
     [SerializeField, Header("与ダメージ")]
     float fAttackDamage = 10.0f;
@@ -68,6 +80,7 @@ public class EnemyController03 : EnemyControllerBase
     bool bCanAction = true; // 行動可能かどうか
     bool bIsShielding = false; // シールド構え
     bool bIsShielded = false; // シールドしたかどうか
+    float fInvincibleTimer;
     float fAttackCoolDownTimer;
     float fAttackActionTimer;
     float fFriezeTimer; // 硬直時間
@@ -103,6 +116,11 @@ public class EnemyController03 : EnemyControllerBase
         {
             Death(); // 死亡
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Damage(-10.0f, (gTargetObject.transform.position - gameObject.transform.position).normalized * -10.0f, 1.0f);
+            MyDebugLib.MessageLog(cLifeController.GetLifePoint);
+        }
     }
 
     void ChangePattern()
@@ -113,28 +131,26 @@ public class EnemyController03 : EnemyControllerBase
         }
         else
         {
-            gDamageTrigger.SetActive(false);
+            bIsShielding = false;
             return; // でなければ攻撃を停止させ、returnする。
         }
+        aAnimator.SetBool("Sweep", (gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance);
         if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
             bIsAcceleration = true;
-            gDamageTrigger.SetActive(false);
             bCanTurn = true;
+            bIsShielding = false;
         }
-        if (((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance) && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
+        if (bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
             bIsAttacking = false;
             Ray ray = new Ray(transform.position, transform.forward);
-            Physics.Raycast(ray, out RaycastHit hit, fAttackDistance);
-            if (hit.transform != null)
+            Physics.Raycast(ray, out RaycastHit hit);
+            if (fAttackCoolDownTimer <= 0.0f)
             {
-                if (hit.transform.tag == "Player" && fAttackCoolDownTimer <= 0.0f) // 正面にプレイヤーがいる際に攻撃実行。
-                {
-                    bCanTurn = false;
-                    bIsAcceleration = false;
-                    Attack();
-                }
+                bCanTurn = false;
+                bIsAcceleration = false;
+                Attack();
             }
         }
     }
@@ -152,12 +168,26 @@ public class EnemyController03 : EnemyControllerBase
         if (fFriezeTimer > 0.0f)
         {
             fFriezeTimer -= Time.deltaTime;
+            if (fFriezeTimer <= 0.0f)
+            {
+                aAnimator.SetBool("Damaged",false);
+            }
         }
+        if (fInvincibleTimer > 0.0f)
+        {
+            fInvincibleTimer -= Time.deltaTime;
+            if (fInvincibleTimer <= 0.0f)
+            {
+                cLifeController.SetInvincible(false);
+            }
+        }
+        
     }
     protected override void Move() // 移動
     {
         if (bIsAcceleration) // 加速中
         {
+            bIsShielding = true;
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
             moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
@@ -170,6 +200,12 @@ public class EnemyController03 : EnemyControllerBase
         }
         else // ブレーキ
         {
+            Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
+            horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (fDistance > horizonDistance.magnitude)
+            {
+                vMoveForce = Vector3.zero;
+            }
             if (vMoveForce.magnitude >= fBrake * Time.deltaTime)
             {
                 vMoveForce -= vMoveForce.normalized * fBrake * Time.deltaTime;
@@ -195,17 +231,36 @@ public class EnemyController03 : EnemyControllerBase
 
     protected override void Attack() // 攻撃
     {
-        if (!bIsAttacking) // 初動処理
+        if (!bIsAttacking && aAnimator.GetBool("Sweep")) // 初動処理
         {
-            gDamageTrigger.SetActive(true);
-            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fFriezeTimer);
+            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fFriezeTimer);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            aAnimator.SetTrigger("IsAttacking");
+            vMoveForce = horizonDistance.normalized * fSweepAttackSpeed;
+            fAttackActionTimer = fSweepAttackActionTime;
+            fAttackCoolDownTimer = fAttackCoolDownTime;
+            bIsAttacking = true;
+            bIsShielding = false;
+        }
+        else if (!bIsAttacking && !aAnimator.GetBool("Sweep")) // 初動処理
+        {
+            Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
+            horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
+                1.0f
+                ); // 方向転換
+            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fFriezeTimer);
             aAnimator.SetTrigger("IsAttacking");
             vMoveForce = horizonDistance.normalized * fAttackSpeed;
             fAttackActionTimer = fAttackActionTime;
             fAttackCoolDownTimer = fAttackCoolDownTime;
+            fInvincibleTimer = fAttackInvincibleTime;
+            cLifeController.SetInvincible(true);
             bIsAttacking = true;
+            bIsShielding = false;
         }
     }
 
@@ -217,22 +272,23 @@ public class EnemyController03 : EnemyControllerBase
             _damage *= fShieldMagnification;
             bIsShielded = true;
         }
-        cLifeController.ChangeLifePoint(_damage); // ダメージを与える
-        if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
+        bool damaged = cLifeController.ChangeLifePoint(_damage); // ダメージを与える
+        if (_friezeTime > 0 && damaged) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {
             KnockBack(_impact, _friezeTime);
         }
+        bIsShielded = false;
     }
 
     protected override void KnockBack(Vector3 _force, float _friezeTime) // ノックバック・硬直
     {
-        if (bIsShielded)
+        if (!bIsShielded)
         {
-            aAnimator.SetTrigger("Damaged"); // 硬直モーション起動
+            aAnimator.SetBool("Damaged",true); // 硬直モーション起動
             bIsAcceleration = false; // 加速停止
             bCanAction = false; // 行動停止
             fFriezeTimer = _friezeTime; // 硬直時間の設定
-            bIsShielded = false;
+            bIsShielding = false;
         }
         vMoveForce = _force; // 移動力を吹っ飛ばされる力に上書き
         rRigidbody.linearVelocity = vMoveForce; // 反映
@@ -248,6 +304,7 @@ public class EnemyController03 : EnemyControllerBase
     bool ShieldJudge(Vector3 _direction)
     {
         Vector3 addVector = _direction + transform.forward;
+        MyDebugLib.MessageLog((Mathf.Asin(addVector.magnitude / 2.0f) * 2.0f).ToString() + ":" + (fShieldRadius * Mathf.Deg2Rad).ToString());
         if (Mathf.Asin(addVector.magnitude / 2.0f) * 2.0f < fShieldRadius * Mathf.Deg2Rad) // 角度算出
         {
             return true;
