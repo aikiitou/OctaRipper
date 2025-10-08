@@ -190,11 +190,13 @@ public class EnemyController01 : EnemyControllerBase
     {
         Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
         horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+        if (horizonDistance.x == 0.0f)
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
             fRotationSpeed * Time.deltaTime
             ); // ï˚å¸ì]ä∑
+        transform.eulerAngles = new Vector3(0.0f,transform.eulerAngles.y,0.0f);
     }
 
     protected override void Attack() // çUåÇ
@@ -202,7 +204,7 @@ public class EnemyController01 : EnemyControllerBase
         if (!bIsAttacking) // èâìÆèàóù
         {
             gDamageTrigger.SetActive(true);
-            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fFriezeTimer);
+            gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fAttackFriezeTime);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             if (horizonDistance.magnitude < 0.1f)

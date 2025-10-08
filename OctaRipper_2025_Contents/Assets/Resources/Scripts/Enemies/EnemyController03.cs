@@ -116,11 +116,6 @@ public class EnemyController03 : EnemyControllerBase
         {
             Death(); // éÄñS
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-10.0f, (gTargetObject.transform.position - gameObject.transform.position).normalized * -10.0f, 1.0f);
-            MyDebugLib.MessageLog(cLifeController.GetLifePoint);
-        }
     }
 
     void ChangePattern()
@@ -233,7 +228,7 @@ public class EnemyController03 : EnemyControllerBase
     {
         if (!bIsAttacking && aAnimator.GetBool("Sweep")) // èâìÆèàóù
         {
-            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fFriezeTimer);
+            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fAttackFriezeTime);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
             aAnimator.SetTrigger("IsAttacking");
@@ -256,7 +251,7 @@ public class EnemyController03 : EnemyControllerBase
                 Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
                 1.0f
                 ); // ï˚å¸ì]ä∑
-            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fFriezeTimer);
+            gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fAttackFriezeTime);
             aAnimator.SetTrigger("IsAttacking");
             vMoveForce = horizonDistance.normalized * fAttackSpeed;
             fAttackActionTimer = fAttackActionTime;
