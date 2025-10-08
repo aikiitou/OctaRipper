@@ -198,7 +198,7 @@ public class EnemyController02 : EnemyControllerBase
                 fBulletSpeed,
                 fAttackDamage,
                 fAttackForce,
-                fFriezeTimer
+                fAttackFriezeTime
                 );
             fAttackCoolDownTimer = fAttackCoolDownTime;
             bIsAttacking = true;
