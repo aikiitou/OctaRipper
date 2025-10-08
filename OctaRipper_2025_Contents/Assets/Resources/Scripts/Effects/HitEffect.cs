@@ -3,6 +3,7 @@ using UnityEngine;
 public class HitEffect : MonoBehaviour
 {
     [SerializeField] ParticleSystem hitEffect;  //エフェクトを再生するパーティクルシステム
+    [SerializeField] //
     private bool hitEffectActive = false;       //ダメージが起きたか判別する
     void Update()
     {
