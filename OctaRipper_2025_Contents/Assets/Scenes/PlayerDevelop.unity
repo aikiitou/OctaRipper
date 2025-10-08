@@ -2075,6 +2075,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 169772245}
     - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
+      propertyPath: gWeakSlashPrefab
+      value: 
+      objectReference: {fileID: 5217690855954004608, guid: 287fe1d4121f9504dba44aca4eb36186, type: 3}
+    - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
       propertyPath: 'gAttackColliders.Array.data[0]'
       value: 
       objectReference: {fileID: 237449112}

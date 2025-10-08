@@ -40,6 +40,12 @@ public class PlayerController : MonoBehaviour
     [Header("攻撃の当たり判定")]
     [SerializeField]
     private GameObject[] gAttackColliders;
+    [Header("弱溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gWeakSlashPrefab;
+    [Header("強溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gStrongSlashPrefab;
 
     private GameObject gDodgeEffectInstance;
 
@@ -244,6 +250,12 @@ public class PlayerController : MonoBehaviour
     private void VecLost(float _magnification)
     {
         rb.linearVelocity *= _magnification;
+    }
+    private void InstantiateWeakSlash()
+    {
+        GameObject weakSlash = Instantiate(gWeakSlashPrefab);
+        weakSlash.transform.position = transform.position;
+        weakSlash.transform.rotation = transform.rotation;
     }
     //ダメージ関数
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
