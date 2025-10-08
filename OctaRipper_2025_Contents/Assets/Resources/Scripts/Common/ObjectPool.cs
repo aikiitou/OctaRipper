@@ -1,63 +1,47 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [System.Serializable]
-    private struct GenerateInformation
-    {
-        public GameObject gObject;
-        public int nNumber;
-    }
-
-    [SerializeField]
-    private GenerateInformation sGenerateInformation;
-
     private Stack<GameObject> gObjectPools = new Stack<GameObject>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void GeneratePool(GameObject create_object,int create_num)
     {
-        GeneratePool();
-    }
-
-    private void GeneratePool()
-    {
-        if(sGenerateInformation.gObject == null)
+        if(create_object == null)
         {
             return;
         }
 
-        for(int i = 0; i < sGenerateInformation.nNumber; ++i)
+        for (int i = 0; i < create_num; i++)
         {
-            GameObject obj = Instantiate(sGenerateInformation.gObject);
+            GameObject obj = Instantiate(create_object);
             obj.transform.parent = this.transform;
             obj.SetActive(false);
             gObjectPools.Push(obj);
         }
     }
 
-    public GameObject GetPoolObject()
+    public GameObject GetPoolObject(string get_object_tag)
     {
-        if (gObjectPools.Count == 0)
+        if(gObjectPools.Any(obj => obj.CompareTag(get_object_tag)))
+        {
+            MyDebugLib.MessageLog("GetSuccess");
+            GameObject nextObject = gObjectPools.Pop();
+            return nextObject;
+        }
+        else
         {
             MyDebugLib.MessageLog("ListisEmpty");
             return null;
         }
 
-        MyDebugLib.MessageLog("GetSuccess");
-
-        GameObject nextObject = gObjectPools.Pop();
-        nextObject.SetActive(true);
-        return nextObject;
     }
 
     public void ReturnPoolObject(GameObject return_object)
     {
         return_object.transform.parent = this.transform;
-        return_object.SetActive(false);
         gObjectPools.Push(return_object);
-
         MyDebugLib.MessageLog("ReturnSuccess");
     }
 }

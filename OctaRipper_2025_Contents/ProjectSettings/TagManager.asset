@@ -7,6 +7,10 @@ TagManager:
   - Enemy01
   - Enemy02
   - Enemy03
+  - Stage1
+  - Stage2
+  - Stage3
+  - Stage4
   - PlayerAttack
   layers:
   - Default
