@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController03 : EnemyControllerBase
@@ -82,6 +83,7 @@ public class EnemyController03 : EnemyControllerBase
     bool bIsShielded = false; // シールドしたかどうか
     float fInvincibleTimer;
     float fAttackCoolDownTimer;
+    float fDeadDelayTime = 0.5f; // 死亡遅延時間
     float fAttackActionTimer;
     float fFriezeTimer; // 硬直時間
     Vector3 vMoveForce; // 移動量
@@ -114,7 +116,7 @@ public class EnemyController03 : EnemyControllerBase
         TimerCountDown(); // タイマー系のカウントダウン
         if (cLifeController.GetLifePoint <= 0.0f)
         {
-            Death(); // 死亡
+            StartCoroutine(DeadDelay()); // 死亡
         }
     }
 
@@ -319,5 +321,12 @@ public class EnemyController03 : EnemyControllerBase
         return false;
     }
 
+    IEnumerator DeadDelay()
+    {
+        bCanAction = false;
+        fFriezeTimer = fDeadDelayTime;
+        yield return new WaitForSeconds(fDeadDelayTime);
+        Death();
+    }
 
 }

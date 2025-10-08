@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController02 : EnemyControllerBase
@@ -57,6 +58,7 @@ public class EnemyController02 : EnemyControllerBase
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
     bool bCanAction = true; // 行動可能かどうか
+    float fDeadDelayTime = 0.25f; // 死亡遅延時間
     float fAttackCoolDownTimer;
     float fMoveCoolDownTimer;
     float fFriezeTimer; // 硬直時間
@@ -91,7 +93,7 @@ public class EnemyController02 : EnemyControllerBase
         TimerCountDown(); // タイマー系のカウントダウン
         if (cLifeController.GetLifePoint <= 0.0f)
         {
-            Death(); // 死亡
+            StartCoroutine(DeadDelay()); // 死亡
         }
     }
 
@@ -236,5 +238,12 @@ public class EnemyController02 : EnemyControllerBase
         gameObject.SetActive(false);
     }
 
+    IEnumerator DeadDelay()
+    {
+        bCanAction = false;
+        fFriezeTimer = fDeadDelayTime;
+        yield return new WaitForSeconds(fDeadDelayTime);
+        Death();
+    }
 
 }
