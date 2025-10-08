@@ -845,8 +845,8 @@ GameObject:
   - component: {fileID: 8431475332669733707}
   - component: {fileID: 8431475332669733708}
   m_Layer: 11
-  m_Name: Enemy_03
-  m_TagString: Enemy03
+  m_Name: Enemy_Boss
+  m_TagString: Boss
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -861,7 +861,7 @@ Animator:
   m_GameObject: {fileID: 7514622482583597745}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c5c19235ffc35064c8f48f70e08e17ef, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4cdcf167a24f0d544a53c5a8d8054d7a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

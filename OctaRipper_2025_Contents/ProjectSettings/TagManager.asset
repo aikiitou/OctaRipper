@@ -7,6 +7,7 @@ TagManager:
   - Enemy01
   - Enemy02
   - Enemy03
+  - Boss
   layers:
   - Default
   - TransparentFX
