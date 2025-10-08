@@ -221,9 +221,9 @@ public class PlayerController : MonoBehaviour
     {
         cAttackController.SetDamage(_damage);
     }
-    private void OnAttackCollider()
+    private void OnAttackCollider(float _knockBack)
     {
-        cAttackController.OnAttackCollider();
+        cAttackController.OnAttackCollider(_knockBack);
     }
     private void DisAttackCollider()
     {
