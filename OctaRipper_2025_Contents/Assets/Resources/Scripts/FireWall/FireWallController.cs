@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class FireWallController : MonoBehaviour
@@ -9,17 +6,10 @@ public class FireWallController : MonoBehaviour
     private float fStartLife;
 
     private float fCurrentLife;
-    private StageController cStageController;
 
     private void Awake()
     {
         fCurrentLife = fStartLife;
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        cStageController = transform.parent.GetComponent<StageController>();
     }
 
     // Update is called once per frame
