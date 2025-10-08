@@ -83,7 +83,10 @@ public class CameraController : MonoBehaviour
 
         //ãóó£ÇÃêßå¿
         Vector3 rayDir = (transform.position - (tPlayer.position + vLookOffset)).normalized;
-        if (Physics.Raycast((tPlayer.position + vLookOffset), rayDir, out RaycastHit hitInfo))
+        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
+        layerMask = ~layerMask;
+        Ray ray = new Ray((tPlayer.position + vLookOffset),rayDir);
+        if(Physics.Raycast(ray, out RaycastHit hitInfo, fMaxDistance, layerMask)) 
         {
             if (hitInfo.transform != transform && hitInfo.transform != tPlayer)
             {
