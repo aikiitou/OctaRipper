@@ -151,7 +151,9 @@ MonoBehaviour:
   fAcceleration: 14
   fNaturalBrake: 7
   fBrake: 10
-  fAttackDistance: 4
+  fAttackDistance: 3
+  fChaseDistance: 40
+  fAttackHardDistance: 2
   fAttackActionTime: 1
   fAttackSpeed: 10
   fAttackDamage: 10
@@ -160,9 +162,9 @@ MonoBehaviour:
   fAttackCoolDownTime: 1.5
   fRotationSpeed: 10
   gDamageTrigger: {fileID: 3661821628362695233}
-  fExplosionDamage: 30
+  fExplosionDamage: 20
   fExplosionFriezeTime: 2
-  fExplosionForce: 3
+  fExplosionForce: 8
   gExplosion: {fileID: 4178853841737588827}
 --- !u!114 &3577171381013002911
 MonoBehaviour:
