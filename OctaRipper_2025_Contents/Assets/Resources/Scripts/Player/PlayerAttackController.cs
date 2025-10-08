@@ -103,7 +103,7 @@ public class PlayerAttackController
         }
         foreach (PlayerAttackColliderController colliderController in cPlayerAttackColliderControllers)
         {
-            colliderController.SetAttackInfo(fCurrentDamage, 1, 10);
+            colliderController.SetAttackInfo(fCurrentDamage, 0.1f, 10);
         }
     }
     public void DisAttackCollider()
