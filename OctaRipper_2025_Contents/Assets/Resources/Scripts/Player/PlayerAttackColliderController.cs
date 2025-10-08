@@ -12,7 +12,7 @@ public class PlayerAttackColliderController : MonoBehaviour
 
     private void Awake()
     {
-        tPlayer = transform.root;
+        tPlayer = transform.parent.parent;
     }
     private void OnTriggerStay(Collider _other)
     {
@@ -25,7 +25,8 @@ public class PlayerAttackColliderController : MonoBehaviour
                 Vector3 playerPos = new Vector3(tPlayer.position.x, 0, tPlayer.position.z);
                 Vector3 enemyPos = new Vector3(_other.transform.position.x, 0, _other.transform.position.z);
                 Vector3 forceVec = (enemyPos - playerPos).normalized;
-                forceVec *= fKnockBackPower;
+                float distance = (enemyPos - playerPos).magnitude;
+                forceVec *= Mathf.Lerp(1, fKnockBackPower, distance);
                 enemy.Damage(-fDamage, forceVec, fFreezeTime);
             }
         }
