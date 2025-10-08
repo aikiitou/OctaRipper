@@ -10,7 +10,7 @@ public class Charge1 : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward * -fSpeed, ForceMode.VelocityChange);
+        rb.AddForce(transform.forward * fSpeed, ForceMode.VelocityChange);
     }
     private void OnTriggerEnter(Collider _other)
     {

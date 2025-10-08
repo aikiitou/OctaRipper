@@ -15,7 +15,8 @@ public class FireWallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(fCurrentLife < 0.0f)
+        MyDebugLib.MessageLog("FWCL" +  fCurrentLife);
+        if(fCurrentLife <= 0.0f)
         {
             StageClear();
         }
@@ -23,11 +24,13 @@ public class FireWallController : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        fCurrentLife -= _damage;
+        MyDebugLib.MessageLog("FW:DAMEGE");
+        fCurrentLife += _damage;
     }
 
     private void StageClear()
     {
         transform.parent.GetComponent<StageController>().ClearEnemies();
+        gameObject.SetActive(false);
     }
 }
