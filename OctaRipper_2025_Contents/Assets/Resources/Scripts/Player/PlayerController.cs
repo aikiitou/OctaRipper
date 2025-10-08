@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -39,6 +37,9 @@ public class PlayerController : MonoBehaviour
     [Header("フレームカウンター")]
     [SerializeField]
     private FrameRate cFps;
+    [Header("攻撃の当たり判定")]
+    [SerializeField]
+    private GameObject[] gAttackColliders;
 
     private GameObject gDodgeEffectInstance;
 
@@ -58,7 +59,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         float fColliderRadius = gameObject.GetComponent<CapsuleCollider>().radius;
         cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed, fColliderRadius);
-        cAttackController = new PlayerAttackController(rb, aAnimator);
+        cAttackController = new PlayerAttackController(rb, aAnimator,gAttackColliders);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
@@ -92,6 +93,8 @@ public class PlayerController : MonoBehaviour
         cLifeController.SetInvincible(false);
 
         gDodgeEffectInstance = Instantiate(gDodgeEffectPrefab, transform.parent);
+
+        cAttackController.DisAttackCollider();
     }
 
     private void Update()
@@ -161,6 +164,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //移動コントローラー
     private void Move(InputAction.CallbackContext _context)
     {
         Vector2 input = _context.ReadValue<Vector2>();
@@ -188,6 +192,7 @@ public class PlayerController : MonoBehaviour
     {
         cMoveController.Look();
     }
+    //アタックコントローラー
     private void OnWeakAttackButton(InputAction.CallbackContext _context)
     {
         cAttackController.OnWeakAttackButton();
@@ -212,6 +217,19 @@ public class PlayerController : MonoBehaviour
     {
         cAttackController.AnimationEnd();
     }
+    private void SetDamage(float _damage)
+    {
+        cAttackController.SetDamage(_damage);
+    }
+    private void OnAttackCollider()
+    {
+        cAttackController.OnAttackCollider();
+    }
+    private void DisAttackCollider()
+    {
+        cAttackController.DisAttackCollider();
+    }
+    //アニメーションに追加する関数
     private void OnFreeze()
     {
         rb.linearVelocity = Vector3.zero;
@@ -230,6 +248,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity *= _magnification;
     }
+    //ダメージ関数
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
