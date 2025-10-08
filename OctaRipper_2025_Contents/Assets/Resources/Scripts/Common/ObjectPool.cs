@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    private Stack<GameObject> gObjectPools = new Stack<GameObject>();
+    private List<GameObject> gObjectPools = new List<GameObject>();
 
     public void GeneratePool(GameObject create_object,int create_num)
     {
@@ -18,30 +18,30 @@ public class ObjectPool : MonoBehaviour
             GameObject obj = Instantiate(create_object);
             obj.transform.parent = this.transform;
             obj.SetActive(false);
-            gObjectPools.Push(obj);
+            gObjectPools.Add(obj);
         }
     }
 
     public GameObject GetPoolObject(string get_object_tag)
     {
-        if(gObjectPools.Any(obj => obj.CompareTag(get_object_tag)))
+        GameObject nextObject = gObjectPools.FirstOrDefault(obj => obj.CompareTag(get_object_tag));
+        if (nextObject != null)
         {
-            MyDebugLib.MessageLog("GetSuccess");
-            GameObject nextObject = gObjectPools.Pop();
+            MyDebugLib.MessageLog("GetSuccess" + nextObject);
+            gObjectPools.Remove(nextObject);
             return nextObject;
         }
         else
         {
             MyDebugLib.MessageLog("ListisEmpty");
-            return null;
         }
-
+        return null; 
     }
 
     public void ReturnPoolObject(GameObject return_object)
     {
         return_object.transform.parent = this.transform;
-        gObjectPools.Push(return_object);
+        gObjectPools.Add(return_object);
         MyDebugLib.MessageLog("ReturnSuccess");
     }
 }

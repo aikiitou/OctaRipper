@@ -30,8 +30,12 @@ public class StageController : MonoBehaviour
         var stageEnemies = cStageEnemies.GetStageEnemies();
         foreach (var enemyData in stageEnemies)
         {
-            for(int i = 0; i < enemyData.nStageTotal; i++)
+            MyDebugLib.MessageLog("ePT" + enemyData.nPopTotal);
+            MyDebugLib.MessageLog("eST"+enemyData.nStageTotal);
+            MyDebugLib.MessageLog("eET" + enemyData.sEnemyTag);
+            for (int i = 0; i < enemyData.nPopTotal; i++)
             {
+                MyDebugLib.MessageLog("AE");
                 AppearanceEnemy(enemyData.sEnemyTag);
             }
         }
@@ -84,6 +88,7 @@ public class StageController : MonoBehaviour
             return;
         }
 
+        MyDebugLib.MessageLog("APE_TAG"+_tag);
         GameObject obj = transform.parent.GetComponent<StageManager>().RequestGetPoolObject(_tag);
         obj.transform.parent = transform;
         gEnemies.Add(obj);
