@@ -20,6 +20,9 @@ public class EnemyController01 : EnemyControllerBase
     [SerializeField, Header("UŒ‚Às‹——£")]
     float fAttackDistance = 2.0f;
 
+    [SerializeField, Header("UŒ‚ŒÅ’èÀs‹——£")]
+    float fAttackHardDistance = 2.0f;
+
     [SerializeField, Header("UŒ‚•K—vŠÔ")]
     float fAttackActionTime = 1.0f;
 
@@ -128,6 +131,15 @@ public class EnemyController01 : EnemyControllerBase
                     Attack();
                 }
             }
+            else
+            {
+                if ((gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackHardDistance && fAttackCoolDownTimer <= 0.0f)
+                {
+                    bCanTurn = false;
+                    bIsAcceleration = false;
+                    Attack();
+                }
+            }
         }
     }
 
@@ -193,6 +205,15 @@ public class EnemyController01 : EnemyControllerBase
             gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fFriezeTimer);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (horizonDistance.magnitude < 0.1f)
+            {
+                horizonDistance = transform.forward;
+            }
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
+                1.0f
+                ); // •ûŒü“]Š·
             aAnimator.SetTrigger("IsAttacking");
             vMoveForce = horizonDistance.normalized * fAttackSpeed;
             fAttackActionTimer = fAttackActionTime;
