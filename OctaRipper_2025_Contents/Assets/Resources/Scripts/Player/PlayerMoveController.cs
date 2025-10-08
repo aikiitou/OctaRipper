@@ -95,7 +95,9 @@ public class PlayerMoveController
             dodgeDir = vMoveVec;
         }
         Ray ray = new Ray(_transform.position, dodgeDir);
-        if(Physics.SphereCast(ray,fColliderRadius,out RaycastHit hitInfo,fDodgeDistance))
+        int layerMask = 1 << LayerMask.NameToLayer("Enemy");
+        layerMask = ~layerMask;
+        if (Physics.SphereCast(ray,fColliderRadius,out RaycastHit hitInfo,fDodgeDistance,layerMask))
         {
             if(hitInfo.collider.CompareTag("Player") == false)
             {
