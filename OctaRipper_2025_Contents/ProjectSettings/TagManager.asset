@@ -7,7 +7,11 @@ TagManager:
   - Enemy01
   - Enemy02
   - Enemy03
-  - Boss
+  - Stage1
+  - Stage2
+  - Stage3
+  - Stage4
+  - PlayerAttack
   layers:
   - Default
   - TransparentFX

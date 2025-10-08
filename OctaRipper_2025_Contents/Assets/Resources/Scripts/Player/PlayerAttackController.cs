@@ -1,9 +1,7 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerAttackController
 {
-    InputSystem_Actions isInput;
     Animator aAnimator;
     Rigidbody rb;
 
@@ -11,10 +9,20 @@ public class PlayerAttackController
     private bool isStrongButton = false;
     private bool isAnimataion = false;
     private int nButtonOnFrame = 0;
-    public PlayerAttackController(Rigidbody _rb , Animator _animator)
+    private float fCurrentDamage = 0f;
+
+    GameObject[] gAttackColliders;
+    PlayerAttackColliderController[] cPlayerAttackColliderControllers;
+    public PlayerAttackController(Rigidbody _rb , Animator _animator, GameObject[] attackColliders)  
     {
         this.aAnimator = _animator;
         this.rb = _rb;
+        this.gAttackColliders = attackColliders;
+        cPlayerAttackColliderControllers = new PlayerAttackColliderController[gAttackColliders.Length];
+        for(int i= 0;i < cPlayerAttackColliderControllers.Length; i++)
+        {
+            cPlayerAttackColliderControllers[i] = gAttackColliders[i].GetComponent<PlayerAttackColliderController>();
+        }
     }
     public void UpdataAttack(int _fpsDiff)
     {
@@ -82,5 +90,31 @@ public class PlayerAttackController
         isAnimataion = false;
         aAnimator.ResetTrigger("weakAttackTrigger");
         aAnimator.ResetTrigger("strongAttackTrigger");
+    }
+    public void SetDamage(float _damage)
+    {
+        fCurrentDamage = _damage;
+    }
+    public void OnAttackCollider()
+    {
+        foreach (GameObject obj in gAttackColliders)
+        { 
+            obj.SetActive(true);
+        }
+        foreach (PlayerAttackColliderController colliderController in cPlayerAttackColliderControllers)
+        {
+            colliderController.SetAttackInfo(fCurrentDamage, 1, 10);
+        }
+    }
+    public void DisAttackCollider()
+    {
+        foreach (GameObject obj in gAttackColliders)
+        {
+            obj.SetActive(false);
+        }
+        foreach (PlayerAttackColliderController colliderController in cPlayerAttackColliderControllers)
+        {
+            colliderController.ResetAttackInfo();
+        }
     }
 }
