@@ -5,9 +5,6 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("初期ライフポイント")]
     float fInitLifePoint = 30.0f;
 
-    [SerializeField, Header("最大移動速度")]
-    float fMaxSpeed = 2.0f;
-
     [SerializeField, Header("移動加速度")]
     float fAcceleration = 20.0f;
 
@@ -177,6 +174,14 @@ public class EnemyController02 : EnemyControllerBase
     {
         Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
         horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+        if (Mathf.Abs(horizonDistance.x) <= 0.01f)
+        {
+            horizonDistance = new Vector3(0.01f, horizonDistance.y, horizonDistance.z);
+        }
+        if (Mathf.Abs(horizonDistance.z) <= 0.01f)
+        {
+            horizonDistance = new Vector3(horizonDistance.x, horizonDistance.y, 0.01f);
+        }
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
