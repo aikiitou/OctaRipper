@@ -608,6 +608,72 @@ MonoBehaviour:
   fSpeed: 25
   fLimitAngle: 30
   fSens: 0.4
+--- !u!1 &447676542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 447676543}
+  - component: {fileID: 447676545}
+  - component: {fileID: 447676544}
+  m_Layer: 12
+  m_Name: PlayerAttackCollider01
+  m_TagString: PlayerAttack
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &447676543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447676542}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2100813601}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &447676544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447676542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 453b1fceeb3650941b387f02a7932ad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &447676545
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447676542}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.64, y: 0.3, z: 1.248517}
+  m_Center: {x: 0, y: 0.00000029543884, z: -0.5474066}
 --- !u!1 &537896342
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +918,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b985a59aa6c19c479db08097fdc3dce, type: 3}
+--- !u!4 &2100813601 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5657608595087764970, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+  m_PrefabInstance: {fileID: 582149164551299644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2112421936
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,13 +1043,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6462400547455752011, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      propertyPath: m_Size.x
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462400547455752011, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      propertyPath: m_Size.z
+      value: 1.2485166
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462400547455752011, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      propertyPath: m_Center.y
+      value: 0.00000040777851
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462400547455752011, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      propertyPath: m_Center.z
+      value: -0.5975339
+      objectReference: {fileID: 0}
     - target: {fileID: 6640715282371303910, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6640715282371303910, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.27
+      value: -0.638
       objectReference: {fileID: 0}
     - target: {fileID: 6640715282371303910, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1016,9 +1103,17 @@ PrefabInstance:
       propertyPath: cFps
       value: 
       objectReference: {fileID: 169772245}
+    - target: {fileID: 8356721303781330561, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      propertyPath: 'gAttackColliders.Array.data[1]'
+      value: 
+      objectReference: {fileID: 447676542}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 976978041890811318, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5657608595087764970, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 447676543}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93ef93b7cb17d5947948dda6fa4b4736, type: 3}
 --- !u!1660057539 &9223372036854775807
