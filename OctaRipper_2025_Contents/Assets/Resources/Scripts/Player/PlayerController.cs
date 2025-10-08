@@ -263,6 +263,10 @@ public class PlayerController : MonoBehaviour
                 //ノックバック
                 rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
                 transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+                if(cLifeController.GetLifePoint <= 0)
+                {
+                    StartCoroutine(Loading.LoadScene("GameOver", this.gameObject));
+                }
             }
         }        
     }
