@@ -70,7 +70,6 @@ public class EnemyController01 : EnemyControllerBase
     float fAttackCoolDownTimer;
     float fAttackActionTimer;
     float fDeadDelayTime = 0.25f; // 死亡遅延時間
-    float fDeadDelayTimer; // 死亡遅延時間カウント
     float fFriezeTimer; // 硬直時間
     Vector3 vMoveForce; // 移動量
     GameObject gTargetObject; // 対象のオブジェクト
@@ -103,10 +102,6 @@ public class EnemyController01 : EnemyControllerBase
         if (cLifeController.GetLifePoint <= 0.0f)
         {
             StartCoroutine(DeadDelay()); // 死亡
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-20.0f, Vector3.zero, 1.0f);
         }
     }
 

@@ -328,7 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fInitLifePoint: 30
-  fMaxSpeed: 2
   fAcceleration: 20
   fBrake: 20
   fAttackDistance: 20
@@ -341,9 +340,9 @@ MonoBehaviour:
   fRotationSpeed: 10
   gBulletObject: {fileID: 7880483803312706414}
   gBulletShotPosition: {fileID: 7246596577788709032}
-  fExplosionDamage: 30
+  fExplosionDamage: 20
   fExplosionFriezeTime: 2
-  fExplosionForce: 3
+  fExplosionForce: 8
   gExplosion: {fileID: 620302056770986620}
 --- !u!136 &8176509100173911317
 CapsuleCollider:
