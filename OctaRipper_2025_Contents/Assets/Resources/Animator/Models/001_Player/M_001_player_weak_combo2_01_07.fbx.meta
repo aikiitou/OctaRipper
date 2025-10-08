@@ -87,7 +87,7 @@ ModelImporter:
         functionName: OnAttackCollider
         data: 
         objectReferenceParameter: {instanceID: 0}
-        floatParameter: 5
+        floatParameter: 10
         intParameter: 0
         messageOptions: 0
       - time: 0.73862535
