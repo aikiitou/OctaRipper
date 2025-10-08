@@ -247,6 +247,10 @@ public class EnemyController03 : EnemyControllerBase
         {
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (horizonDistance.magnitude < 0.1f)
+            {
+                horizonDistance = transform.forward;
+            }
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
