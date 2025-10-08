@@ -2,24 +2,20 @@ using UnityEngine;
 
 public class HitEffect : MonoBehaviour
 {
-    [SerializeField] ParticleSystem hitEffect;  //エフェクトを再生するパーティクルシステム
-    [SerializeField] //
-    private bool hitEffectActive = false;       //ダメージが起きたか判別する
+    [SerializeField] ParticleSystem hitEffect1;  //エフェクトを再生するパーティクルシステム
+    [SerializeField] ParticleSystem hitEffect2;
+    public void HitParticle()
+    {
+        hitEffect1.Emit(10);
+        hitEffect2.Emit(4);
+    }
+    
+    /*[SerializeField] HitEffect hitEffect;     呼び出し例
     void Update()
     {
-        HitParticle();
-        HitEffectActive();
-    }
-    void HitParticle()
-    {
-        if (hitEffectActive)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            hitEffect.Emit(1);
-            hitEffectActive = false;
+            hitEffect.HitParticle();
         }
-    }
-    void HitEffectActive()
-    {
-
-    }
+    }*/
 }
