@@ -227,6 +227,14 @@ public class EnemyController01 : EnemyControllerBase
             gDamageTrigger.GetComponent<Enemy01AttackController>().SetUp(fAttackDamage, fAttackForce, fAttackFriezeTime);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (Mathf.Abs(horizonDistance.x) <= 0.01f)
+            {
+                horizonDistance = new Vector3(0.01f, horizonDistance.y, horizonDistance.z);
+            }
+            if (Mathf.Abs(horizonDistance.z) <= 0.01f)
+            {
+                horizonDistance = new Vector3(horizonDistance.x, horizonDistance.y, 0.01f);
+            }
             if (horizonDistance.magnitude < 0.1f)
             {
                 horizonDistance = transform.forward;
