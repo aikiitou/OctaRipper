@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController01 : EnemyControllerBase
@@ -19,6 +20,9 @@ public class EnemyController01 : EnemyControllerBase
 
     [SerializeField, Header("攻撃実行距離")]
     float fAttackDistance = 2.0f;
+
+    [SerializeField, Header("追跡実行距離")]
+    float fChaseDistance = 2.0f;
 
     [SerializeField, Header("攻撃固定実行距離")]
     float fAttackHardDistance = 2.0f;
@@ -65,6 +69,8 @@ public class EnemyController01 : EnemyControllerBase
     bool bCanAction = true; // 行動可能かどうか
     float fAttackCoolDownTimer;
     float fAttackActionTimer;
+    float fDeadDelayTime = 0.25f; // 死亡遅延時間
+    float fDeadDelayTimer; // 死亡遅延時間カウント
     float fFriezeTimer; // 硬直時間
     Vector3 vMoveForce; // 移動量
     GameObject gTargetObject; // 対象のオブジェクト
@@ -96,7 +102,11 @@ public class EnemyController01 : EnemyControllerBase
         TimerCountDown(); // タイマー系のカウントダウン
         if (cLifeController.GetLifePoint <= 0.0f)
         {
-            Death(); // 死亡
+            StartCoroutine(DeadDelay()); // 死亡
+        }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Damage(-20.0f, Vector3.zero, 1.0f);
         }
     }
 
@@ -164,7 +174,15 @@ public class EnemyController01 : EnemyControllerBase
         {
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
-            moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
+            float accelMagnifaction = (fChaseDistance - moveAddForce.magnitude) / fChaseDistance;
+            if (accelMagnifaction >= 0.0f)
+            {
+                moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime * accelMagnifaction; // 加速量算出
+            }
+            else
+            {
+                moveAddForce = Vector3.zero;
+            }
             vMoveForce -= vMoveForce.normalized * fNaturalBrake * Time.deltaTime; // 摩擦
             vMoveForce += moveAddForce; // 加速度を移動量に加える
             if (vMoveForce.magnitude >= fMaxSpeed) // 上限値矯正
@@ -257,5 +275,11 @@ public class EnemyController01 : EnemyControllerBase
         gameObject.SetActive(false);
     }
 
-
+    IEnumerator DeadDelay()
+    {
+        bCanAction = false;
+        fFriezeTimer = fDeadDelayTime;
+        yield return new WaitForSeconds(fDeadDelayTime);
+        Death();
+    }
 }
