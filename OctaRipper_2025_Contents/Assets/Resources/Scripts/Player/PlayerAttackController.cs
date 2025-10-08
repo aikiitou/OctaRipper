@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttackController
 {
-    InputSystem_Actions isInput;
     Animator aAnimator;
     Rigidbody rb;
 
