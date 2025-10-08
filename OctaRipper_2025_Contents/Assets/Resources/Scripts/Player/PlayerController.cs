@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     private PlayerAttackController cAttackController;
     private LifeController cLifeController;
 
+    private bool bIsFreeze = false;
     private int nDodgeRestCoolTimeFrame = 0;
     private int nEffectActiveFrame = 0;
     private int nFreezeFrame = 0;
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         float fColliderRadius = gameObject.GetComponent<CapsuleCollider>().radius;
         cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed, fColliderRadius);
+        cAttackController = new PlayerAttackController(rb, aAnimator);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
@@ -64,7 +66,10 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled += Stop;
         isInput.Player.Dodge.started += Dodge;
         isInput.Player.Look.performed += Look;
-        isInput.Player.WeakAttack.started += WeakAttack;
+        isInput.Player.OnWeakAttack.performed += OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.performed += ReleaseWeakAttackButton;
+        isInput.Player.OnStrengthAttack.performed += OnStrongAttackButton;
+        isInput.Player.ReleaseStrengthAttack.performed += ReleaseStrongAttackButton;
     }
     private void OnDisable()
     {
@@ -74,7 +79,10 @@ public class PlayerController : MonoBehaviour
         isInput.Player.Move.canceled -= Stop;
         isInput.Player.Dodge.started -= Dodge;
         isInput.Player.Look.performed -= Look;
-        isInput.Player.WeakAttack.started -= WeakAttack;
+        isInput.Player.OnWeakAttack.performed -= OnWeakAttackButton;
+        isInput.Player.ReleaseWeakAttack.performed -= ReleaseWeakAttackButton;
+        isInput.Player.OnStrengthAttack.performed -= OnStrongAttackButton;
+        isInput.Player.ReleaseStrengthAttack.performed -= ReleaseStrongAttackButton;
     }
     private void Start()
     {
@@ -102,7 +110,6 @@ public class PlayerController : MonoBehaviour
         }
 
         nPastFps = currentFps;
-
         
         //クールタイム計算
         if (nDodgeRestCoolTimeFrame > 0)
@@ -113,20 +120,25 @@ public class PlayerController : MonoBehaviour
                 nDodgeRestCoolTimeFrame = 0;
             }
         }
+
+        cAttackController.UpdataAttack(nFpsDiff);
     }
     private void FixedUpdate()
     {
-        if(nFreezeFrame <= 0)
+        if(nFreezeFrame <= 0 && bIsFreeze == false)
         {
             cMoveController.FixedUpdateMove(transform);
         }
         else
         {
-            nFreezeFrame -= nFpsDiff;
-            if(nFreezeFrame <= 0)
+            if(nFreezeFrame > 0)
             {
-                nFreezeFrame = 0;
-                cLifeController.SetInvincible(false);
+                nFreezeFrame -= nFpsDiff;
+                if (nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+                    cLifeController.SetInvincible(false);
+                }
             }
         }
 
@@ -160,7 +172,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Dodge(InputAction.CallbackContext _context)
     {
-        if(nDodgeRestCoolTimeFrame <= 0)
+        if(nDodgeRestCoolTimeFrame <= 0 && bIsFreeze == false)
         {
             cLifeController.SetInvincible(true);
 
@@ -176,23 +188,63 @@ public class PlayerController : MonoBehaviour
     {
         cMoveController.Look();
     }
-    private void WeakAttack(InputAction.CallbackContext _context)
+    private void OnWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.WeakAttack();
+        cAttackController.OnWeakAttackButton();
     }
-
+    private void ReleaseWeakAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.ReleaseWeakAttackButton();
+    }
+    private void OnStrongAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.OnStrongAttackButton();
+    }
+    private void ReleaseStrongAttackButton(InputAction.CallbackContext _context)
+    {
+        cAttackController.ReleaseStrongAttackButton();
+    }
+    private void AnimationStr()
+    {
+        cAttackController.AnimationStr();
+    }
+    private void AnimationEnd()
+    {
+        cAttackController.AnimationEnd();
+    }
+    private void OnFreeze()
+    {
+        rb.linearVelocity = Vector3.zero;
+        bIsFreeze = true;
+    }
+    private void DisFreeze()
+    {
+        rb.linearVelocity = Vector3.zero;
+        bIsFreeze = false;
+    }
+    private void GoFront(float _distance)
+    {
+        rb.AddForce(transform.forward * _distance);
+    }
+    private void VecLost(float _magnification)
+    {
+        rb.linearVelocity *= _magnification;
+    }
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
-            //硬直・無敵の設定
-            nFreezeFrame = _freezeFrame;
-            cLifeController.SetInvincible(true);
-            //ノックバックベクトルの補正
-            _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
-            //ノックバック
-            rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
-            transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+            if (bIsFreeze == true)
+            {
+                //硬直・無敵の設定
+                nFreezeFrame = _freezeFrame;
+                cLifeController.SetInvincible(true);
+                //ノックバックベクトルの補正
+                _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
+                //ノックバック
+                rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
+                transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+            }
         }        
     }
 }
