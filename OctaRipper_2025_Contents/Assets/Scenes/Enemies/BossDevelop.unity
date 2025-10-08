@@ -785,7 +785,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 1
 --- !u!1001 &3629847052492964700
 PrefabInstance:
@@ -848,11 +848,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
---- !u!1 &3629847052492964701 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
-  m_PrefabInstance: {fileID: 3629847052492964700}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3629847052492964702 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
@@ -870,7 +865,6 @@ GameObject:
   - component: {fileID: 2119949277248024341}
   - component: {fileID: 761868740758814265}
   - component: {fileID: 8431475332669733706}
-  - component: {fileID: 8431475332669733707}
   - component: {fileID: 8431475332669733708}
   - component: {fileID: 8431475332669733711}
   - component: {fileID: 8431475332669733710}
@@ -904,42 +898,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8431475332669733707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7514622482583597745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3c4cfe67491bba4f95fb55fe2ce910b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fInitLifePoint: 120
-  fMaxSpeed: 15
-  fAcceleration: 50
-  fNaturalBrake: 30
-  fBrake: 40
-  fAttackDistance: 10
-  fDistance: 2
-  fAttackActionTime: 2
-  fSweepAttackActionTime: 1
-  fAttackSpeed: 42
-  fAttackInvincibleTime: 1
-  fSweepAttackSpeed: 25
-  fAttackDamage: 10
-  fAttackForce: 1
-  fAttackFriezeTime: 0.1
-  fAttackCoolDownTime: 3
-  fShieldMagnification: 0.5
-  fShieldRadius: 45
-  fRotationSpeed: 10
-  gDamageTrigger: {fileID: 713678295899088615}
-  fExplosionDamage: 10
-  fExplosionFriezeTime: 10
-  fExplosionForce: 10
-  gExplosion: {fileID: 3629847052492964701}
 --- !u!136 &8431475332669733708
 CapsuleCollider:
   m_ObjectHideFlags: 0
