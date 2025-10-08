@@ -50,21 +50,21 @@ public class StageManager : MonoBehaviour
         Stage2,
         Stage3,
         Stage4,
+        Clear
     }
 
     private const float NextStageOffsetY = 2.5f;
 
-    private Dictionary<StageNum, string> cGetStageTag = new Dictionary<StageNum, string>()
+    private Dictionary<StageNum, StageNum> cGetNextStage = new Dictionary<StageNum, StageNum>()
     {
-        {StageNum.None,"None" },
-        {StageNum.Stage1,"Stage1" },
-        {StageNum.Stage2,"Stage2" },
-        {StageNum.Stage3,"Stage3" },
-        {StageNum.Stage4,"Stage4" }
+        {StageNum.None,StageNum.Stage1 },
+        {StageNum.Stage1, StageNum.Stage2 },
+        {StageNum.Stage2,StageNum.Stage3},
+        {StageNum.Stage3,StageNum.Stage4},
+        {StageNum.Stage4, StageNum.Clear}
     };
 
     private StageNum cCurrentStageNum = StageNum.None;
-    private StageNum cNextStageNum = StageNum.Stage1;
 
     [SerializeField]
     private GameObject gPlayerObject = null;
@@ -82,7 +82,7 @@ public class StageManager : MonoBehaviour
         if (gPlayerObject.transform.position.y < fCurrentPlayerPosY - NextStageOffsetY)
         {
             MyDebugLib.MessageLog("StartStage");
-            StartNextStage(cNextStageNum);
+            StartNextStage(cGetNextStage[cCurrentStageNum]);
             fCurrentPlayerPosY = gPlayerObject.transform.position.y;
         }
     }
@@ -93,25 +93,8 @@ public class StageManager : MonoBehaviour
 
         cCurrentStageNum = next_stage;
 
-        SetStageActive(nStageCount);
+        gStageEmptys[nStageCount].GetComponent<StageController>().StartStage();
+
         nStageCount++;
-
-
-    }
-
-    private void SetStageActive(int stage_count)
-    {
-        for (int i = 0; i < gStageEmptys.Count; i++)
-        {
-            if (stage_count == i)
-            {
-                gStageEmptys[i].SetActive(true);
-                gStageEmptys[i].GetComponent<StageController>().StartStage();
-            }
-            else
-            {
-                gStageEmptys[i].SetActive(false);
-            }
-        }
     }
 }
