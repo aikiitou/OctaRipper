@@ -30,6 +30,10 @@ public class PlayerAttackColliderController : MonoBehaviour
                 enemy.Damage(-fDamage, forceVec, fFreezeTime);
             }
         }
+        if(_other.TryGetComponent<FireWallController>(out FireWallController fireWall))
+        {
+            fireWall.TakeDamage(-fDamage);
+        }
     }
     public void SetAttackInfo(float _damage,float _freezeTime,float _knockBackPower)
     {
