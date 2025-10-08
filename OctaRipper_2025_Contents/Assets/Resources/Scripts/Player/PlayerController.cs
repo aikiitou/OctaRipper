@@ -128,20 +128,17 @@ public class PlayerController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(nFreezeFrame <= 0 && bIsFreeze == false)
+        if (nFreezeFrame <= 0 && bIsFreeze == false)
         {
             cMoveController.FixedUpdateMove(transform);
         }
-        else
+        else if(nFreezeFrame > 0)
         {
-            if(nFreezeFrame > 0)
+            nFreezeFrame -= nFpsDiff;
+            if (nFreezeFrame <= 0)
             {
-                nFreezeFrame -= nFpsDiff;
-                if (nFreezeFrame <= 0)
-                {
-                    nFreezeFrame = 0;
-                    cLifeController.SetInvincible(false);
-                }
+                nFreezeFrame = 0;
+                cLifeController.SetInvincible(false);
             }
         }
 
@@ -253,7 +250,7 @@ public class PlayerController : MonoBehaviour
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
-            if (bIsFreeze == true)
+            if (bIsFreeze == false)
             {
                 //硬直・無敵の設定
                 nFreezeFrame = _freezeFrame;
@@ -261,7 +258,9 @@ public class PlayerController : MonoBehaviour
                 //ノックバックベクトルの補正
                 _knockBackVec = new Vector3(_knockBackVec.x, 0, _knockBackVec.z);
                 //ノックバック
+                rb.linearVelocity = Vector3.zero;
                 rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
+                
                 transform.rotation = Quaternion.LookRotation(-_knockBackVec);
                 if(cLifeController.GetLifePoint <= 0)
                 {
