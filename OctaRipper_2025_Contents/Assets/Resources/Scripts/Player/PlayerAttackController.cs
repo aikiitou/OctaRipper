@@ -95,7 +95,7 @@ public class PlayerAttackController
     {
         fCurrentDamage = _damage;
     }
-    public void OnAttackCollider()
+    public void OnAttackCollider(float _knockBack)
     {
         foreach (GameObject obj in gAttackColliders)
         { 
@@ -103,7 +103,7 @@ public class PlayerAttackController
         }
         foreach (PlayerAttackColliderController colliderController in cPlayerAttackColliderControllers)
         {
-            colliderController.SetAttackInfo(fCurrentDamage, 0.1f, 10);
+            colliderController.SetAttackInfo(fCurrentDamage, 0.1f, _knockBack);
         }
     }
     public void DisAttackCollider()
