@@ -56,6 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3746124643400132644}
   - component: {fileID: 6373383193257194356}
+  - component: {fileID: 449059509792207300}
   m_Layer: 0
   m_Name: StageManager
   m_TagString: Untagged
@@ -97,6 +98,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cCreateEnemies: []
   cObjectPool: {fileID: 1851343894271231300}
+  gPlayerObject: {fileID: 0}
+  gStageEmptys: []
+--- !u!114 &449059509792207300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4202285962848298400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9deb7912864607d49b46b933130d7dd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4746501745532491515
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class StageController : MonoBehaviour
     private const float RANDOM_RANGE_HALF = 20.0f;
     private const float E_TO_P_RANGE = 5.0f;
     private const float RANDOM_ATTEMPTS_LIMIT = 10;
+    private const float KILL_DAMAGE = -999.99f;
 
     [SerializeField]
     private StageEnemies cStageEnemies = null;
@@ -165,8 +166,7 @@ public class StageController : MonoBehaviour
 
         for (int i = 0; i < gEnemies.Count; i++)
         {
-            gEnemies[i].SetActive(false);
-            EliminationEnemy(gEnemies[i]);
+            gEnemies[i].GetComponent<EnemyControllerBase>().Damage(KILL_DAMAGE,Vector3.zero,0.0f);
         }
 
     }
