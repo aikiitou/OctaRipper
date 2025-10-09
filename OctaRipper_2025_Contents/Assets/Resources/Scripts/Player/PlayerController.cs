@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
-    const int DEATH_EFFECT_TIME = 60;
+    const int DEATH_EFFECT_FRAME = 12;
     const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
@@ -54,6 +54,9 @@ public class PlayerController : MonoBehaviour
     [Header("フレームカウンター")]
     [SerializeField]
     private FrameRate cFps;
+    [Header("ステージマネジャー")]
+    [SerializeField]
+    private Transform tStageManager;
     [Header("攻撃の当たり判定")]
     [SerializeField]
     private GameObject[] gAttackColliders;
@@ -185,6 +188,7 @@ public class PlayerController : MonoBehaviour
                 {
                     nFreezeFrame = 0;
 
+                    tStageManager.GetComponent<GameOverNotification>().ChageGameOverGameOver();
                 }
             }
         }
@@ -249,19 +253,31 @@ public class PlayerController : MonoBehaviour
     //アタックコントローラー
     private void OnWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.OnWeakAttackButton();
+        if(bIsActive == true)
+        {
+            cAttackController.OnWeakAttackButton();
+        }
     }
     private void ReleaseWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.ReleaseWeakAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.ReleaseWeakAttackButton();
+        }
     }
     private void OnStrongAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.OnStrongAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.OnStrongAttackButton();
+        }
     }
     private void ReleaseStrongAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.ReleaseStrongAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.ReleaseStrongAttackButton();
+        }
     }
     private void AnimationStr()
     {
@@ -321,7 +337,7 @@ public class PlayerController : MonoBehaviour
     {
         cMoveController.Stop(transform);
         bIsActive = false;
-        nFreezeFrame = DEATH_EFFECT_TIME;
+        nFreezeFrame = DEATH_EFFECT_FRAME;
         gDeathEffect.SetActive(true);
     }
     //ダメージ関数

@@ -1173,6 +1173,7 @@ MonoBehaviour:
   gHitEffect: {fileID: 5435855016953545824}
   gDeathEffect: {fileID: 5512865770706459240}
   cFps: {fileID: 0}
+  tStageManager: {fileID: 0}
   gAttackColliders:
   - {fileID: 5592690814487215815}
   - {fileID: 9210553902957632665}
@@ -1455,12 +1456,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.17
+      value: 1.02
       objectReference: {fileID: 0}
     - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
       propertyPath: m_LocalPosition.z
