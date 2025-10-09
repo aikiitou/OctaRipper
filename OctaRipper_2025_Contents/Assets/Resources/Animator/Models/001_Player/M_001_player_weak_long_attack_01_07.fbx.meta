@@ -56,13 +56,6 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: DisRightChargeEffect
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 200
-        intParameter: 0
-        messageOptions: 0
-      - time: 0
         functionName: AnimationStr
         data: 
         objectReferenceParameter: {instanceID: 0}
