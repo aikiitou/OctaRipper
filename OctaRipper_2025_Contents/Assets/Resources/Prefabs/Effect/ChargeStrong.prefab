@@ -135,8 +135,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fSpeed: 20
-  fDamage: 0
-  fFreezeTime: 0
+  fDamage: 10
+  fFreezeTime: 1
+  fKnockBackPower: 10
   fDestroyTime: 0.2
 --- !u!65 &324742231729623792
 BoxCollider:
