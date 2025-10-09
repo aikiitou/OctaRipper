@@ -2,13 +2,24 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField, Header("‰“®–³“GŠÔ")]
+    float fFirstInvincibleTime;
+
+    [SerializeField, Header("s“®ŠÔ•b”")]
+    float fIdleTime;
+
+    [SerializeField, Header("~‚è‰º‚ë‚µŠÔ")]
+    float fFallFistTime;
+
+    [SerializeField, Header("“ã‚¬•¥‚¢ŠÔ")]
+    float fSweepTime;
+
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
