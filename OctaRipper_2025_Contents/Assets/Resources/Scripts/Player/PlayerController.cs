@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
+    const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -30,24 +31,27 @@ public class PlayerController : MonoBehaviour
     [Header("最大体力")]
     [SerializeField]
     private float fMaxLif;
+    [Header("エフェクトの到着フレーム(回避の無敵時間)")]
+    [SerializeField]
+    private int nEffectArrivalFrame;
     [Header("回避エフェクト")]
     [SerializeField]
     private GameObject gDodgeEffectPrefab;
-    [Header("エフェクトの到着フレーム")]
+    [Header("弱溜め攻撃斬撃プレファブ")]
     [SerializeField]
-    private int nEffectArrivalFrame;
+    private GameObject gWeakSlashPrefab;
+    [Header("強溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gStrongSlashPrefab;
+    [Header("ヒットエフェクト")]
+    [SerializeField]
+    GameObject gHitEffect;
     [Header("フレームカウンター")]
     [SerializeField]
     private FrameRate cFps;
     [Header("攻撃の当たり判定")]
     [SerializeField]
     private GameObject[] gAttackColliders;
-    [Header("弱溜め攻撃斬撃プレファブ")]
-    [SerializeField]
-    private GameObject gWeakSlashPrefab;
-    //[Header("強溜め攻撃斬撃プレファブ")]
-    //[SerializeField]
-    //private GameObject gStrongSlashPrefab;
     [Header("背中の時間制限用オブジェクト")]
     [SerializeField]
     private GameObject[] gBackTimerOjb;
@@ -275,8 +279,16 @@ public class PlayerController : MonoBehaviour
     }
     private void InstantiateWeakSlash()
     {
-        GameObject weakSlash = Instantiate(gWeakSlashPrefab);
-        weakSlash.transform.position = transform.position;
+        GameObject weakSlash = Instantiate(gWeakSlashPrefab,transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
+        weakSlash.transform.rotation = transform.rotation;
+    }
+    private void InstantiateStrongSlash()
+    {
+        GameObject weakSlash = Instantiate(gStrongSlashPrefab, transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
     }
     //ダメージ関数
@@ -284,6 +296,7 @@ public class PlayerController : MonoBehaviour
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
+            gHitEffect.GetComponent<HitEffect>().HitParticle();
             if (bIsFreeze == false)
             {
                 //硬直・無敵の設定
