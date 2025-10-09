@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class HitEffect : MonoBehaviour
 {
-    [SerializeField] ParticleSystem hitEffect1;  //エフェクトを再生するパーティクルシステム
-    [SerializeField] ParticleSystem hitEffect2;
+    [SerializeField] ParticleSystem hitEffect;  //エフェクトを再生するパーティクルシステム
+    [SerializeField] int nParticleEmit;
     public void HitParticle()
     {
-        hitEffect1.Emit(10);
-        hitEffect2.Emit(4);
+        hitEffect.Emit(nParticleEmit);
     }
     
     /*[SerializeField] HitEffect hitEffect;     呼び出し例
