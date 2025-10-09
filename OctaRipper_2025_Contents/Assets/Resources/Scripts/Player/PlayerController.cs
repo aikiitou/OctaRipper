@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
     const int DEATH_EFFECT_FRAME = 12;
+    const int REGENE_START_FRAME = 60;
+    const float ONE_SECOND_HEAL_VALUE = 50;
     const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
@@ -32,7 +34,7 @@ public class PlayerController : MonoBehaviour
     private float fAnimSpeed;
     [Header("最大体力")]
     [SerializeField]
-    private float fMaxLif;
+    private float fMaxLife;
     [Header("エフェクトの到着フレーム(回避の無敵時間)")]
     [SerializeField]
     private int nEffectArrivalFrame;
@@ -76,9 +78,11 @@ public class PlayerController : MonoBehaviour
     private int nBackTimerIndex = 0;
     private int nDodgeRestCoolTimeFrame = 0;
     private int nEffectActiveFrame = 0;
+    private int nNoDamageFrame = 0;
     private int nFreezeFrame = 0;
     private int nPastFps;
     private int nFpsDiff;
+    private float fOneFrameHealValue;
     private void OnEnable()
     {
         aAnimator = GetComponent<Animator>();
@@ -113,9 +117,11 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
+        fOneFrameHealValue = ONE_SECOND_HEAL_VALUE / _FPS;
+
         cLifeController = GetComponent<LifeController>();
 
-        cLifeController.SetLifePoint(fMaxLif);
+        cLifeController.SetLifePoint(fMaxLife);
         cLifeController.SetInvincible(false);
 
         gDodgeEffectInstance = Instantiate(gDodgeEffectPrefab, transform.parent);
@@ -175,8 +181,21 @@ public class PlayerController : MonoBehaviour
                     cLifeController.SetInvincible(false);
                 }
             }
-
-
+            //回復
+            nNoDamageFrame += nFpsDiff;
+            if(nNoDamageFrame >= 60)
+            {
+                if (cLifeController.GetLifePoint < fMaxLife)
+                {
+                    float healValue = fOneFrameHealValue * nFpsDiff;
+                    cLifeController.ChangeLifePoint(healValue);
+                    if(cLifeController.GetLifePoint >= fMaxLife)
+                    {
+                        cLifeController.SetLifePoint(fMaxLife);
+                    }
+                }
+            }
+            //アタックコントローラー用
             cAttackController.UpdataAttack(nFpsDiff);
         }
         else
@@ -345,6 +364,9 @@ public class PlayerController : MonoBehaviour
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
+            //ダメージ受けてないフレームのリセット
+            nNoDamageFrame = 0;
+            //ヒットエフェクト
             gHitEffect.GetComponent<HitEffect>().HitParticle();
             if (bIsFreeze == false)
             {
@@ -356,8 +378,9 @@ public class PlayerController : MonoBehaviour
                 //ノックバック
                 rb.linearVelocity = Vector3.zero;
                 rb.AddForce(_knockBackVec, ForceMode.VelocityChange);
-                
+                //攻撃をくらったほうを向く
                 transform.rotation = Quaternion.LookRotation(-_knockBackVec);
+                //体力0以下なら死亡
                 if(cLifeController.GetLifePoint <= 0)
                 {
                     Die();

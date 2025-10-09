@@ -1996,6 +1996,10 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
+      propertyPath: fMaxLife
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
       propertyPath: tStageManager
       value: 
       objectReference: {fileID: 0}
