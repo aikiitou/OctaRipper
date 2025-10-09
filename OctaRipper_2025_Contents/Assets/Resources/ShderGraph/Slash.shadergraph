@@ -166,20 +166,6 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "1080cdc30bbf41a1bf59d9642095b8a6"
-                },
-                "m_SlotId": 1
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "266edccd807d4a6db0cbf5d192b13ca5"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
                     "m_Id": "31a6c1d38dc04799971a5d0f41f6e0c7"
                 },
                 "m_SlotId": 1
@@ -366,20 +352,6 @@
                 },
                 "m_SlotId": 1
             }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "fa0dbe6c000f49f0aa5c87712e5bfb33"
-                },
-                "m_SlotId": 1
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "04c15d56725549f0b6a7c4f0a165bdce"
-                },
-                "m_SlotId": 1
-            }
         }
     ],
     "m_VertexContext": {
@@ -483,7 +455,7 @@
     "m_ObjectId": "095db89d035545cd8969d020c371eb81",
     "m_Title": "Mask",
     "m_Position": {
-        "x": 1185.599853515625,
+        "x": 1185.5999755859375,
         "y": -550.4000244140625
     }
 }
@@ -1041,7 +1013,7 @@
     "m_ShaderOutputName": "Edge2",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 1.100000023841858,
+        "x": 1.2799999713897706,
         "y": 1.0,
         "z": 1.0,
         "w": 1.0
@@ -1439,7 +1411,7 @@
     "m_ObjectId": "685592dff3a04506a7cde2063ba02aed",
     "m_Title": "distosion",
     "m_Position": {
-        "x": -394.4000244140625,
+        "x": -394.39996337890627,
         "y": -104.0
     }
 }
@@ -1831,7 +1803,7 @@
     "m_ShaderOutputName": "Edge1",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.800000011920929,
+        "x": 0.44999998807907107,
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
