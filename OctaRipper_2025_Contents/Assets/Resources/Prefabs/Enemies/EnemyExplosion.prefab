@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1361465345354757478}
   - component: {fileID: 2834352295410790401}
   - component: {fileID: 7152289876281484502}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: EnemyExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,6 +78,18 @@ PrefabInstance:
     - target: {fileID: 2107123642400294062, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
       propertyPath: m_Name
       value: Particle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2107123642400294062, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2225024465048685503, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 2474793193877773466, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 4891542544191984353, guid: 94f446b288768a24cb81df23244d4fb3, type: 3}
       propertyPath: m_LocalPosition.x
