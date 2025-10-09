@@ -68,7 +68,7 @@ public class Loading
         MyDebugLib.MessageLog("ChangeScene");
         async.allowSceneActivation = true;
 
-
+        yield return new WaitForSeconds(0.5f);
 
         yield return Fade(ALPHA_MAX,ALPHA_MIN);
         MyDebugLib.MessageLog("FadeIn");

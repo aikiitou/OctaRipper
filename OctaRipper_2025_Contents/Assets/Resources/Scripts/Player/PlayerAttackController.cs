@@ -64,7 +64,7 @@ public class PlayerAttackController
         if(isAnimataion == false && isStrongButton == false)
         {
             isWeakButton = true;
-            aAnimator.SetBool("bIsButton", true);
+            aAnimator.SetBool("bIsWeakButton", true);
             aAnimator.SetTrigger("weakAttackTrigger");
 
             nButtonOnFrame = 0;
@@ -74,19 +74,23 @@ public class PlayerAttackController
         {
             aAnimator.SetTrigger("weakComboTrigger");
         }
+
+        DisBothChargeEffect();
     }
     public void ReleaseWeakAttackButton()
     {
         isWeakButton = false;
 
-        aAnimator.SetBool("bIsButton", false);
+        aAnimator.SetBool("bIsWeakButton", false);
+
+        DisRightChargeEffect();
     }
     public void OnStrongAttackButton()
     {
         if(isWeakButton == false && isAnimataion == false)
         {
             isStrongButton = true;
-            aAnimator.SetBool("bIsButton", true);
+            aAnimator.SetBool("bIsStrongButton", true);
             aAnimator.SetTrigger("strongAttackTrigger");
 
             nButtonOnFrame = 0;
@@ -96,12 +100,16 @@ public class PlayerAttackController
         {
             aAnimator.SetTrigger("strongComboTrigger");
         }
+
+        DisBothChargeEffect();
     }
     public void ReleaseStrongAttackButton()
     {
         isStrongButton = false;
 
-        aAnimator.SetBool("bIsButton", false);
+        aAnimator.SetBool("bIsStrongButton", false);
+
+        DisBothChargeEffect();
     }
     public void AnimationStr()
     {
