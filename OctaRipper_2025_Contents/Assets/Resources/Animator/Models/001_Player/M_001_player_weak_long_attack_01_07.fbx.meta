@@ -55,6 +55,34 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0
+        functionName: DisRightChargeEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 200
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: AnimationStr
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 200
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.15392059
+        functionName: GoFront
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 200
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.16166507
+        functionName: InstantiateWeakSlash
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 200
+        intParameter: 0
+        messageOptions: 0
       - time: 1
         functionName: AnimationEnd
         data: 
@@ -69,15 +97,8 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.15392059
-        functionName: GoFront
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 200
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.16166507
-        functionName: InstantiateWeakSlash
+      - time: 1
+        functionName: AnimationEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 200
