@@ -129,8 +129,7 @@ public class EnemyController02 : EnemyControllerBase
 
     void TimerCountDown() // 各タイマーのカウントダウン
     {
-        if (fAttackCoolDownTimer > 0.0f &&
-            Vector3.Distance(gTargetObject.transform.position, transform.position) > fAttackDistance)
+        if (fAttackCoolDownTimer > 0.0f)
         {
             fAttackCoolDownTimer -= Time.deltaTime;
         }

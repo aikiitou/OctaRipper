@@ -150,6 +150,7 @@ MonoBehaviour:
   fInitLifePoint: 60
   fMaxSpeed: 4
   fAcceleration: 14
+  fMinAcceleration: 7.3
   fNaturalBrake: 7
   fBrake: 10
   fAttackDistance: 3

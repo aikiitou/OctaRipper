@@ -9929,7 +9929,7 @@ MonoBehaviour:
   fInitLifePoint: 30
   fAcceleration: 20
   fBrake: 20
-  fAttackDistance: 20
+  fAttackDistance: 8
   fMoveCoolDownTime: 1
   fBulletSpeed: 40
   fAttackDamage: 10
@@ -9943,6 +9943,7 @@ MonoBehaviour:
   fExplosionFriezeTime: 2
   fExplosionForce: 8
   gExplosion: {fileID: 620302056770986620}
+  gHitEffect: {fileID: 0}
 --- !u!136 &8176509100173911317
 CapsuleCollider:
   m_ObjectHideFlags: 0
