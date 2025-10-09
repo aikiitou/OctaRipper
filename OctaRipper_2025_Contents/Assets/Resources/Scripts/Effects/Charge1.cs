@@ -7,10 +7,13 @@ public class Charge1 : MonoBehaviour
     [SerializeField] float fSpeed;
     [SerializeField] float fDamage;
     [SerializeField] float fFreezeTime;
+    [SerializeField] float fDestroyTime;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * fSpeed, ForceMode.VelocityChange);
+        Destroy(gameObject, fDestroyTime);
     }
     private void OnTriggerEnter(Collider _other)
     {
