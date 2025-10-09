@@ -36,8 +36,9 @@ public class Enemy02BulletController : MonoBehaviour
             Vector3 distance = other.transform.position - gameObject.transform.position;
             other.GetComponent<PlayerController>().Damage(-fDamage, distance.normalized * fForce, (int)fFriezeFrame);
         }
-        if (other.gameObject != gParentObject)
+        if (other.gameObject.layer != 11)
         {
+            MyDebugLib.MessageLog(other.gameObject.layer);
             Release();
         }
     }
