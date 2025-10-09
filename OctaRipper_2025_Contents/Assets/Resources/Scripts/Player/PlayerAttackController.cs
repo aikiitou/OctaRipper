@@ -7,6 +7,8 @@ public class PlayerAttackController
     Animator aAnimator;
     Rigidbody rb;
 
+    const float FREEZE_TIME = 1.0f;
+
     private bool isWeakButton = false;
     private bool isStrongButton = false;
     private bool isAnimataion = false;
@@ -108,7 +110,7 @@ public class PlayerAttackController
         }
         foreach (PlayerAttackColliderController colliderController in cPlayerAttackColliderControllers)
         {
-            colliderController.SetAttackInfo(fCurrentDamage, 1.0f, _knockBack);
+            colliderController.SetAttackInfo(fCurrentDamage, FREEZE_TIME, _knockBack);
         }
     }
     public void DisAttackCollider()
