@@ -61,6 +61,6 @@ Material:
     - _ScrollSpeed: 1
     - _SlashWidth: 0.58
     m_Colors:
-    - _Color: {r: 0.5641509, g: 0.7291333, b: 1, a: 1}
+    - _Color: {r: 0.06666667, g: 0.89411765, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
