@@ -54,6 +54,9 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("爆発オブジェクト")]
     GameObject gExplosion; // 攻撃の当たり判定オブジェクト
 
+    [SerializeField, Header("ヒットエフェクトオブジェクト")]
+    GameObject gHitEffect; // 攻撃の当たり判定オブジェクト
+
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
@@ -115,16 +118,8 @@ public class EnemyController02 : EnemyControllerBase
         if (fAttackCoolDownTimer <= 0.0f && rRigidbody.linearVelocity.magnitude <= 0.0f && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
             bIsAttacking = false;
-            Ray ray = new Ray(transform.position, transform.forward);
-            Physics.Raycast(ray, out RaycastHit hit);
-            if (hit.transform != null)
-            {
-                if (hit.transform.tag == "Player") // 正面にプレイヤーがいる際に攻撃実行。
-                {
-                    bCanTurn = false;
-                    Attack();
-                }
-            }
+            bCanTurn = false;
+            Attack();
         }
         if (!bIsAttacking) // 攻撃中でなければ
         {
@@ -214,6 +209,7 @@ public class EnemyController02 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
+        gHitEffect.GetComponent<HitEffect>().HitParticle();
         cLifeController.ChangeLifePoint(_damage); // ダメージを与える
         if (_friezeTime > 0) // 硬直時間が存在するのであれば、ノックバックと硬直を発生させる。
         {

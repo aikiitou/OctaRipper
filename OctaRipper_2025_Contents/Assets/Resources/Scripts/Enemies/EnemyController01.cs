@@ -106,10 +106,6 @@ public class EnemyController01 : EnemyControllerBase
         {
             StartCoroutine(DeadDelay()); // Ž€–S
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-10.0f, -transform.forward * 5.0f, 0.5f);
-        }
     }
 
     void ChangePattern()

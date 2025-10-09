@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class PlayerAttackController
@@ -10,6 +12,9 @@ public class PlayerAttackController
     private bool isAnimataion = false;
     private int nButtonOnFrame = 0;
     private float fCurrentDamage = 0f;
+
+    private GameObject gWeakSlashPrefab;
+    private GameObject gStrongSlashPrefab;
 
     GameObject[] gAttackColliders;
     PlayerAttackColliderController[] cPlayerAttackColliderControllers;

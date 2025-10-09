@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
+    const int TURN_BLOCK_TIME = 1800;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -40,6 +42,15 @@ public class PlayerController : MonoBehaviour
     [Header("攻撃の当たり判定")]
     [SerializeField]
     private GameObject[] gAttackColliders;
+    [Header("弱溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gWeakSlashPrefab;
+    //[Header("強溜め攻撃斬撃プレファブ")]
+    //[SerializeField]
+    //private GameObject gStrongSlashPrefab;
+    [Header("背中の時間制限用オブジェクト")]
+    [SerializeField]
+    private GameObject[] gBackTimerOjb;
 
     private GameObject gDodgeEffectInstance;
 
@@ -48,6 +59,8 @@ public class PlayerController : MonoBehaviour
     private LifeController cLifeController;
 
     private bool bIsFreeze = false;
+    private int nTimerFrame = 0;
+    private int nBackTimerIndex = 0;
     private int nDodgeRestCoolTimeFrame = 0;
     private int nEffectActiveFrame = 0;
     private int nFreezeFrame = 0;
@@ -124,6 +137,19 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //制限時間
+        nTimerFrame += nFpsDiff;
+        if (nTimerFrame >= TURN_BLOCK_TIME)
+        {
+            nTimerFrame = 0;
+            gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.color = Color.black;
+            nBackTimerIndex++;
+        }
+        if (nBackTimerIndex >= gBackTimerOjb.Length)
+        {
+
+        }
+
         cAttackController.UpdataAttack(nFpsDiff);
     }
     private void FixedUpdate()
@@ -132,7 +158,7 @@ public class PlayerController : MonoBehaviour
         {
             cMoveController.FixedUpdateMove(transform);
         }
-        else if(nFreezeFrame > 0)
+        else if (nFreezeFrame > 0)
         {
             nFreezeFrame -= nFpsDiff;
             if (nFreezeFrame <= 0)
@@ -244,6 +270,12 @@ public class PlayerController : MonoBehaviour
     private void VecLost(float _magnification)
     {
         rb.linearVelocity *= _magnification;
+    }
+    private void InstantiateWeakSlash()
+    {
+        GameObject weakSlash = Instantiate(gWeakSlashPrefab);
+        weakSlash.transform.position = transform.position;
+        weakSlash.transform.rotation = transform.rotation;
     }
     //ダメージ関数
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
