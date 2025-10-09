@@ -33,7 +33,11 @@ public class PlayerAttackColliderController : MonoBehaviour
         }
         if(_other.TryGetComponent<FireWallController>(out FireWallController fireWall))
         {
-            fireWall.TakeDamage(-fDamage);
+            if (gDamagedObjects.Contains(_other.gameObject) == false)
+            {
+                gDamagedObjects.Add(_other.gameObject);
+                fireWall.TakeDamage(-fDamage);
+            }
         }
     }
     public void SetAttackInfo(float _damage,float _freezeTime,float _knockBackPower)
