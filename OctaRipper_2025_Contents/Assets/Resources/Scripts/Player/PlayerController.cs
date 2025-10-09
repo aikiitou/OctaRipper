@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
+    const int DEATH_EFFECT_FRAME = 12;
+    const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -30,24 +33,33 @@ public class PlayerController : MonoBehaviour
     [Header("最大体力")]
     [SerializeField]
     private float fMaxLif;
+    [Header("エフェクトの到着フレーム(回避の無敵時間)")]
+    [SerializeField]
+    private int nEffectArrivalFrame;
     [Header("回避エフェクト")]
     [SerializeField]
     private GameObject gDodgeEffectPrefab;
-    [Header("エフェクトの到着フレーム")]
-    [SerializeField]
-    private int nEffectArrivalFrame;
-    [Header("フレームカウンター")]
-    [SerializeField]
-    private FrameRate cFps;
-    [Header("攻撃の当たり判定")]
-    [SerializeField]
-    private GameObject[] gAttackColliders;
     [Header("弱溜め攻撃斬撃プレファブ")]
     [SerializeField]
     private GameObject gWeakSlashPrefab;
-    //[Header("強溜め攻撃斬撃プレファブ")]
-    //[SerializeField]
-    //private GameObject gStrongSlashPrefab;
+    [Header("強溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gStrongSlashPrefab;
+    [Header("ヒットエフェクト")]
+    [SerializeField]
+    GameObject gHitEffect;
+    [Header("死亡エフェクト")]
+    [SerializeField]
+    GameObject gDeathEffect;
+    [Header("フレームカウンター")]
+    [SerializeField]
+    private FrameRate cFps;
+    [Header("ステージマネジャー")]
+    [SerializeField]
+    private Transform tStageManager;
+    [Header("攻撃の当たり判定")]
+    [SerializeField]
+    private GameObject[] gAttackColliders;
     [Header("背中の時間制限用オブジェクト")]
     [SerializeField]
     private GameObject[] gBackTimerOjb;
@@ -59,6 +71,7 @@ public class PlayerController : MonoBehaviour
     private LifeController cLifeController;
 
     private bool bIsFreeze = false;
+    private bool bIsActive = true;
     private int nTimerFrame = 0;
     private int nBackTimerIndex = 0;
     private int nDodgeRestCoolTimeFrame = 0;
@@ -112,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //FPS計算
         int currentFps = cFps.GetFPS();
         if (currentFps < nPastFps)
         {
@@ -127,64 +141,83 @@ public class PlayerController : MonoBehaviour
 
         nPastFps = currentFps;
         
-        //クールタイム計算
-        if (nDodgeRestCoolTimeFrame > 0)
+        if(bIsActive == true)
         {
-            nDodgeRestCoolTimeFrame -= nFpsDiff;
-            if (nDodgeRestCoolTimeFrame <= 0)
+            //クールタイム計算
+            if (nDodgeRestCoolTimeFrame > 0)
             {
-                nDodgeRestCoolTimeFrame = 0;
+                nDodgeRestCoolTimeFrame -= nFpsDiff;
+                if (nDodgeRestCoolTimeFrame <= 0)
+                {
+                    nDodgeRestCoolTimeFrame = 0;
+                }
             }
-        }
 
-        //制限時間
-        nTimerFrame += nFpsDiff;
-        if (nTimerFrame >= TIME_LIMIT_FRAME / gBackTimerOjb.Length)
-        {
-            MyDebugLib.MessageLog(gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.GetColor("_BASE_COLOR"));
-
-            nTimerFrame = 0;
-            gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.SetColor("_BASE_COLOR", Color.black);
-            nBackTimerIndex++;
-        }
-        if (nBackTimerIndex >= gBackTimerOjb.Length)
-        {
-
-        }
-
-        cAttackController.UpdataAttack(nFpsDiff);
-    }
-    private void FixedUpdate()
-    {
-        if (nFreezeFrame <= 0 && bIsFreeze == false)
-        {
-            cMoveController.FixedUpdateMove(transform);
-        }
-        else if (nFreezeFrame > 0)
-        {
-            nFreezeFrame -= nFpsDiff;
-            if (nFreezeFrame <= 0)
+            //制限時間
+            nTimerFrame += nFpsDiff;
+            if (nTimerFrame >= TIME_LIMIT_FRAME / gBackTimerOjb.Length)
             {
-                nFreezeFrame = 0;
-                cLifeController.SetInvincible(false);
+                nTimerFrame = 0;
+                gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.SetColor("_BASE_COLOR", Color.black);
+                nBackTimerIndex++;
             }
-        }
+            if (nBackTimerIndex >= gBackTimerOjb.Length)
+            {
+                Die();
+            }
 
-        if (gDodgeEffectInstance.activeInHierarchy == false)
-        {
-            gDodgeEffectInstance.transform.position = transform.position;
-            gDodgeEffectInstance.transform.rotation = transform.rotation;
+            if (nFreezeFrame > 0)
+            {
+                nFreezeFrame -= nFpsDiff;
+                if (nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+                    cLifeController.SetInvincible(false);
+                }
+            }
+
+
+            cAttackController.UpdataAttack(nFpsDiff);
         }
         else
         {
-            nEffectActiveFrame += nFpsDiff;
-            float Ratio = (float)nEffectActiveFrame / (float)nEffectArrivalFrame;
-            gDodgeEffectInstance.transform.position =
-                Vector3.Lerp(gDodgeEffectInstance.transform.position, transform.position, Ratio);
-            if (Ratio >= 1.0f)
+            if(nFreezeFrame > 0)
             {
-                cLifeController.SetInvincible(false);
-                gDodgeEffectInstance.SetActive(false);
+                nFreezeFrame -= nFpsDiff;
+                if(nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+
+                    tStageManager.GetComponent<GameOverNotification>().ChageGameOverGameOver();
+                }
+            }
+        }
+    }
+    private void FixedUpdate()
+    {
+        if(bIsActive == true)
+        {
+            if (nFreezeFrame <= 0 && bIsFreeze == false)
+            {
+                cMoveController.FixedUpdateMove(transform);
+            }
+            
+            if (gDodgeEffectInstance.activeInHierarchy == false)
+            {
+                gDodgeEffectInstance.transform.position = transform.position;
+                gDodgeEffectInstance.transform.rotation = transform.rotation;
+            }
+            else
+            {
+                nEffectActiveFrame += nFpsDiff;
+                float Ratio = (float)nEffectActiveFrame / (float)nEffectArrivalFrame;
+                gDodgeEffectInstance.transform.position =
+                    Vector3.Lerp(gDodgeEffectInstance.transform.position, transform.position, Ratio);
+                if (Ratio >= 1.0f)
+                {
+                    cLifeController.SetInvincible(false);
+                    gDodgeEffectInstance.SetActive(false);
+                }
             }
         }
     }
@@ -220,19 +253,31 @@ public class PlayerController : MonoBehaviour
     //アタックコントローラー
     private void OnWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.OnWeakAttackButton();
+        if(bIsActive == true)
+        {
+            cAttackController.OnWeakAttackButton();
+        }
     }
     private void ReleaseWeakAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.ReleaseWeakAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.ReleaseWeakAttackButton();
+        }
     }
     private void OnStrongAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.OnStrongAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.OnStrongAttackButton();
+        }
     }
     private void ReleaseStrongAttackButton(InputAction.CallbackContext _context)
     {
-        cAttackController.ReleaseStrongAttackButton();
+        if (bIsActive == true)
+        {
+            cAttackController.ReleaseStrongAttackButton();
+        }
     }
     private void AnimationStr()
     {
@@ -275,15 +320,32 @@ public class PlayerController : MonoBehaviour
     }
     private void InstantiateWeakSlash()
     {
-        GameObject weakSlash = Instantiate(gWeakSlashPrefab);
-        weakSlash.transform.position = transform.position;
+        GameObject weakSlash = Instantiate(gWeakSlashPrefab,transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
+    }
+    private void InstantiateStrongSlash()
+    {
+        GameObject weakSlash = Instantiate(gStrongSlashPrefab, transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
+        weakSlash.transform.rotation = transform.rotation;
+    }
+    //死亡演出
+    private void Die()
+    {
+        cMoveController.Stop(transform);
+        bIsActive = false;
+        nFreezeFrame = DEATH_EFFECT_FRAME;
+        gDeathEffect.SetActive(true);
     }
     //ダメージ関数
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
         if(cLifeController.ChangeLifePoint(_damageValue) == true)
         {
+            gHitEffect.GetComponent<HitEffect>().HitParticle();
             if (bIsFreeze == false)
             {
                 //硬直・無敵の設定
@@ -298,7 +360,7 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(-_knockBackVec);
                 if(cLifeController.GetLifePoint <= 0)
                 {
-                    StartCoroutine(Loading.LoadScene("GameOver", this.gameObject));
+                    Die();
                 }
             }
         }        

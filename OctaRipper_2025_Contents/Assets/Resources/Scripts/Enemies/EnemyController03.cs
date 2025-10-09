@@ -18,8 +18,8 @@ public class EnemyController03 : EnemyControllerBase
     [SerializeField, Header("移動減速度")]
     float fBrake = 20.0f;
 
-    [SerializeField, Header("攻撃実行距離")]
-    float fAttackDistance = 2.0f;
+    [SerializeField, Header("強攻撃確率")]
+    float fHeavyAttackPercent = 25.0f;
 
     [SerializeField, Header("接近可能距離")]
     float fDistance = 1.0f;
@@ -75,6 +75,10 @@ public class EnemyController03 : EnemyControllerBase
     [SerializeField, Header("爆発オブジェクト")]
     GameObject gExplosion; // 攻撃の当たり判定オブジェクト
 
+    [SerializeField, Header("ヒットエフェクトオブジェクト")]
+    GameObject gHitEffect; // 攻撃の当たり判定オブジェクト
+
+
     bool bIsAcceleration = true; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
@@ -82,7 +86,7 @@ public class EnemyController03 : EnemyControllerBase
     bool bIsShielding = false; // シールド構え
     bool bIsShielded = false; // シールドしたかどうか
     float fInvincibleTimer;
-    float fAttackCoolDownTimer;
+    float fAttackCoolDownTimer = 1.0f;
     float fDeadDelayTime = 0.5f; // 死亡遅延時間
     float fAttackActionTimer;
     float fFriezeTimer; // 硬直時間
@@ -131,7 +135,6 @@ public class EnemyController03 : EnemyControllerBase
             bIsShielding = false;
             return; // でなければ攻撃を停止させ、returnする。
         }
-        aAnimator.SetBool("Sweep", (gTargetObject.transform.position - gameObject.transform.position).magnitude <= fAttackDistance);
         if (fAttackActionTimer <= 0.0f) // 攻撃中のタイマーが終わっていれば、攻撃判定を終了させ、回転を許可する。
         {
             bIsAcceleration = true;
@@ -187,6 +190,10 @@ public class EnemyController03 : EnemyControllerBase
             bIsShielding = true;
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
+            if (fDistance > moveAddForce.magnitude)
+            {
+                vMoveForce = Vector3.zero;
+            }
             moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime; // 加速量算出
             vMoveForce -= vMoveForce.normalized * fNaturalBrake * Time.deltaTime; // 摩擦
             vMoveForce += moveAddForce; // 加速度を移動量に加える
@@ -236,11 +243,28 @@ public class EnemyController03 : EnemyControllerBase
 
     protected override void Attack() // 攻撃
     {
+        if (Random.Range(0.0f,100.0f) <= fHeavyAttackPercent)
+        {
+            aAnimator.SetBool("Sweep", false);
+        }
+        else
+        {
+            aAnimator.SetBool("Sweep", true);
+        }
         if (!bIsAttacking && aAnimator.GetBool("Sweep")) // 初動処理
         {
             gDamageTrigger.GetComponent<Enemy03AttackController>().SetUp(fAttackDamage, transform.forward * fAttackForce, fAttackFriezeTime);
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (horizonDistance.magnitude < 0.1f)
+            {
+                horizonDistance = transform.forward;
+            }
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
+                1.0f
+                ); // 方向転換
             aAnimator.SetTrigger("IsAttacking");
             vMoveForce = horizonDistance.normalized * fSweepAttackSpeed;
             fAttackActionTimer = fSweepAttackActionTime;
@@ -275,6 +299,7 @@ public class EnemyController03 : EnemyControllerBase
 
     public override void Damage(float _damage, Vector3 _impact, float _friezeTime) // ダメージ処理
     {
+        gHitEffect.GetComponent<HitEffect>().HitParticle();
         bIsShielded = false;
         if (bIsShielding && ShieldJudge(_impact.normalized))
         {
