@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0, b: 0.20064402, a: 1}
+      maxColor: {r: 0, g: 1, b: 0.34238338, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -672,7 +672,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 0.4, y: 0.19, z: 4.7}
+    m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -4853,11 +4853,11 @@ GameObject:
   - component: {fileID: 8780153743953156740}
   - component: {fileID: 1197884941984347560}
   - component: {fileID: 2545716692455501260}
-  - component: {fileID: 9013231668584869133}
   - component: {fileID: 5658013922550177918}
   - component: {fileID: 3882653221178823228}
+  - component: {fileID: 704123832224492920}
   m_Layer: 11
-  m_Name: Missile
+  m_Name: BossBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4934,27 +4934,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9013231668584869133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5582520676264741483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b4d36142591dc44591f222d7730d450, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fSpeed: 30
-  fDamage: 10
-  fCanRotationTime: 1
-  fCanRotationEndTime: 0.7
-  fRotationSpeed: 6
-  fAliveTime: 5
-  fExplosionFriezeTime: 0.3
-  fExplosionForce: 10
-  gExplosion: {fileID: 5710511735251725656}
 --- !u!54 &5658013922550177918
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4981,7 +4960,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!135 &3882653221178823228
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5002,7 +4981,25 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 4.02}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &704123832224492920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5582520676264741483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc270a1b1b0627c44a5ba59e3c8ced25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fSpeed: 70
+  fDamage: 20
+  fAliveTime: 1
+  fExplosionFriezeTime: 0.1
+  fExplosionForce: 5
+  gExplosion: {fileID: 5710511735251725656}
 --- !u!1 &8534072712406323657
 GameObject:
   m_ObjectHideFlags: 0
@@ -9855,15 +9852,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.y
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1361465345354757478, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9907,15 +9904,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_Name
@@ -9927,15 +9924,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

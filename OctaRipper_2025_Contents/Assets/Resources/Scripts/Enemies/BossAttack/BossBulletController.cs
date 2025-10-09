@@ -1,43 +1,34 @@
 using UnityEngine;
 
-public class MissileController : MonoBehaviour
+public class BossBulletController : MonoBehaviour
 {
     [SerializeField, Header("スピード")]
-    float fSpeed = 10.0f;
+    float fSpeed = 20.0f;
 
     [SerializeField, Header("与ダメージ")]
     float fDamage = 10.0f;
 
-    [SerializeField, Header("回転開始までの時間")]
-    float fCanRotationTime = 1.0f;
-
-    [SerializeField, Header("回転終了までの時間")]
-    float fCanRotationEndTime = 1.0f;
-
-    [SerializeField, Header("見た目回転スピード")]
-    float fRotationSpeed = 10.0f;
-
     [SerializeField, Header("最大生存時間")]
-    float fAliveTime = 5.0f;
+    float fAliveTime = 1.0f;
 
 
     [SerializeField, Header("爆発与硬直時間")]
-    float fExplosionFriezeTime = 0.3f;
+    float fExplosionFriezeTime = 0.1f;
 
     [SerializeField, Header("爆発吹っ飛ばし")]
-    float fExplosionForce = 10.0f;
+    float fExplosionForce = 5.0f;
 
     [SerializeField, Header("爆発オブジェクト")]
     GameObject gExplosion; // 攻撃の当たり判定オブジェクト
 
 
-    float fCanRotationTimer;
+    float fAliveTimer;
     GameObject gParentObject;
     Rigidbody rRigidBody;
     GameObject gTargetObject; // 対象のオブジェクト
     public void SetUp(GameObject _shotObject, GameObject _parent, Vector3 _pos)
     {
-        fCanRotationTimer = fCanRotationTime;
+        fAliveTimer = fAliveTime;
         gTargetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
         gParentObject = _parent;
         rRigidBody = GetComponent<Rigidbody>();
@@ -45,22 +36,18 @@ public class MissileController : MonoBehaviour
         transform.parent = null;
         transform.position = _pos;
         gameObject.SetActive(true);
-        transform.rotation = Quaternion.FromToRotation(Vector3.forward, rRigidBody.linearVelocity);
+        Vector3 distance = gTargetObject.transform.position - gameObject.transform.position;
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.FromToRotation(Vector3.forward, distance.normalized),
+            1.0f
+            ); // 方向転換
     }
     void Update()
     {
-        if (fCanRotationTimer < 0.0f && fCanRotationTimer >= -fCanRotationEndTime)
-        {
-            rRigidBody.linearVelocity = transform.forward * fSpeed;
-            Vector3 distance = gTargetObject.transform.position - gameObject.transform.position;
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                Quaternion.FromToRotation(Vector3.forward, distance.normalized),
-                fRotationSpeed * Time.deltaTime
-                ); // 方向転換
-        }
-        fCanRotationTimer -= Time.deltaTime;
-        if (fCanRotationTimer < - fAliveTime)
+        rRigidBody.linearVelocity = transform.forward * fSpeed;
+        fAliveTimer -= Time.deltaTime;
+        if (fAliveTimer < 0.0f)
         {
             Release();
         }
@@ -70,7 +57,7 @@ public class MissileController : MonoBehaviour
     public void Release()
     {
         transform.position = gParentObject.transform.position;
-        gParentObject.GetComponent<MissilePool>().ReturnList(gameObject);
+        gParentObject.GetComponent<BossBulletPool>().ReturnList(gameObject);
         transform.parent = gParentObject.transform;
         rRigidBody.linearVelocity = Vector3.zero;
         gameObject.SetActive(false);
@@ -84,6 +71,5 @@ public class MissileController : MonoBehaviour
             Release();
         }
     }
-
 
 }
