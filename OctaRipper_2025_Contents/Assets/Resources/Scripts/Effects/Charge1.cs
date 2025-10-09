@@ -22,6 +22,11 @@ public class Charge1 : MonoBehaviour
         {
             enemy.Damage(-fDamage, transform.forward * fKnockBackPower, fFreezeTime);
         }
+        if (_other.TryGetComponent<FireWallController>(out FireWallController fireWall))
+        {
+            fireWall.TakeDamage(-fDamage);
+            Destroy(gameObject);
+        }
     }
 }
     
