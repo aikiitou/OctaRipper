@@ -10,8 +10,6 @@ public class StageController : MonoBehaviour
 
     [SerializeField]
     private StageEnemies cStageEnemies = null;
-    [SerializeField]
-    private GameObject gFireWall = null;
 
     private List<GameObject> gEnemies = new List<GameObject>();
     private List<bool> bPrevStates = new List<bool>();
@@ -137,23 +135,27 @@ public class StageController : MonoBehaviour
 
     private IEnumerator RepopEnemy(string _tag)
     {
-        if(cPopCount[_tag] > GetPopTotal(_tag))
+        MyDebugLib.MessageLog("PC" + cPopCount[_tag]);
+        MyDebugLib.MessageLog("GP" + GetStageTotal(_tag));
+
+        yield return new WaitForSeconds(3.0f);
+
+        if (cPopCount[_tag] > GetStageTotal(_tag))
         {
             yield break;
         }
 
-        yield return new WaitForSeconds(3.0f);
         AppearanceEnemy(_tag);
         yield return null;
     }
 
-    private int GetPopTotal(string _tag)
+    private int GetStageTotal(string _tag)
     {
         foreach (var enemy in cStageEnemies.GetStageEnemies())
         {
             if (enemy.sEnemyTag == _tag)
             {
-                return enemy.nPopTotal;
+                return enemy.nStageTotal;
             }
         }
 
