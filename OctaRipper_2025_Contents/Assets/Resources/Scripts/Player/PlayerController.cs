@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
-    const int TURN_BLOCK_TIME = 1800;
+    const int TIME_LIMIT_FRAME = 10800;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -139,10 +139,12 @@ public class PlayerController : MonoBehaviour
 
         //§ŒÀŽžŠÔ
         nTimerFrame += nFpsDiff;
-        if (nTimerFrame >= TURN_BLOCK_TIME)
+        if (nTimerFrame >= TIME_LIMIT_FRAME / gBackTimerOjb.Length)
         {
+            MyDebugLib.MessageLog(gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.GetColor("_BASE_COLOR"));
+
             nTimerFrame = 0;
-            gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.color = Color.black;
+            gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.SetColor("_BASE_COLOR", Color.black);
             nBackTimerIndex++;
         }
         if (nBackTimerIndex >= gBackTimerOjb.Length)
