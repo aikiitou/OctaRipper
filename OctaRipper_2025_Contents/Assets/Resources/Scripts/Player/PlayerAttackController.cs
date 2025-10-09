@@ -15,9 +15,6 @@ public class PlayerAttackController
     private int nButtonOnFrame = 0;
     private float fCurrentDamage = 0f;
 
-    private GameObject gWeakSlashPrefab;
-    private GameObject gStrongSlashPrefab;
-
     GameObject[] gAttackColliders;
     PlayerAttackColliderController[] cPlayerAttackColliderControllers;
     public PlayerAttackController(Rigidbody _rb , Animator _animator, GameObject[] attackColliders)  

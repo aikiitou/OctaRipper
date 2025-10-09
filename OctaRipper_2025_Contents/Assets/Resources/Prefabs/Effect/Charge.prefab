@@ -105,7 +105,7 @@ MonoBehaviour:
   fDamage: 5
   fFreezeTime: 1
   fKnockBackPower: 7
-  fDestroyTime: 0.2
+  fDestroyTime: 0.3
 --- !u!65 &7703475720322282443
 BoxCollider:
   m_ObjectHideFlags: 0
