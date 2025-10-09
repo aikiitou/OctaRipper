@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
-    const float WEAK_SLAH_HEIGHT = 1.0f;
+    const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -40,9 +40,9 @@ public class PlayerController : MonoBehaviour
     [Header("弱溜め攻撃斬撃プレファブ")]
     [SerializeField]
     private GameObject gWeakSlashPrefab;
-    //[Header("強溜め攻撃斬撃プレファブ")]
-    //[SerializeField]
-    //private GameObject gStrongSlashPrefab;
+    [Header("強溜め攻撃斬撃プレファブ")]
+    [SerializeField]
+    private GameObject gStrongSlashPrefab;
     [Header("ヒットエフェクト")]
     [SerializeField]
     GameObject gHitEffect;
@@ -280,7 +280,14 @@ public class PlayerController : MonoBehaviour
     private void InstantiateWeakSlash()
     {
         GameObject weakSlash = Instantiate(gWeakSlashPrefab,transform.parent);
-        Vector3 offset = new Vector3(transform.forward.x, WEAK_SLAH_HEIGHT, transform.forward.z);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
+        weakSlash.transform.rotation = transform.rotation;
+    }
+    private void InstantiateStrongSlash()
+    {
+        GameObject weakSlash = Instantiate(gStrongSlashPrefab, transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
         weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
     }
