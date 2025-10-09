@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
+    const int DEATH_EFFECT_TIME = 60;
     const float SLAH_HEIGHT_OFFSET = 1.0f;
 
     InputSystem_Actions isInput;
@@ -46,6 +48,9 @@ public class PlayerController : MonoBehaviour
     [Header("ヒットエフェクト")]
     [SerializeField]
     GameObject gHitEffect;
+    [Header("死亡エフェクト")]
+    [SerializeField]
+    GameObject gDeathEffect;
     [Header("フレームカウンター")]
     [SerializeField]
     private FrameRate cFps;
@@ -63,6 +68,7 @@ public class PlayerController : MonoBehaviour
     private LifeController cLifeController;
 
     private bool bIsFreeze = false;
+    private bool bIsActive = true;
     private int nTimerFrame = 0;
     private int nBackTimerIndex = 0;
     private int nDodgeRestCoolTimeFrame = 0;
@@ -116,6 +122,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        //FPS計算
         int currentFps = cFps.GetFPS();
         if (currentFps < nPastFps)
         {
@@ -131,64 +138,82 @@ public class PlayerController : MonoBehaviour
 
         nPastFps = currentFps;
         
-        //クールタイム計算
-        if (nDodgeRestCoolTimeFrame > 0)
+        if(bIsActive == true)
         {
-            nDodgeRestCoolTimeFrame -= nFpsDiff;
-            if (nDodgeRestCoolTimeFrame <= 0)
+            //クールタイム計算
+            if (nDodgeRestCoolTimeFrame > 0)
             {
-                nDodgeRestCoolTimeFrame = 0;
+                nDodgeRestCoolTimeFrame -= nFpsDiff;
+                if (nDodgeRestCoolTimeFrame <= 0)
+                {
+                    nDodgeRestCoolTimeFrame = 0;
+                }
             }
-        }
 
-        //制限時間
-        nTimerFrame += nFpsDiff;
-        if (nTimerFrame >= TIME_LIMIT_FRAME / gBackTimerOjb.Length)
-        {
-            MyDebugLib.MessageLog(gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.GetColor("_BASE_COLOR"));
-
-            nTimerFrame = 0;
-            gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.SetColor("_BASE_COLOR", Color.black);
-            nBackTimerIndex++;
-        }
-        if (nBackTimerIndex >= gBackTimerOjb.Length)
-        {
-
-        }
-
-        cAttackController.UpdataAttack(nFpsDiff);
-    }
-    private void FixedUpdate()
-    {
-        if (nFreezeFrame <= 0 && bIsFreeze == false)
-        {
-            cMoveController.FixedUpdateMove(transform);
-        }
-        else if (nFreezeFrame > 0)
-        {
-            nFreezeFrame -= nFpsDiff;
-            if (nFreezeFrame <= 0)
+            //制限時間
+            nTimerFrame += nFpsDiff;
+            if (nTimerFrame >= TIME_LIMIT_FRAME / gBackTimerOjb.Length)
             {
-                nFreezeFrame = 0;
-                cLifeController.SetInvincible(false);
+                nTimerFrame = 0;
+                gBackTimerOjb[nBackTimerIndex].GetComponent<Renderer>().material.SetColor("_BASE_COLOR", Color.black);
+                nBackTimerIndex++;
             }
-        }
+            if (nBackTimerIndex >= gBackTimerOjb.Length)
+            {
+                Die();
+            }
 
-        if (gDodgeEffectInstance.activeInHierarchy == false)
-        {
-            gDodgeEffectInstance.transform.position = transform.position;
-            gDodgeEffectInstance.transform.rotation = transform.rotation;
+            if (nFreezeFrame > 0)
+            {
+                nFreezeFrame -= nFpsDiff;
+                if (nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+                    cLifeController.SetInvincible(false);
+                }
+            }
+
+
+            cAttackController.UpdataAttack(nFpsDiff);
         }
         else
         {
-            nEffectActiveFrame += nFpsDiff;
-            float Ratio = (float)nEffectActiveFrame / (float)nEffectArrivalFrame;
-            gDodgeEffectInstance.transform.position =
-                Vector3.Lerp(gDodgeEffectInstance.transform.position, transform.position, Ratio);
-            if (Ratio >= 1.0f)
+            if(nFreezeFrame > 0)
             {
-                cLifeController.SetInvincible(false);
-                gDodgeEffectInstance.SetActive(false);
+                nFreezeFrame -= nFpsDiff;
+                if(nFreezeFrame <= 0)
+                {
+                    nFreezeFrame = 0;
+
+                }
+            }
+        }
+    }
+    private void FixedUpdate()
+    {
+        if(bIsActive == true)
+        {
+            if (nFreezeFrame <= 0 && bIsFreeze == false)
+            {
+                cMoveController.FixedUpdateMove(transform);
+            }
+            
+            if (gDodgeEffectInstance.activeInHierarchy == false)
+            {
+                gDodgeEffectInstance.transform.position = transform.position;
+                gDodgeEffectInstance.transform.rotation = transform.rotation;
+            }
+            else
+            {
+                nEffectActiveFrame += nFpsDiff;
+                float Ratio = (float)nEffectActiveFrame / (float)nEffectArrivalFrame;
+                gDodgeEffectInstance.transform.position =
+                    Vector3.Lerp(gDodgeEffectInstance.transform.position, transform.position, Ratio);
+                if (Ratio >= 1.0f)
+                {
+                    cLifeController.SetInvincible(false);
+                    gDodgeEffectInstance.SetActive(false);
+                }
             }
         }
     }
@@ -291,6 +316,14 @@ public class PlayerController : MonoBehaviour
         weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
     }
+    //死亡演出
+    private void Die()
+    {
+        cMoveController.Stop(transform);
+        bIsActive = false;
+        nFreezeFrame = DEATH_EFFECT_TIME;
+        gDeathEffect.SetActive(true);
+    }
     //ダメージ関数
     public void Damage(float _damageValue, Vector3 _knockBackVec,int _freezeFrame)
     {
@@ -311,7 +344,7 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(-_knockBackVec);
                 if(cLifeController.GetLifePoint <= 0)
                 {
-                    StartCoroutine(Loading.LoadScene("GameOver", this.gameObject));
+                    Die();
                 }
             }
         }        
