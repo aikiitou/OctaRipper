@@ -47,6 +47,15 @@ public class PlayerController : MonoBehaviour
     [Header("強溜め攻撃斬撃プレファブ")]
     [SerializeField]
     private GameObject gStrongSlashPrefab;
+    [Header("回転エフェクト")]
+    [SerializeField]
+    private GameObject gCircleSlashEffect;
+    [Header("右チャージエフェクト")]
+    [SerializeField]
+    private GameObject gRightChargeEffect;
+    [Header("左チャージエフェクト")]
+    [SerializeField]
+    private GameObject gLeftChargeEffect;
     [Header("ヒットエフェクト")]
     [SerializeField]
     GameObject gHitEffect;
@@ -89,7 +98,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         float fColliderRadius = gameObject.GetComponent<CapsuleCollider>().radius;
         cMoveController = new PlayerMoveController(rb, aAnimator, fSpeed, fAnimSpeed, fDodgeDistance, fAnimSpeed, fColliderRadius);
-        cAttackController = new PlayerAttackController(rb, aAnimator,gAttackColliders);
+        cAttackController = new PlayerAttackController(rb, aAnimator, gAttackColliders, gRightChargeEffect, gLeftChargeEffect);
         isInput = new InputSystem_Actions();
         isInput.Enable();
         //インプットシステムに関数の追加
@@ -318,6 +327,14 @@ public class PlayerController : MonoBehaviour
     {
         cAttackController.DisAttackCollider();
     }
+    private void DisRightChargeEffect()
+    {
+        cAttackController.DisRightChargeEffect();
+    }
+    private void DisBothChargeEffect()
+    {
+        cAttackController.DisBothChargeEffect();
+    }
     //アニメーションに追加する関数
     private void OnFreeze()
     {
@@ -350,6 +367,14 @@ public class PlayerController : MonoBehaviour
         Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
         weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
+    }
+    private void OnCircleSlashEffect()
+    {
+        gCircleSlashEffect.SetActive(true);
+    }
+    private void DisCircleSlashEffect()
+    {
+        gCircleSlashEffect.SetActive(false);
     }
     //死亡演出
     private void Die()

@@ -5,14 +5,11 @@ using UnityEngine;
 
 public class PlayerAttackColliderController : MonoBehaviour
 {
-    const float HIT_STOP_TIME = 0.1f;
-
     List<GameObject> gDamagedObjects = new List<GameObject>();
     private Transform tPlayer;
     private float fDamage = 0f;
     private float fFreezeTime = 0f;
     private float fKnockBackPower = 0f;
-    private bool bIsHitStop = false;
 
     private void Awake()
     {
@@ -32,27 +29,16 @@ public class PlayerAttackColliderController : MonoBehaviour
                 float distance = (enemyPos - playerPos).magnitude;
                 forceVec *= Mathf.Lerp(1, fKnockBackPower, distance);
                 enemy.Damage(-fDamage, forceVec, fFreezeTime);
-                if(bIsHitStop == false)
-                {
-                    HitStop();
-                }
             }
         }
         if(_other.TryGetComponent<FireWallController>(out FireWallController fireWall))
         {
-            fireWall.TakeDamage(-fDamage);
-            if (bIsHitStop == false)
+            if (gDamagedObjects.Contains(_other.gameObject) == false)
             {
-                HitStop();
+                gDamagedObjects.Add(_other.gameObject);
+                fireWall.TakeDamage(-fDamage);
             }
         }
-    }
-    private IEnumerator HitStop()
-    {
-        bIsHitStop = true;
-        Time.timeScale = 0.0f;
-        yield return new WaitForSecondsRealtime(HIT_STOP_TIME);
-        Time.timeScale = 1.0f;
     }
     public void SetAttackInfo(float _damage,float _freezeTime,float _knockBackPower)
     {
@@ -66,6 +52,5 @@ public class PlayerAttackColliderController : MonoBehaviour
         fDamage = 0f;
         fFreezeTime = 0f;
         fKnockBackPower = 0f;
-        bIsHitStop = false;
     }
 }
