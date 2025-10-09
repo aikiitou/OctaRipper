@@ -1622,6 +1622,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511195637}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &520797888 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2334284711403960786, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
+  m_PrefabInstance: {fileID: 1066019134}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &623832209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2476,6 +2481,11 @@ GameObject:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7308053311845192780, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
   m_PrefabInstance: {fileID: 1759836819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &992925886 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2334284711403960786, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
+  m_PrefabInstance: {fileID: 1883457152}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &993159990
 GameObject:
@@ -3698,6 +3708,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347701031}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1432643510 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2334284711403960786, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
+  m_PrefabInstance: {fileID: 1757923730}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1444188032 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8080070521236786586, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
@@ -4619,6 +4634,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3857320787955107171, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
+      propertyPath: gFireWall
+      value: 
+      objectReference: {fileID: 1432643510}
+    - target: {fileID: 3857320787955107171, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
       propertyPath: cStageEnemies
       value: 
       objectReference: {fileID: 11400000, guid: 262dc08dfa0757e41bb57e2752647f3c, type: 2}
@@ -4630,6 +4649,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5065198238599364426, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
+      propertyPath: gFireWall
+      value: 
+      objectReference: {fileID: 520797888}
     - target: {fileID: 5065198238599364426, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
       propertyPath: cStageEnemies
       value: 
@@ -4706,6 +4729,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6801129331795296556, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
+      propertyPath: gFireWall
+      value: 
+      objectReference: {fileID: 992925886}
     - target: {fileID: 6801129331795296556, guid: 8191d95e4f44e6641932ba2b5591d9e5, type: 3}
       propertyPath: cStageEnemies
       value: 

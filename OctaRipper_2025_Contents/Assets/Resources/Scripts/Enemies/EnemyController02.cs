@@ -57,13 +57,13 @@ public class EnemyController02 : EnemyControllerBase
     [SerializeField, Header("ヒットエフェクトオブジェクト")]
     GameObject gHitEffect; // 攻撃の当たり判定オブジェクト
 
-    bool bIsAcceleration = true; // 現在加速しているかどうか
+    bool bIsAcceleration = false; // 現在加速しているかどうか
     bool bIsAttacking = false; // 攻撃しているかどうか
     bool bCanTurn = true; // 回転可能かどうか
     bool bCanAction = true; // 行動可能かどうか
     float fDeadDelayTime = 0.25f; // 死亡遅延時間
     float fAttackCoolDownTimer;
-    float fMoveCoolDownTimer;
+    float fMoveCoolDownTimer = 1.0f;
     float fFriezeTimer; // 硬直時間
     Vector3 vMoveForce; // 移動量
     GameObject gTargetObject; // 対象のオブジェクト
@@ -115,7 +115,7 @@ public class EnemyController02 : EnemyControllerBase
             bCanTurn = true;
             bIsAcceleration = true;
         }
-        if (fAttackCoolDownTimer <= 0.0f && rRigidbody.linearVelocity.magnitude <= 0.0f && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
+        if (fAttackCoolDownTimer <= 0.0f && rRigidbody.linearVelocity.magnitude <= 0.01f && bCanAction) // 攻撃距離内に対象がいるまたは攻撃実行中、かつ行動可能。
         {
             bIsAttacking = false;
             bCanTurn = false;
@@ -129,8 +129,7 @@ public class EnemyController02 : EnemyControllerBase
 
     void TimerCountDown() // 各タイマーのカウントダウン
     {
-        if (fAttackCoolDownTimer > 0.0f &&
-            Vector3.Distance(gTargetObject.transform.position, transform.position) > fAttackDistance)
+        if (fAttackCoolDownTimer > 0.0f)
         {
             fAttackCoolDownTimer -= Time.deltaTime;
         }
@@ -192,6 +191,19 @@ public class EnemyController02 : EnemyControllerBase
         {
             Vector3 horizonDistance = gTargetObject.transform.position - gameObject.transform.position;
             horizonDistance = new Vector3(horizonDistance.x, 0.0f, horizonDistance.z);
+            if (Mathf.Abs(horizonDistance.x) <= 0.01f)
+            {
+                horizonDistance = new Vector3(0.01f, horizonDistance.y, horizonDistance.z);
+            }
+            if (Mathf.Abs(horizonDistance.z) <= 0.01f)
+            {
+                horizonDistance = new Vector3(horizonDistance.x, horizonDistance.y, 0.01f);
+            }
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.FromToRotation(Vector3.forward, horizonDistance.normalized),
+                1.0f
+                ); // 方向転換
             aAnimator.SetTrigger("IsAttacking");
             gBulletObject.GetComponent<Enemy02BulletController>().SetUp(
                 gameObject,
