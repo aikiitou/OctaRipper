@@ -15,13 +15,17 @@ public class PlayerAttackController
     private int nButtonOnFrame = 0;
     private float fCurrentDamage = 0f;
 
+    GameObject gRightChargeEffect;
+    GameObject gLeftChargeEffect;
     GameObject[] gAttackColliders;
     PlayerAttackColliderController[] cPlayerAttackColliderControllers;
-    public PlayerAttackController(Rigidbody _rb , Animator _animator, GameObject[] attackColliders)  
+    public PlayerAttackController(Rigidbody _rb, Animator _animator, GameObject[] attackColliders, GameObject _rightChargeEffect, GameObject _leftChargeEffect)  
     {
         this.aAnimator = _animator;
         this.rb = _rb;
         this.gAttackColliders = attackColliders;
+        this.gRightChargeEffect = _rightChargeEffect;
+        this.gLeftChargeEffect = _leftChargeEffect;
         cPlayerAttackColliderControllers = new PlayerAttackColliderController[gAttackColliders.Length];
         for(int i= 0;i < cPlayerAttackColliderControllers.Length; i++)
         {
@@ -34,11 +38,25 @@ public class PlayerAttackController
         {
             nButtonOnFrame += _fpsDiff;
             aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
+            if(nButtonOnFrame >= 20)
+            {
+                if(gRightChargeEffect.activeInHierarchy == false)
+                {
+                    OnRightChargeEffect();
+                }
+            }
         }
         if (isStrongButton == true)
         {
             nButtonOnFrame += _fpsDiff;
             aAnimator.SetInteger("nButtonOnFrame", nButtonOnFrame);
+            if (nButtonOnFrame >= 25)
+            {
+                if (gRightChargeEffect.activeInHierarchy == false || gLeftChargeEffect.activeInHierarchy == false)
+                {
+                    OnBothChargeEffect();
+                }
+            }   
         }
     }
     public void OnWeakAttackButton()
@@ -120,5 +138,23 @@ public class PlayerAttackController
         {
             colliderController.ResetAttackInfo();
         }
+    }
+    public void OnRightChargeEffect()
+    {
+        gRightChargeEffect.SetActive(true);
+    }
+    public void DisRightChargeEffect()
+    {
+        gRightChargeEffect.SetActive(false);
+    }
+    public void OnBothChargeEffect()
+    {
+        gRightChargeEffect.SetActive(true);
+        gLeftChargeEffect.SetActive(true);
+    }
+    public void DisBothChargeEffect()
+    {
+        gRightChargeEffect.SetActive(false);
+        gLeftChargeEffect.SetActive(false);
     }
 }
