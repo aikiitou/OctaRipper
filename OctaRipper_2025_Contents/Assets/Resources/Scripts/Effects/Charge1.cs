@@ -7,6 +7,7 @@ public class Charge1 : MonoBehaviour
     [SerializeField] float fSpeed;
     [SerializeField] float fDamage;
     [SerializeField] float fFreezeTime;
+    [SerializeField] float fKnockBackPower;
     [SerializeField] float fDestroyTime;
 
     void Start()
@@ -19,7 +20,12 @@ public class Charge1 : MonoBehaviour
     {
         if (_other.TryGetComponent<EnemyControllerBase>(out EnemyControllerBase enemy))
         {
-            enemy.Damage(-fDamage, transform.forward, fFreezeTime);
+            enemy.Damage(-fDamage, transform.forward * fKnockBackPower, fFreezeTime);
+        }
+        if (_other.TryGetComponent<FireWallController>(out FireWallController fireWall))
+        {
+            fireWall.TakeDamage(-fDamage);
+            Destroy(gameObject);
         }
     }
 }
