@@ -93,7 +93,7 @@ public class StageController : MonoBehaviour
         GameObject obj = transform.parent.GetComponent<StageManager>().RequestGetPoolObject(_tag);
         obj.transform.parent = transform;
         gEnemies.Add(obj);
-        if (obj.tag == "Boss")
+        if (obj.tag == "Boss" || obj.tag == "Enemy03")
         {
             obj.transform.position = this.transform.position;
         }
