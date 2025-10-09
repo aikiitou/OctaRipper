@@ -47,6 +47,9 @@ public class PlayerController : MonoBehaviour
     [Header("強溜め攻撃斬撃プレファブ")]
     [SerializeField]
     private GameObject gStrongSlashPrefab;
+    [Header("回転エフェクト")]
+    [SerializeField]
+    private GameObject gCircleSlashEffect;
     [Header("ヒットエフェクト")]
     [SerializeField]
     GameObject gHitEffect;
@@ -350,6 +353,14 @@ public class PlayerController : MonoBehaviour
         Vector3 offset = new Vector3(transform.forward.x, SLAH_HEIGHT_OFFSET, transform.forward.z);
         weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
+    }
+    private void OnCircleSlashEffect()
+    {
+        gCircleSlashEffect.SetActive(true);
+    }
+    private void DisCircleSlashEffect()
+    {
+        gCircleSlashEffect.SetActive(false);
     }
     //死亡演出
     private void Die()
