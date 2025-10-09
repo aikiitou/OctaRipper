@@ -12,6 +12,9 @@ public class EnemyController01 : EnemyControllerBase
     [SerializeField, Header("移動加速度")]
     float fAcceleration = 5.0f;
 
+    [SerializeField, Header("最小移動加速度")]
+    float fMinAcceleration = 1.0f;
+
     [SerializeField, Header("移動自然減速度")]
     float fNaturalBrake = 2.0f;
 
@@ -173,13 +176,13 @@ public class EnemyController01 : EnemyControllerBase
             Vector3 moveAddForce = gTargetObject.transform.position - gameObject.transform.position; // 対象と自分の距離算出
             moveAddForce = new Vector3(moveAddForce.x, 0.0f, moveAddForce.z); // y成分を除く
             float accelMagnifaction = (fChaseDistance - moveAddForce.magnitude) / fChaseDistance;
-            if (accelMagnifaction >= 0.0f)
+            if (accelMagnifaction >= fMinAcceleration / fAcceleration)
             {
                 moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime * accelMagnifaction; // 加速量算出
             }
             else
             {
-                moveAddForce = Vector3.zero;
+                moveAddForce = moveAddForce.normalized * fAcceleration * Time.deltaTime * (fMinAcceleration / fAcceleration); // 加速量算出
             }
             vMoveForce -= vMoveForce.normalized * fNaturalBrake * Time.deltaTime; // 摩擦
             vMoveForce += moveAddForce; // 加速度を移動量に加える
