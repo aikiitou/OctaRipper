@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     const int _FPS = 60;
     const int TIME_LIMIT_FRAME = 10800;
+    const float WEAK_SLAH_HEIGHT = 1.0f;
 
     InputSystem_Actions isInput;
     Animator aAnimator;
@@ -278,8 +279,9 @@ public class PlayerController : MonoBehaviour
     }
     private void InstantiateWeakSlash()
     {
-        GameObject weakSlash = Instantiate(gWeakSlashPrefab);
-        weakSlash.transform.position = transform.position;
+        GameObject weakSlash = Instantiate(gWeakSlashPrefab,transform.parent);
+        Vector3 offset = new Vector3(transform.forward.x, WEAK_SLAH_HEIGHT, transform.forward.z);
+        weakSlash.transform.position = transform.position + offset;
         weakSlash.transform.rotation = transform.rotation;
     }
     //É_ÉÅÅ[ÉWä÷êî
