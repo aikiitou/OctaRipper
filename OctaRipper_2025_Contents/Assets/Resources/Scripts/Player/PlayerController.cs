@@ -382,21 +382,27 @@ public class PlayerController : MonoBehaviour
     {
         gCircleSlashEffect.SetActive(false);
     }
-    private void OnRightSlashEffect()
+    private void OnRightSlashEffect(float _scale)
     {
+        gRightSlashEffect.transform.localScale = Vector3.one * _scale;
         gRightSlashEffect.SetActive(true);
     }
     private void DisRightSlashEffect()
     {
+        gRightSlashEffect.transform.localScale = Vector3.one;
         gRightSlashEffect.SetActive(false);
     }
-    private void OnBothSlashEffect()
+    private void OnBothSlashEffect(float _scale)
     {
+        gRightSlashEffect.transform.localScale = Vector3.one * _scale;
+        gLeftSlashEffect.transform.localScale = Vector3.one * _scale;
         gRightSlashEffect.SetActive(true);
         gLeftSlashEffect.SetActive(true);
     }
     private void DisBothSlashEffect()
     {
+        gRightSlashEffect.transform.localScale = Vector3.one;
+        gLeftSlashEffect.transform.localScale = Vector3.one;
         gRightSlashEffect.SetActive(false);
         gLeftSlashEffect.SetActive(false);
     }
