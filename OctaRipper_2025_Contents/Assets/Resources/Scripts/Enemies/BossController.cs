@@ -233,7 +233,6 @@ public class BossController : EnemyControllerBase
     {
         gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
-        gameObject.SetActive(false);
     }
 
     IEnumerator DeadDelay()
@@ -243,4 +242,13 @@ public class BossController : EnemyControllerBase
         yield return new WaitForSeconds(fDeadDelayTime);
         Death();
     }
+
+    IEnumerator ClearDelay()
+    {
+        fFriezeTimer = 1.0f;
+        yield return new WaitForSeconds(fDeadDelayTime);
+        //gClearObject.GetComponent<GameClearNotification>
+        Death();
+    }
+
 }
