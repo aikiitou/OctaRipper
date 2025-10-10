@@ -336,7 +336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8585335805040987835, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
       propertyPath: fStartLife
-      value: 100
+      value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8585335805040987835, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
       propertyPath: fStartLife
-      value: 100
+      value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 493136739}
     - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
       propertyPath: fMaxLife
-      value: 100
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6730877074799829421, guid: b92f74d6462b34044b45f778a3fbb828, type: 3}
       propertyPath: tStageManager
@@ -1088,7 +1088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8585335805040987835, guid: 9c3f2976cf75f614fba4fa1b9c63b61f, type: 3}
       propertyPath: fStartLife
-      value: 100
+      value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
