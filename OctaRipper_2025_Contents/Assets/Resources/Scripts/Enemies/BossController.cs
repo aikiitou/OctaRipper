@@ -60,6 +60,7 @@ public class BossController : EnemyControllerBase
 
     bool bIsDown = false; // 暴走によるダウンをしているかどうか
     bool bCanTurn = false; // 回転可能かどうか
+    bool bIsDead = false;
     float fDeadDelayTime = 5.0f; // 死亡遅延時間
     float fFriezeTimer; // 硬直時間
     float fActionTimer; // 行動時間
@@ -96,13 +97,10 @@ public class BossController : EnemyControllerBase
             Turn(); // 回転
         }
         TimerCountDown(); // タイマー系のカウントダウン
-        if (cLifeController.GetLifePoint <= 0.0f)
+        if (cLifeController.GetLifePoint <= 0.0f && !bIsDead)
         {
+            bIsDead = true;
             StartCoroutine(DeadDelay()); // 死亡
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Damage(-100.0f, Vector3.zero, 0.0f);
         }
     }
 
