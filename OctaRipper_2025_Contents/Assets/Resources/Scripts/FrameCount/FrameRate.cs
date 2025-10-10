@@ -5,23 +5,11 @@ using UnityEngine;
 
 public class FrameRate : MonoBehaviour
 {
-    public static FrameRate instance;   //インスタンス化
     private int nFrameRate;     //現在のフレーム
     private int nFrame = 59;    //フレームをリセットする数
 
     private void Awake()
     {
-        //インスタンス化
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        DontDestroyOnLoad(gameObject);
         Application.targetFrameRate = 60;
     }
 
