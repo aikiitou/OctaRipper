@@ -30454,7 +30454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe77bda2ae195e478eaf9a927587241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fInitLifePoint: 1000
+  fInitLifePoint: 300
   fAttackDamage: 30
   fAttackForce: 15
   fAttackFriezeTime: 0.2
