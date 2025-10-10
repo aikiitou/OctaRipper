@@ -96,11 +96,14 @@ public class BossController : EnemyControllerBase
         {
             Turn(); // 回転
         }
-        TimerCountDown(); // タイマー系のカウントダウン
-        if (cLifeController.GetLifePoint <= 0.0f && !bIsDead)
+        if (!bIsDead)
         {
-            bIsDead = true;
-            StartCoroutine(DeadDelay()); // 死亡
+            TimerCountDown(); // タイマー系のカウントダウン
+            if (cLifeController.GetLifePoint <= 0.0f)
+            {
+                bIsDead = true;
+                StartCoroutine(DeadDelay()); // 死亡
+            }
         }
     }
 
@@ -133,6 +136,9 @@ public class BossController : EnemyControllerBase
         {
             switch (nActionNum)
             {
+                case -1:
+                    bCanTurn = false; 
+                    break;
                 case 0:
                     cLifeController.SetInvincible(false);
                     fActionTimer += fIdleTime;
@@ -231,22 +237,19 @@ public class BossController : EnemyControllerBase
     {
         gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
-        StartCoroutine(ClearDelay());
+        gClearObject.GetComponent<GameClearNotification>().ChageGameClearGameOver();
+        gameObject.SetActive(false);
     }
 
     IEnumerator DeadDelay()
     {
+        bCanTurn = false;
+        nActionNum = -1;
         aAnimator.SetTrigger("Dead");
         fFriezeTimer = fDeadDelayTime;
         yield return new WaitForSeconds(fDeadDelayTime);
         Death();
     }
 
-    IEnumerator ClearDelay()
-    {
-        fFriezeTimer = 1.0f;
-        yield return new WaitForSeconds(fDeadDelayTime);
-        gClearObject.GetComponent<GameClearNotification>().ChageGameClearGameOver();
-    }
 
 }
