@@ -12,6 +12,7 @@ TagManager:
   - Stage3
   - Stage4
   - PlayerAttack
+  - SceneChanger
   layers:
   - Default
   - TransparentFX
