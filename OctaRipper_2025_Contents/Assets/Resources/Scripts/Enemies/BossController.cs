@@ -99,6 +99,7 @@ public class BossController : EnemyControllerBase
         TimerCountDown(); // タイマー系のカウントダウン
         if (cLifeController.GetLifePoint <= 0.0f && !bIsDeath)
         {
+            bIsDeath = true;
             StartCoroutine(DeadDelay()); // 死亡
         }
     }
