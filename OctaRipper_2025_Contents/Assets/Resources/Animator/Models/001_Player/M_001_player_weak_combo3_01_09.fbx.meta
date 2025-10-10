@@ -76,6 +76,34 @@ ModelImporter:
         floatParameter: 20
         intParameter: 0
         messageOptions: 0
+      - time: 0.41723132
+        functionName: OnCircleSlashEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.42110357
+        functionName: OnBothSlashEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.61355513
+        functionName: DisCircleSlashEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6159223
+        functionName: DisBothSlashEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.7115198
         functionName: DisAttackCollider
         data: 
@@ -92,20 +120,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.93207544
         functionName: AnimationEnd
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.41723132
-        functionName: OnCircleSlashEffect
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.6185866
-        functionName: DisCircleSlashEffect
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
