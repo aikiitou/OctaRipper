@@ -56,6 +56,12 @@ public class PlayerController : MonoBehaviour
     [Header("左チャージエフェクト")]
     [SerializeField]
     private GameObject gLeftChargeEffect;
+    [Header("スラッシュエフェクト右")]
+    [SerializeField]
+    private GameObject gRightSlashEffect;
+    [Header("スラッシュエフェクト左")]
+    [SerializeField]
+    private GameObject gLeftSlashEffect;
     [Header("ヒットエフェクト")]
     [SerializeField]
     GameObject gHitEffect;
@@ -375,6 +381,24 @@ public class PlayerController : MonoBehaviour
     private void DisCircleSlashEffect()
     {
         gCircleSlashEffect.SetActive(false);
+    }
+    private void OnRightSlashEffect()
+    {
+        gRightSlashEffect.SetActive(true);
+    }
+    private void DisRightSlashEffect()
+    {
+        gRightSlashEffect.SetActive(false);
+    }
+    private void OnBothSlashEffect()
+    {
+        gRightSlashEffect.SetActive(true);
+        gLeftSlashEffect.SetActive(true);
+    }
+    private void DisBothSlashEffect()
+    {
+        gRightSlashEffect.SetActive(false);
+        gLeftSlashEffect.SetActive(false);
     }
     //死亡演出
     private void Die()
