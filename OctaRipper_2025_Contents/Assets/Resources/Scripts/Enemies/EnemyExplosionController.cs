@@ -10,8 +10,22 @@ public class EnemyExplosionController : MonoBehaviour
     float fAliveTime = 0.5f; // ê∂ë∂éûä‘
     float fAliveTimer = 0.0f; // ê∂ë∂éûä‘ÉJÉEÉìÉg
 
+    bool bCanPlayerDamage;
     public void SetUp(GameObject _obj, float _force, float _damage, float _friezeTime)
     {
+        bCanPlayerDamage = false;
+        transform.parent = null;
+        gameObject.SetActive(true);
+        gParentObject = _obj;
+        fDamage = _damage;
+        fForce = _force;
+        fFriezeTime = _friezeTime;
+        fAliveTimer = fAliveTime;
+    }
+
+    public void SetUp(GameObject _obj, float _force, float _damage, float _friezeTime, bool _canPlayerDamage)
+    {
+        bCanPlayerDamage = _canPlayerDamage;
         transform.parent = null;
         gameObject.SetActive(true);
         gParentObject = _obj;
@@ -44,7 +58,15 @@ public class EnemyExplosionController : MonoBehaviour
         if (other.GetComponent<EnemyControllerBase>())
         {
             Vector3 distance = other.transform.position - gameObject.transform.position;
-            other.GetComponent<EnemyControllerBase>().Damage(-fDamage, distance * fForce, fFriezeTime);
+            other.GetComponent<EnemyControllerBase>().Damage(-fDamage, distance.normalized * fForce, fFriezeTime);
         }
+        if (other.tag == "Player" && bCanPlayerDamage)
+        {
+            float fFriezeFrame = fFriezeTime / (1.0f / (float)Application.targetFrameRate);
+            Vector3 distance = other.transform.position - gameObject.transform.position;
+            other.GetComponent<PlayerController>().Damage(-fDamage, distance.normalized * fForce, (int)fFriezeFrame);
+            gameObject.SetActive(false);
+        }
+
     }
 }

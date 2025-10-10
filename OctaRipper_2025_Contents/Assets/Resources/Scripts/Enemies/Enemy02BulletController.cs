@@ -38,7 +38,6 @@ public class Enemy02BulletController : MonoBehaviour
         }
         if (other.gameObject.layer != 11)
         {
-            MyDebugLib.MessageLog(other.gameObject.layer);
             Release();
         }
     }
