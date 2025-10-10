@@ -41,7 +41,7 @@ public class MissileController : MonoBehaviour
         gTargetObject = GameObject.FindGameObjectWithTag("Player"); // ëŒè€Çë„ì¸
         gParentObject = _parent;
         rRigidBody = GetComponent<Rigidbody>();
-        rRigidBody.linearVelocity = -_shotObject.transform.up * fSpeed;
+        rRigidBody.linearVelocity = _shotObject.transform.up * fSpeed;
         transform.parent = null;
         transform.position = _pos;
         gameObject.SetActive(true);
