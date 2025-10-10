@@ -65,6 +65,7 @@ public class BossController : EnemyControllerBase
     float fActionTimer; // 行動時間
     int nActionNum; // 行動ナンバー
     GameObject gTargetObject; // 対象のオブジェクト
+    GameObject gClearObject; // ゲームクリアのオブジェクト
     Rigidbody rRigidbody; // Rigidbody
     Animator aAnimator; // Animator
 
@@ -74,6 +75,7 @@ public class BossController : EnemyControllerBase
         gDamageTrigger.SetActive(false);
         aAnimator = GetComponent<Animator>();
         gTargetObject = GameObject.FindGameObjectWithTag("Player"); // 対象を代入
+        gClearObject = GameObject.FindGameObjectWithTag("SceneChanger"); // 対象を代入
         rRigidbody = GetComponent<Rigidbody>();
     }
 
