@@ -25,9 +25,6 @@ public class BossController : EnemyControllerBase
     GameObject gHitEffect; // 攻撃の当たり判定オブジェクト
 
 
-    [SerializeField, Header("最速モーションスピード")]
-    float fFastestSpeed;
-
     [SerializeField, Header("最遅モーションスピード")]
     float fSlowestSpeed;
 
@@ -49,9 +46,21 @@ public class BossController : EnemyControllerBase
     [SerializeField, Header("暴走クールダウン時間")]
     float fWildCoolDownTime;
 
+    [SerializeField, Header("死亡時爆発与ダメージ")]
+    float fExplosionDamage = 0.0f;
+
+    [SerializeField, Header("死亡時爆発与硬直時間")]
+    float fExplosionFriezeTime = 0.0f;
+
+    [SerializeField, Header("死亡時爆発吹っ飛ばし")]
+    float fExplosionForce = 0.0f;
+
+    [SerializeField, Header("爆発オブジェクト")]
+    GameObject gExplosion; // 攻撃の当たり判定オブジェクト
+
     bool bIsDown = false; // 暴走によるダウンをしているかどうか
     bool bCanTurn = false; // 回転可能かどうか
-    float fDeadDelayTime = 10.0f; // 死亡遅延時間
+    float fDeadDelayTime = 5.0f; // 死亡遅延時間
     float fFriezeTimer; // 硬直時間
     float fActionTimer; // 行動時間
     int nActionNum; // 行動ナンバー
@@ -89,18 +98,36 @@ public class BossController : EnemyControllerBase
         {
             StartCoroutine(DeadDelay()); // 死亡
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Damage(-100.0f, Vector3.zero, 0.0f);
+        }
     }
 
     void ChangePattern()
     {
-
+        if (bIsDown)
+        {
+            aAnimator.SetFloat("MotionMultiple", fSlowestSpeed + (cLifeController.GetLifePoint / fInitLifePoint * (1.0f - fSlowestSpeed)));
+        }
+        else
+        {
+            aAnimator.SetFloat("MotionMultiple", 1.0f);
+        }
     }
 
     void TimerCountDown() // 各タイマーのカウントダウン
     {
         if (fActionTimer > 0.0f)
         {
-            fActionTimer -= Time.deltaTime;
+            if (bIsDown)
+            {
+                fActionTimer -= Time.deltaTime * (fSlowestSpeed + (cLifeController.GetLifePoint / fInitLifePoint * (1.0f - fSlowestSpeed)));
+            }
+            else
+            {
+                fActionTimer -= Time.deltaTime;
+            }
         }
         else
         {
@@ -202,12 +229,14 @@ public class BossController : EnemyControllerBase
 
     protected override void Death() // 死亡(現在は仮ログ)
     {
+        gExplosion.GetComponent<EnemyExplosionController>().SetUp(gameObject, fExplosionForce, fExplosionDamage, fExplosionFriezeTime);
         MyDebugLib.MessageLog("Dead");
         gameObject.SetActive(false);
     }
 
     IEnumerator DeadDelay()
     {
+        aAnimator.SetTrigger("Dead");
         fFriezeTimer = fDeadDelayTime;
         yield return new WaitForSeconds(fDeadDelayTime);
         Death();

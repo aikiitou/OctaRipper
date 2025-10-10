@@ -9932,7 +9932,7 @@ MonoBehaviour:
   fBrake: 20
   fAttackDistance: 8
   fMoveCoolDownTime: 1
-  fBulletSpeed: 40
+  fBulletSpeed: 30
   fAttackDamage: 10
   fAttackForce: 1
   fAttackFriezeTime: 0.1

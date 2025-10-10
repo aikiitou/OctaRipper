@@ -200,6 +200,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f11e0abfeddc513499b51401a70ae4af, type: 3}
+--- !u!1 &50624203 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+  m_PrefabInstance: {fileID: 3629847052492964700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &63337492 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5582520676264741483, guid: f11e0abfeddc513499b51401a70ae4af, type: 3}
@@ -6498,7 +6503,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620496652}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -11651,7 +11656,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730692699}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -16733,7 +16738,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 844075653}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -33024,7 +33029,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568842411}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -38013,7 +38018,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666319483}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -43350,7 +43355,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1863172817}
   serializedVersion: 8
-  lengthInSec: 4
+  lengthInSec: 10
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -49127,6 +49132,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1371657140478884496, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3217119406012749050, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: simulationSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_Name
       value: EnemyExplosion
@@ -49134,6 +49159,26 @@ PrefabInstance:
     - target: {fileID: 3501428015227873185, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3929985675632628065, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6694831763857816483, guid: 84249b7c33cfd9f4da5c3c4be0e52b14, type: 3}
+      propertyPath: simulationSpeed
+      value: 0.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49981,14 +50026,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe77bda2ae195e478eaf9a927587241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fInitLifePoint: 100
+  fInitLifePoint: 1000
   fAttackDamage: 30
   fAttackForce: 15
   fAttackFriezeTime: 0.2
   gDamageTrigger: {fileID: 713678295899088615}
   fRotationSpeed: 10
   gHitEffect: {fileID: 2059414628}
-  fFastestSpeed: 2
   fSlowestSpeed: 0.5
   fFirstInvincibleTime: 3
   fIdleTime: 3
@@ -49996,6 +50040,10 @@ MonoBehaviour:
   fSweepTime: 3.5
   fWildTime: 7.5
   fWildCoolDownTime: 5.5
+  fExplosionDamage: 0
+  fExplosionFriezeTime: 0
+  fExplosionForce: 0
+  gExplosion: {fileID: 50624203}
 --- !u!136 &8431475332669733710
 CapsuleCollider:
   m_ObjectHideFlags: 0
