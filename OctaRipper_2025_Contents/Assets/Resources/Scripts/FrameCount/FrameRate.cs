@@ -1,6 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-using NUnit;
-using UnityEditor.Build;
 using UnityEngine;
 
 public class FrameRate : MonoBehaviour
